@@ -1,0 +1,4 @@
+##gff-version 3
+##source-version rtracklayer 1.66.0
+##date 2025-04-18
+CP026300.1	rtracklayer	rRNA	441284	495332	.	.	.	name=rDNA locus

@@ -1,0 +1,141 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# 10_Master Table  
+***  
+
+Building a master table with the ARS, OEM, dist to CEN, dist to JUNC, dist to TER, signifRFD/MH, ∆ICgn, signif∆IC, ∆nanoT, signif∆nanoT, CTF19, RIF1, FKH1FKH2, dist toRFDsig.  
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+```
+
+### Import Ori table
+```{r message=FALSE, warning=FALSE}
+ars2keep <- import("Data/ars2keep_lim10k_cl1500_2_dtac1500.bed") %>% sort
+ars2keep$score <- NULL
+ars2 <- as_tibble(ars2keep) %>% select(c(name,start,end))
+```
+
+### add OEM data  
+
+Data were compiled from OEM bigwig
+
+```{r message=FALSE, warning=FALSE}
+oemBY1_bw <- import("BigFiles/BigWig/BY1_oem_10k.bw")
+oemBY2_bw <- import("BigFiles/BigWig/BY2_oem_10k.bw")
+oemBY3_bw <- import("BigFiles/BigWig/BY3_oem_10k.bw")
+oemSY1_bw <- import("BigFiles/BigWig/SY1_oem_10k.bw")
+oemSY2_bw <- import("BigFiles/BigWig/SY2_oem_10k.bw")
+oemSY3_bw <- import("BigFiles/BigWig/SY3_oem_10k.bw")
+oemBY1 <- coverage(oemBY1_bw,weight=oemBY1_bw$score)
+oemBY2 <- coverage(oemBY2_bw,weight=oemBY2_bw$score)
+oemBY3 <- coverage(oemBY3_bw,weight=oemBY3_bw$score)
+oemSY1 <- coverage(oemSY1_bw,weight=oemSY1_bw$score)
+oemSY2 <- coverage(oemSY2_bw,weight=oemSY2_bw$score)
+oemSY3 <- coverage(oemSY3_bw,weight=oemSY3_bw$score)
+
+ars2$OEMBY1 <- sapply(seq_along(ars2keep), function(i) {
+	mean(oemBY1[ars2keep[i]],na.rm=T)
+	})
+ars2$OEMBY2 <- sapply(seq_along(ars2keep), function(i) {
+	mean(oemBY2[ars2keep[i]],na.rm=T)
+	})
+ars2$OEMBY3 <- sapply(seq_along(ars2keep), function(i) {
+	mean(oemBY3[ars2keep[i]],na.rm=T)
+	})
+ars2$OEMSY1 <- sapply(seq_along(ars2keep), function(i) {
+	mean(oemSY1[ars2keep[i]],na.rm=T)
+	})
+ars2$OEMSY2 <- sapply(seq_along(ars2keep), function(i) {
+	mean(oemSY2[ars2keep[i]],na.rm=T)
+	})
+ars2$OEMSY3 <- sapply(seq_along(ars2keep), function(i) {
+	mean(oemSY3[ars2keep[i]],na.rm=T)
+	})
+
+ars2$dOEM1 <- ars2$OEMSY1-ars2$OEMBY1
+ars2$dOEM2 <- ars2$OEMSY2-ars2$OEMBY2
+ars2$dOEM3 <- ars2$OEMSY3-ars2$OEMBY3
+ars2 <- ars2 %>%
+	mutate(OEMm_BY=pmap_dbl(.,function(OEMBY1,OEMBY2,OEMBY3,...) mean(c(OEMBY1,OEMBY2,OEMBY3),na.rm=T))) %>%
+	mutate(OEMm_SY=pmap_dbl(.,function(OEMSY1,OEMSY2,OEMSY3,...) mean(c(OEMSY1,OEMSY2,OEMSY3),na.rm=T))) %>%
+	mutate(d_OEMm=pmap_dbl(., function(dOEM1,dOEM2,dOEM3,...) mean(c(dOEM1,dOEM2,dOEM3),na.rm=T)))
+
+```
+
+### Importing RFD test results
+
+```{r message=FALSE, warning=FALSE}
+bgsigMH2 <- import("Data/bgsigMH.bed")
+distArs2RFD <- distanceToNearest(ars2keep,bgsigMH2)
+ars2$dt_signif_RFD <- mcols(distArs2RFD)[,1]
+#ars2 <- ars2 %>%
+#	mutate(signif_RFDMH=dt_signif_RFD<5000)
+```
+
+### Add distance to CEN, TEL and Junction
+```{r message=FALSE, warning=FALSE}
+CEN <- import("Genome_annotations/SY14_CEN.gff3") 
+chromSY <- import("Genome_annotations/chromBYonSYgr.bed") %>% sort
+seqinfo(chromSY) <- seqinfSY
+
+chromJunction <- gaps(chromSY-10)
+chromTrueJunction <- chromJunction[4:18]
+TEL_SY <- chromJunction[c(3,19)]
+
+ars2$dt_CEN <- data.frame(distanceToNearest(resize(ars2keep,fix="center",width=1),CEN))[,3]
+ars2$dt_JUNC <- data.frame(distanceToNearest(resize(ars2keep,fix="center",width=1),chromTrueJunction))[,3]
+ars2$dt_TEL <- data.frame(distanceToNearest(resize(ars2keep,fix="center",width=1),TEL_SY))[,3]
+
+```
+
+### Add results on Init
+```{r message=FALSE, warning=FALSE}
+ars.init <- readRDS("Data/ARSinitMAnorm2.rds") %>%
+	mutate(dInit_SY_BY=Mval) %>%	select(c(name,dInit_SY_BY,dInitSY_BY_padj=padj))
+ars3 <- left_join(ars2,ars.init,by="name")
+```
+To affect the variation of the initiations between SY and BY (dInit_SY_BY), we used Mval from the MAnorm2 analysis which correspond to difference between the normalised initiation signal. If this value is positive, it means that there are more initiation in the SY compared to the BY.
+
+### Add results on nanoT
+```{r message=FALSE, warning=FALSE}
+ars.RT <- readRDS("Data/ARS_nanotiming_MApadj.rds") %>%
+	# mutate(RT_BY=pmap_dbl(., function(BY_rep1, BY_rep2,BY_rep3,...) mean(c(BY_rep1,BY_rep2,BY_rep3)))) %>%
+	# mutate(RT_SY=pmap_dbl(., function(SY_rep1,SY_rep2,SY_rep3,...) mean(c(SY_rep1, SY_rep2,SY_rep3)))) %>%
+	mutate(dRT_SY_BY=pmap_dbl(., function(SY_rep1,SY_rep2,SY_rep3,BY_rep1, BY_rep2,BY_rep3,...) mean(c(SY_rep1, SY_rep2,SY_rep3))-mean(c(BY_rep1,BY_rep2,BY_rep3)))) %>%
+#	select(c(name,RT_BY,RT_SY,dRT_SY_BY,dRT_SY_BY_padj=padj))
+	select(c(name,dRT_SY_BY,dRT_SY_BY_padj=padj))
+ars4 <- left_join(ars3,ars.RT,by="name")
+```
+dRT_SY_BY is the difference of the mean RT values between BY and SY. If it is negative, it indicates that this Ori replicated later in SY compared to BY
+
+### Add biblio data
+```{r message=FALSE, warning=FALSE}
+arsbiblio <- read_tsv("Data/ARS_withBiblioData_namesBYSY.tsv",show_col_types = FALSE) %>%
+	select(c(6,22:25))
+
+ars5 <- left_join(ars4,arsbiblio,by="name")
+
+write_tsv(ars5,"Data/BYSY_MasterTable.tsv")
+
+ars6 <- ars5 %>% select(-c(4:12))
+
+write_tsv(ars6,"Data/BYSY_MasterTable_simple.tsv")
+```
+
+Add Table 1,2 and 3 annotations
+```{r message=FALSE, warning=FALSE}
+AnnotTable <- read_tsv("Data_raw/Annot_Table.tsv",show_col_types = FALSE,na = character()) %>% mutate(Table123=paste0(Table1,Table2,Table3)) %>% mutate(Table123=ifelse(Table123=="AA","A",Table123))
+
+ars7 <- left_join(ars6,AnnotTable,by="name")
+
+write_tsv(ars7,"Data/BYSY_MasterTable_simple_Table123.tsv")
+write_tsv(ars7,"Data/TableS2.tsv")
+
+```

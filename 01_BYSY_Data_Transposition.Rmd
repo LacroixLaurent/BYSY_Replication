@@ -1,0 +1,367 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# 01_Data Transposition
+
+***  
+## Generating the nucleotide to nucleotide conversion table  
+Original fasta files for the genomes (SY14.fa and BY4742.fa) were downloaded from the accession identifier [PRJNA429985](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA429985) 
+Chromosomes from the BY strain were used a "reads" and mapped on the SY genome using minimap2 (version=2.22-r1101) and samtools (version=1.17):  
+```{bash eval=FALSE, include=FALSE}
+minimap2 -ax asm5 Data_raw/SY14.fa Data_raw/BY4742.fa | samtools sort -o Data/BYonSY.sorted.bam
+samtools index Data/BYonSY.sorted.bam
+```
+Then the conversion table was build in R based on the CIGAR information from the resulting bam-file.  
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(rtracklayer))
+suppressMessages(library(tidyverse))
+suppressMessages(library(GenomicAlignments))
+`%+%` <- paste0
+```
+First two SeqInfo object were generated:  
+```{r message=FALSE, warning=FALSE}
+seqinfSY <- Seqinfo(seqnames=c("CP029160.1"),seqlengths=c(11848804),isCircular=F,genome="SY14")
+saveRDS(seqinfSY, file="Data/seqinfSY.rds")
+BYgenome <- Biostrings::readDNAStringSet("Data_raw/BY4742.fa")
+names(BYgenome) <- sapply(names(BYgenome), function(x) strsplit(x," ")[[1]][1])
+seqinfBY <- Seqinfo(seqnames=names(BYgenome), seqlengths=lengths(BYgenome), genome="BY4742", isCircular=c(rep(F,16),T))
+saveRDS(seqinfBY, file="Data/seqinfBY.rds")
+```
+
+We built two functions to shift the coordinates according the the CIGAR information:  
+```{r message=FALSE, warning=FALSE}
+cigar2genome <- function(x) {
+### x is a char vector from CIGAR
+### I and S sequence in read but not in genome
+	xres <- x
+	xres[x %in% c("I","S","H")] <- 0
+	xres[x %in% c("M","D")] <- 1
+	return(xres)
+	}
+	
+cigar2signal <- function(x) {
+### x is a char vector from CIGAR
+### I and S sequence in read but not in genome and D are not in the read_signal
+	xres <- x
+	xres[x %in% c("D")] <- 0
+	xres[x %in% c("M","I","S","H")] <- 1
+	return(xres)
+	}
+```
+Then the data from the bam-file were processed to generate a coordinate to coordinate conversion table **masterconvtable** that can convert coordinates from BY to SY and reciprocally.  
+```{r message=FALSE, warning=FALSE}
+bam.in <- "Data/BYonSY.sorted.bam"
+
+data0 <- try(system(paste0("samtools view -F 2047 ",bam.in," | cut -f 1,2,3,4,6"),intern=T))
+# keep only primary and supplementary mappings
+data1 <- lapply(data0, function(x) 
+	{
+		input1 <- strsplit(x,"\t")[[1]]
+		flag <- input1[2]
+		startBYSY <- as.numeric(input1[4])
+		chromBY <- input1[1]
+		chromSY <- input1[3]
+		cigar <- GenomicAlignments::cigarToRleList(input1[5])[[1]]
+		cig <- as.vector(cigar)
+		BYpos <- cumsum(cigar2signal(cig))
+		SYpos <- startBYSY-1+cumsum(as.numeric(cigar2genome(cig)))
+		transtib <- tibble(cig,chromBY,BYpos,chromSY,SYpos)
+		leng <- sum(as.numeric(cigar2genome(cig)))
+		endBYSY <- startBYSY+leng-1
+		res <- tibble(flag,chromBY,chromSY,startBYSY,endBYSY,leng,BYpos=list(BYpos),SYpos=list(SYpos),cig=list(cig),cigar=list(input1[5]),convtable=list(transtib))
+	return(res)
+	})
+	
+data_out2 <- do.call(bind_rows,data1) %>%
+# filter for the primary aligned and for long supplementary mapping to recover the big chunk of chrVIII that minimap2 generates a supplementary (CUP1-1 locus)
+	 filter(flag==0 | leng>10000) %>%
+	 mutate(chromBYrom=factor(chromBY) %>%
+fct_recode("chrI"="CP026301.1","chrII"="CP026296.1","chrIII"="CP026297.1","chrIV"="CP026298.1","chrV"="CP026299.1","chrVI"="CP026302.1","chrVII"="CP026294.1","chrVIII"="CP026287.1","chrIX"="CP026295.1","chrX"="CP026288.1","chrXI"="CP026289.1","chrXII"="CP026300.1","chrXIII"="CP026291.1","chrXIV"="CP026293.1","chrXV"="CP026303.1","chrXVI"="CP026290.1")) %>%
+	select(chromBY,chromBYrom,chromSY,startBYSY,endBYSY,convtable)
+
+data4 <- data_out2 %>% 
+	select(chromBYrom,convtable) %>%
+	unnest(col=c(convtable)) %>%
+	filter(cig=="M") %>%
+	filter(!duplicated(SYpos,fromLast=T)) %>%
+	group_by(chromSY,chromBY,chromBYrom) %>%
+	summarise(startSY=min(SYpos),endSY=max(SYpos),startBY=min(BYpos),endBY=max(BYpos)) %>%
+	ungroup %>%
+	arrange(startSY)
+
+masterconvtable <- data_out2 %>% 
+	select(chromBYrom,convtable) %>%
+	unnest(col=c(convtable)) %>%
+	filter(cig=="M") %>%
+	filter(!duplicated(SYpos,fromLast=T)) %>%
+	select(-cig)
+
+chromBYonSYgr <- with(data4,GRanges(seqnames=chromSY,range=IRanges(startSY,endSY),strand="*",name=chromBYrom,seqinfo=seqinfSY))
+
+chromSYonBYgr <- with(data4,GRanges(seqnames=chromBY,range=IRanges(startBY,endBY),strand="*",name=chromSY,seqinfo=seqinfBY))
+export(chromBYonSYgr,con="Genome_annotations/chromBYonSYgr.bed")
+export(chromSYonBYgr,con="Genome_annotations/chromSYonBYgr.bed")
+write_tsv(masterconvtable,file="BigFiles/Data/BY2SYcon.tsv.gz")
+```
+As control, genomic coordinates from the 16 BY chromosomes were "transposed" this way.  
+```{r message=FALSE, warning=FALSE}
+chromBY <- as(seqinfBY,"GRanges")
+
+chromBY2 <- chromBY %>% as_tibble %>% mutate(coord=map2(start,end, function(x,y) x:y)) %>% unnest(cols=c(coord)) %>% select(chromBY=seqnames,BYpos=coord)
+chromBY2SY <- left_join(masterconvtable,chromBY2) %>% 
+	group_by(chromSY,chromBY,chromBYrom) %>%
+	summarise(startSY=min(SYpos),endSY=max(SYpos),startBY=min(BYpos),endBY=max(BYpos)) %>%
+	ungroup %>%
+	arrange(startSY)
+
+chromBY2SYgr <- with(chromBY2SY,GRanges(seqnames=chromSY,range=IRanges(startSY,endSY),strand="*",name=chromBYrom,seqinfo=seqinfSY))
+
+chromBY2SY2 <- left_join(masterconvtable,chromBY2)
+chromBY2SY3 <- split(chromBY2SY2,chromBY2SY2$chromBYrom)
+
+chromBY2SY3grl <- lapply(seq_along(chromBY2SY3), function(i)
+	{
+		x <- chromBY2SY3[[i]]
+		res <- with(x,GRanges(seqnames=chromSY,ranges=IRanges(start=SYpos,width=1),strand="*",seqinfo=seqinfSY,name=chromBYrom)) %>% GenomicRanges::reduce()
+		res$name <- names(chromBY2SY3)[[i]]
+		return(res)
+		})
+chromBY2SY3gr <- do.call(c,chromBY2SY3grl)
+## correspond to all the partial matched segment
+
+export(chromBY2SYgr,con="Genome_annotations/chromBY2SYgr.bed")
+export(chromBY2SY3gr,con="Genome_annotations/chromBY2SY3gr.bed")
+
+identical(chromBY2SYgr,chromBYonSYgr)
+#[1] TRUE
+```
+
+The *chromBY2SY3gr.bed* illustrates that this conversion is not always a perfect match and might conduct to some information lost but it appears really acceptable for our purpose.  
+
+## Converting NFS forks from BY to SY  
+
+First we need to load all the forks coordinates from the BY experiment
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(rtracklayer))
+suppressMessages(library(tidyverse))
+`%+%` <- paste0
+
+forks_BYBY <- readRDS("Data_raw/forks_BYBY.rds")
+saveRDS(forks_BYBY,file="Data/forks_BYBY.rds")
+```
+Then we import the conversion table if not in memory
+```{r message=FALSE, warning=FALSE}
+BY2SY <- read_tsv("BigFiles/Data/BY2SYcon.tsv.gz",show_col_types = FALSE)
+```
+Then we assign at each fork a unique identifier (fid) and proceed to the conversion
+```{r message=FALSE, warning=FALSE}
+forks_BYBY$fid <- 1:nrow(forks_BYBY)
+forksBY <- forks_BYBY %>% mutate(BYpos=map2(X0,X1,function(x,y) x:y)) %>% select(chromBY=chrom,direc,X0,X1,BYpos,fid,speed,read_id)
+
+forksBYlist <- split(forksBY,forksBY$chromBY)
+
+forksBY2SYlist <- lapply(forksBYlist, function(x)
+{
+res <- inner_join(unnest(x,cols=c(BYpos)),BY2SY,by = c("chromBY", "BYpos")) %>%
+	group_by(fid,chromBY,direc) %>%
+	nest() %>%
+	ungroup %>%
+	mutate(X0n=map_int(data,function(x) dplyr::slice(x,1) %>% pull(BYpos))) %>%
+	mutate(X1n=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(BYpos))) %>%
+	mutate(X0nSY=map_int(data,function(x) dplyr::slice(x,1) %>% pull(SYpos))) %>%
+	mutate(X1nSY=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(SYpos))) %>%
+	select(-data)
+	return(res)
+})
+forksBY2SY <- do.call(bind_rows,forksBY2SYlist)
+
+forksBY2SY2 <- inner_join(forksBY2SY,forks_BYBY,by = join_by(direc, fid)) %>% mutate(chromSY="CP029160.1")
+saveRDS(forksBY2SY2,file="Data/forks_BYBYSY.rds")
+
+forks_SYSY <- readRDS("Data_raw/forks_SYSY.rds")
+saveRDS(forks_SYSY,file="Data/forks_SYSY.rds")
+```
+Conversion could result in change of the width of the object, that could affect the new speed determination. Therefore, the speed measured on the mapping genome was kept during the genomic coordinates conversion process.
+As control, SY data can be transposed to BY and then back to SY and BY data can be transposed to SY and then back to BY.  
+
+## Converting initiations and terminations from BY to SY  
+
+Similarly, Initiations and terminations can be transposed:  
+```{r message=FALSE, warning=FALSE}
+initer_BYBY <- readRDS("Data_raw/initer_BYBY.rds")
+saveRDS(initer_BYBY,file="Data/initer_BYBY.rds")
+
+initer_BYBY$fid <- 1:nrow(initer_BYBY)
+
+initerBY <- initer_BYBY %>% 
+	mutate(BYpos=map2(x0,x1,function(x,y) x:y)) %>% 
+	mutate(wid=x1-x0+1) %>%
+	select(chromBY=chrom,x0,x1,BYpos,fid,type,wid)
+
+initerBYlist <- split(initerBY,initerBY$chromBY)
+
+initerBY2SYlist <- lapply(initerBYlist, function(x)
+{
+res <- inner_join(unnest(x,cols=c(BYpos)),BY2SY,by = c("chromBY", "BYpos")) %>%
+	group_by(fid,chromBY,type,wid) %>%
+	nest() %>%
+	ungroup %>%
+	mutate(x0n=map_int(data,function(y) dplyr::slice(y,1) %>% pull(BYpos))) %>%
+	mutate(x1n=map_dbl(data,function(y) dplyr::slice(y,nrow(y)) %>% pull(BYpos))) %>%
+	mutate(x0nSY=map_int(data,function(y) dplyr::slice(y,1) %>% pull(SYpos))) %>%
+	mutate(x1nSY=map_dbl(data,function(y) dplyr::slice(y,nrow(y)) %>% pull(SYpos))) %>%
+	select(-data)
+	return(res)
+})
+initerBY2SY <- do.call(bind_rows,initerBY2SYlist)
+
+initerBY2SY2 <- inner_join(initerBY2SY,initer_BYBY,by = join_by(fid, type)) %>% mutate(chromSY="CP029160.1") %>% mutate(centerSY=floor((x0nSY+x1nSY)/2))
+# WARNING, the new "center" might by wrong for partially deleted segment but it was the only way to deal with partially deleted segment that loose the center!
+
+saveRDS(initerBY2SY2,file="Data/initer_BYBYSY.rds")
+
+initer_SYSY <- readRDS("Data_raw/initer_SYSY.rds")
+saveRDS(initer_SYSY,file="Data/initer_SYSY.rds")
+```
+
+Similarly to the forks transposition process, width of initiation or termination segment could also be changed during the conversion process, affecting the initiation (or termination) probability affected to the segment. Therefore, the width from the original mapping was also kept in the conversion process. Unfortunately, it was not possible to transfer unambiguously the center of the initiation and termination segment as its precise coordinate did often fall within microdeletion present in the CIGAR code used to build the conversion table.  
+
+## Converting nanotiming data from BY to SY  
+
+```{r message=FALSE, warning=FALSE}
+source("Helper_function.r")
+
+BYnano_rep1 <- readRDS("Data_raw/nanoT_BY_rep1.rds") %>% 
+	mutate(nanoTsc99=1+myscaling0(mean_br_bin,infq=0.005,supq=0.995))
+BYnano_rep1$fid <- 1:nrow(BYnano_rep1)
+BYnanoBY2 <- BYnano_rep1 %>% mutate(BYpos=map2(positions,positions+999,function(x,y) x:y)) %>% select(chromBY=chrom,positions,BYpos,fid,mean_br_bin)
+res <- inner_join(unnest(BYnanoBY2,cols=c(BYpos)),BY2SY,by = c("chromBY", "BYpos")) %>%
+	group_by(fid,chromBY) %>%
+	nest() %>%
+	ungroup %>%
+	mutate(startn=map_dbl(data,function(x) dplyr::slice(x,1) %>% pull(BYpos))) %>%
+	mutate(endn=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(BYpos))) %>%
+	mutate(startnSY=map_dbl(data,function(x) dplyr::slice(x,1) %>% pull(SYpos))) %>%
+	mutate(endnSY=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(SYpos))) %>%
+	select(-data)
+BYnano_rep1SY <- inner_join(BYnano_rep1,res,by = join_by(fid)) %>%
+	mutate(chromSY="CP029160.1")
+BY_rep1 <- BYnano_rep1SY %>% 
+	mutate(Rep="rep1") %>%
+	mutate(strain="BY")
+saveRDS(BY_rep1,file="Data/nanoT_BYBYSY_rep1.rds")
+BYrep1.gr <- with(BY_rep1,GRanges(seqnames=chromSY,ranges=IRanges(start=startnSY,end=endnSY),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(BYrep1.gr,weight=BYrep1.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_BYBYSY_rep1.bw")
+BYrep1.grBY <- with(BYnano_rep1,suppressWarnings(GRanges(seqnames=chrom,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfBY,nanoT=nanoTsc99)))
+cov2exp <- coverage(BYrep1.grBY,weight=BYrep1.grBY$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_BYBY_rep1.bw")
+
+BYnano_rep2 <- readRDS("Data_raw/nanoT_BY_rep2.rds") %>%
+	mutate(nanoTsc99=1+myscaling0(mean_br_bin,infq=0.005,supq=0.995))
+BYnano_rep2$fid <- 1:nrow(BYnano_rep2)
+BYnanoBY2 <- BYnano_rep2 %>% mutate(BYpos=map2(positions,positions+999,function(x,y) x:y)) %>% select(chromBY=chrom,positions,BYpos,fid,mean_br_bin)
+res <- inner_join(unnest(BYnanoBY2,cols=c(BYpos)),BY2SY,by = c("chromBY", "BYpos")) %>%
+	group_by(fid,chromBY) %>%
+	nest() %>%
+	ungroup %>%
+	mutate(startn=map_dbl(data,function(x) dplyr::slice(x,1) %>% pull(BYpos))) %>%
+	mutate(endn=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(BYpos))) %>%
+	mutate(startnSY=map_dbl(data,function(x) dplyr::slice(x,1) %>% pull(SYpos))) %>%
+	mutate(endnSY=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(SYpos))) %>%
+	select(-data)
+BYnano_rep2SY <- inner_join(BYnano_rep2,res,by = join_by(fid)) %>%
+	mutate(chromSY="CP029160.1") 
+BY_rep2 <- BYnano_rep2SY  %>% 
+	mutate(Rep="rep2") %>%
+	mutate(strain="BY")
+saveRDS(BY_rep2,file="Data/nanoT_BYBYSY_rep2.rds")
+BYrep2.gr <- with(BY_rep2,GRanges(seqnames=chromSY,ranges=IRanges(start=startnSY,end=endnSY),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(BYrep2.gr,weight=BYrep2.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_BYBYSY_rep2.bw")
+BYrep2.grBY <- with(BYnano_rep2,suppressWarnings(GRanges(seqnames=chrom,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfBY,nanoT=nanoTsc99)))
+cov2exp <- coverage(BYrep2.grBY,weight=BYrep2.grBY$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_BYBY_rep2.bw")
+
+BYnano_rep3 <- readRDS("Data_raw/nanoT_BY_rep3.rds") %>% 
+	mutate(nanoTsc99=1+myscaling0(mean_br_bin,infq=0.005,supq=0.995))
+BYnano_rep3$fid <- 1:nrow(BYnano_rep3)
+BYnanoBY2 <- BYnano_rep3 %>% mutate(BYpos=map2(positions,positions+999,function(x,y) x:y)) %>% select(chromBY=chrom,positions,BYpos,fid,mean_br_bin)
+res <- inner_join(unnest(BYnanoBY2,cols=c(BYpos)),BY2SY,by = c("chromBY", "BYpos")) %>%
+	group_by(fid,chromBY) %>%
+	nest() %>%
+	ungroup %>%
+	mutate(startn=map_dbl(data,function(x) dplyr::slice(x,1) %>% pull(BYpos))) %>%
+	mutate(endn=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(BYpos))) %>%
+	mutate(startnSY=map_dbl(data,function(x) dplyr::slice(x,1) %>% pull(SYpos))) %>%
+	mutate(endnSY=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(SYpos))) %>%
+	select(-data)
+BYnano_rep3SY <- inner_join(BYnano_rep3,res,by = join_by(fid)) %>%
+	mutate(chromSY="CP029160.1")
+BY_rep3 <- BYnano_rep3SY %>% 
+	mutate(Rep="rep3") %>%
+	mutate(strain="BY")
+saveRDS(BY_rep3,file="Data/nanoT_BYBYSY_rep3.rds")
+BYrep3.gr <- with(BY_rep3,GRanges(seqnames=chromSY,ranges=IRanges(start=startnSY,end=endnSY),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(BYrep3.gr,weight=BYrep3.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_BYBYSY_rep3.bw")
+BYrep3.grBY <- with(BYnano_rep3,suppressWarnings(GRanges(seqnames=chrom,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfBY,nanoT=nanoTsc99)))
+cov2exp <- coverage(BYrep3.grBY,weight=BYrep3.grBY$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_BYBY_rep3.bw")
+
+SYnano_rep1 <- readRDS("Data_raw/nanoT_SY_rep1.rds") %>%
+	rename(chromSY=chrom)
+SY_rep1 <- SYnano_rep1 %>% 
+	mutate(nanoTsc99=1+myscaling0(mean_br_bin,infq=0.005,supq=0.995)) %>%
+	mutate(Rep="rep1") %>%
+	mutate(strain="SY")
+saveRDS(SY_rep1,file="Data/nanoT_SYSY_rep1.rds")
+SYrep1.gr <- with(SY_rep1,GRanges(seqnames=chromSY,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(SYrep1.gr,weight=SYrep1.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_SYSY_rep1.bw")
+
+SYnano_rep2 <- readRDS("Data_raw/nanoT_SY_rep2.rds") %>%
+	rename(chromSY=chrom)
+SY_rep2 <- SYnano_rep2 %>% 
+	mutate(nanoTsc99=1+myscaling0(mean_br_bin,infq=0.005,supq=0.995)) %>%
+	mutate(Rep="rep2") %>%
+	mutate(strain="SY")
+saveRDS(SY_rep2,file="Data/nanoT_SYSY_rep2.rds")
+SYrep2.gr <- with(SY_rep2,GRanges(seqnames=chromSY,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(SYrep2.gr,weight=SYrep2.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_SYSY_rep2.bw")
+
+SYnano_rep3 <- readRDS("Data_raw/nanoT_SY_rep3.rds")%>%
+	rename(chromSY=chrom)
+SY_rep3 <- SYnano_rep3 %>% 
+	mutate(nanoTsc99=1+myscaling0(mean_br_bin,infq=0.005,supq=0.995)) %>%
+	mutate(Rep="rep3") %>%
+	mutate(strain="SY")
+saveRDS(SY_rep3,file="Data/nanoT_SYSY_rep3.rds")
+SYrep3.gr <- with(SY_rep3,GRanges(seqnames=chromSY,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(SYrep3.gr,weight=SYrep3.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_SYSY_rep3.bw")
+
+nanoT_SY <- bind_rows(SY_rep1,SY_rep2,SY_rep3)
+nanoT_SY.gr <- with(nanoT_SY,GRanges(seqnames=chromSY,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(nanoT_SY.gr,weight=nanoT_SY.gr$nanoT/3)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_SYSY.bw")
+
+nanoT_BY <- bind_rows(BY_rep1,BY_rep2,BY_rep3)
+nanoT_BY.gr <- with(nanoT_BY,GRanges(seqnames=chromSY,ranges=IRanges(start=startnSY,end=endnSY),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(nanoT_BY.gr,weight=nanoT_BY.gr$nanoT/3)
+cov2exp[cov2exp<0.1] <- NA
+export(cov2exp,con="BigWig/nanoT_BYBYSY.bw")
+
+```

@@ -1,0 +1,91 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# 03_RFD Profiles  
+
+***  
+## Computing forks coverages and RFD
+
+```{r}
+suppressMessages(library(rtracklayer))
+suppressMessages(library(tidyverse))
+suppressMessages(library(GenomicRanges))
+`%+%` <- paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+seqinfBY <- readRDS("Data/seqinfBY.rds")
+```
+
+There are two pairs of diverging Ty element from the chrIII and chrXVI that generate basecalling/mapping artifacts. We will therefore remove the forks, initiations and terminations mapping on these genomic segments.  
+```{r}
+Ty_chrIII_SY <- GRanges("CP029160.1",IRanges(7409106,7421212),strand="*",seqinfo=seqinfSY)
+Ty_chrIII_BY <- GRanges("CP026297.1",IRanges(174645,186751),strand="*",seqinfo=seqinfBY)
+Ty_chrXVI_SY <- GRanges("CP029160.1",IRanges(851297,863439),strand="*",seqinfo=seqinfSY)
+Ty_chrXVI_BY <- GRanges("CP026290.1",IRanges(844705,856847),strand="*",seqinfo=seqinfBY)
+maskedTy_SY <- c(Ty_chrIII_SY,Ty_chrXVI_SY)
+saveRDS(maskedTy_SY, file="Data/maskedTy_SY.rds")
+maskedTy_BY <- c(Ty_chrIII_BY,Ty_chrXVI_BY)
+saveRDS(maskedTy_BY, file="Data/maskedTy_BY.rds")
+```
+
+### Importing forks and removing those mapping on the problematic Ty area.
+```{r}
+forks_SYSY <- readRDS("Data/forks_SYSY.rds")
+forks_SYSY.gr<- with(forks_SYSY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+forks_SYSY2 <- forks_SYSY %>% 
+	mutate(Ty_filter=!overlapsAny(forks_SYSY.gr,maskedTy_SY)) %>%
+	filter(Ty_filter)
+forks_SYSY2.gr<- with(forks_SYSY2, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+
+forks_BYSY <- readRDS("Data/forks_BYBYSY.rds")
+forks_BYSY.gr<- with(forks_BYSY, GRanges(seqnames=chromSY,ranges=IRanges(pmin(X0nSY,X1nSY),pmax(X0nSY,X1nSY)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+forks_BYSY2 <- forks_BYSY %>% 
+	mutate(Ty_filter=!overlapsAny(forks_BYSY.gr,maskedTy_SY)) %>%
+	filter(Ty_filter)
+forks_BYSY2.gr<- with(forks_BYSY2, GRanges(seqnames=chromSY,ranges=IRanges(pmin(X0nSY,X1nSY),pmax(X0nSY,X1nSY)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+
+forks_BYBY <- readRDS("Data/forks_BYBY.rds")
+forks_BYBY.gr<- with(forks_BYBY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfBY))
+forks_BYBY2 <- forks_BYBY %>% 
+	mutate(Ty_filter=!overlapsAny(forks_BYBY.gr,maskedTy_BY)) %>%
+	filter(Ty_filter)
+forks_BYBY2.gr<- with(forks_BYBY2, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfBY))
+```
+
+We can then compute the RFD for SY data mapped on SY genome,BY data mapped on BY genome and transposed to SY genome and BY data mapped on BY genome.  
+```{r}
+## on SY genome
+forks_SYSY_R.gr<- forks_SYSY2.gr[strand(forks_SYSY2.gr)=="+"]
+forks_SYSY_L.gr<- forks_SYSY2.gr[strand(forks_SYSY2.gr)=="-"]
+
+covL_SY <- coverage(forks_SYSY_L.gr)
+covR_SY <- coverage(forks_SYSY_R.gr)
+cov_SY <- covR_SY+covL_SY
+rfdSY <- (covR_SY-covL_SY)/(covR_SY+covL_SY)
+export(covL_SY,con="BigWig/covL_SYSY_nt.bw")
+export(covR_SY,con="BigWig/covR_SYSY_nt.bw")
+export(cov_SY,con="BigWig/covtot_SYSY_nt.bw")
+export(rfdSY,con="BigWig/rfd_SYSY_nt.bw")
+
+# BY mapped on BY transposed to SY
+forks_BYSY_R.gr<- forks_BYSY2.gr[strand(forks_BYSY2.gr)=="+"]
+forks_BYSY_L.gr<- forks_BYSY2.gr[strand(forks_BYSY2.gr)=="-"]
+
+covL_BY <- coverage(forks_BYSY_L.gr)
+covR_BY <- coverage(forks_BYSY_R.gr)
+cov_BY <- covR_BY+covL_BY
+rfdBY <- (covR_BY-covL_BY)/(covR_BY+covL_BY)
+export(covL_BY,con="BigWig/covL_BYBYSY_nt.bw")
+export(covR_BY,con="BigWig/covR_BYBYSY_nt.bw")
+export(cov_BY,con="BigWig/covtot_BYBYSY_nt.bw")
+export(rfdBY,con="BigWig/rfd_BYBYSY_nt.bw")
+
+## on BY genome
+forks_BYBY_R.gr<- forks_BYBY2.gr[strand(forks_BYBY2.gr)=="+"]
+forks_BYBY_L.gr<- forks_BYBY2.gr[strand(forks_BYBY2.gr)=="-"]
+
+covL_BY <- coverage(forks_BYBY_L.gr)
+covR_BY <- coverage(forks_BYBY_R.gr)
+rfdBY <- (covR_BY-covL_BY)/(covR_BY+covL_BY)
+export(rfdBY,con="BigWig/rfd_BYBY_nt.bw")
+```

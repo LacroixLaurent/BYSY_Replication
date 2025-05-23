@@ -1,0 +1,354 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# Figure2
+
+***  
+
+### Figure 2 : RFD and test on chr XIII
+#### Figure S2: RFD and test for the others
+
+Plot to compare RFD tests on pooled and paired data
+
+```{r}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+library(patchwork)
+library(ggprism)
+theme_set(theme_bw())
+mypal <- c(paletteer::paletteer_d("ggthemes::Classic_20"),"grey40","black","gold","greenyellow","grey20")
+`%+%` <- paste0
+
+source("Helper_function.r")
+
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+chromSY <- import("Genome_annotations/chromBYonSYgr.bed") %>% NewSeqinfo(seqin=seqinfSY) %>% sort
+bs0 <- 1000
+ovl <- 50000
+```
+
+
+Generate genomic track with chr, CEN and ORI.  
+
+```{r}
+CEN <- import("Genome_annotations/SY14_CEN.gff3") %>% NewSeqinfo(seqin=seqinfSY)
+ARS_BYonSY <- import("Data/ars2keep_lim10k_cl1500_2_dtac1500.bed") %>% NewSeqinfo(seqin=seqinfSY)
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),strand="*",seqinfo=seqinfSY)
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds")
+ura3d0 <- GRanges("CP029160.1",IRanges(1051200,1051500),strand="*",seqinfo=seqinfSY,type="ura3_masked")
+masked_SY <- c(maskedTy_SY,ura3d0)
+geno_leg <- factor(c("CEN","ORI","rDNA","Ty_masked","ura3_masked"),levels=c("CEN","ORI","rDNA","Ty_masked","ura3_masked"))
+geno_pal <- mypal[c(9,13,17,21,25)]
+names(geno_pal) <- geno_leg
+feat.list <- GRangesList(
+	CEN,
+	ARS_BYonSY,
+	rDNA_SY,
+	maskedTy_SY,
+	ura3d0,
+	chromSY
+) 
+names(feat.list) <- c(names(geno_pal),"chromBY")
+feat.list <- lapply(seq_along(feat.list), function(x) {feat.list[[x]]$type=names(feat.list)[x];return(feat.list[[x]])})
+feat <- do.call(c,feat.list)
+
+chrom_pal <- mypal[c(1:8,10:12,14:18)]
+names(chrom_pal) <- chromSY$name
+geno_pal <- c(geno_pal,chrom_pal)
+
+pl_geno <- lapply(seq_along(chromSY), function(i) {
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+	featROI <- as_tibble(feat[overlapsAny(feat,ROI)]) %>% rename(featname=name)
+ggplot(featROI)+
+	geom_rect(data=featROI %>% filter(type %in% c("CEN","rDNA","Ty_masked","ura3_masked")),aes(xmin=start,xmax=end,ymin=2,ymax=3,col=type,fill=type))+
+	geom_rect(data=featROI%>% filter(type %in% c("ORI")),aes(xmin=start,xmax=end,ymin=1,ymax=2,col=type,fill=type))+
+	geom_rect(data=featROI%>% filter(type %in% c("chromBY")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=0,ymax=1,col=featname,fill=featname))+
+	geom_text(data=featROI%>% filter(type %in% c("chromBY")),aes(x=(pmax(start,start(ROI))+pmin(end,end(ROI)))/2,y=0.5,label=featname),col="black",size=2)+
+	scale_color_manual("",values = geno_pal)+
+	scale_fill_manual("",values = geno_pal)+
+	xlab(paste0("SY coordinates (kb)"))+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+		coord_cartesian(clip = "off")+
+theme(axis.ticks.y = element_blank(),axis.text.y = element_blank(),panel.grid.major.y=element_blank(),panel.grid.minor.y=element_blank(),legend.key = element_rect(colour = "black"))
+})
+
+```
+
+### paired RFD and CMH test
+```{r warning=FALSE}
+allplotMH <- function(bg)
+{
+
+pl_testBYSY <- lapply(seq_along(chromSY), function(i) {
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+toplot_F <- bind_rows(
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(bg,weight=bg$mh_test3kcor)[ROI])),type="BYSY",type2="3k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(bg,weight=bg$mh_test5kcor)[ROI])),type="BYSY",type2="5k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(bg,weight=bg$mh_test11kcor)[ROI])),type="BYSY",type2="11k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(bg,weight=bg$mh_test21kcor)[ROI])),type="BYSY",type2="21k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(bg,weight=bg$mh_test41kcor)[ROI])),type="BYSY",type2="41k")
+)
+toplot_F$type2 <- factor(toplot_F$type2, levels=c("3k","5k","11k","21k","41k"))
+
+toplot_F_bin <- toplot_F %>%
+		mutate(pos = floor((pos-1)/bs0)*bs0+1) %>%
+		group_by(type2,pos) %>%
+		summarise(wt = mean(wt,na.rm=T), .groups = "drop")
+
+## group and fix test threshold to 1e-2
+Ftest.th <- 1e-2
+toplot_F_bin2 <- toplot_F_bin %>%
+		mutate(test=map_chr(wt, function(x) case_when((x<=Ftest.th)~"s.",(x>Ftest.th)~"n.s.",T~"NA")) %>% as_factor)
+
+custom_breaks <- seq(start(ROI)-1, end(ROI), 10000)
+
+p2 <- ggplot(toplot_F_bin2)+geom_tile(aes(x=pos+500,y=type2,fill=test))+
+	scale_fill_manual("",values=c("purple","white","grey65"),breaks = c("s.", "n.s.", "NA"),labels = c("s.", "n.s.", "N/A"),na.value = "grey65",limits= c("s.", "n.s.", "NA"))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("BYvsSY")+
+	coord_cartesian(expand=F)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black"))
+
+return(p2)
+})
+return(pl_testBYSY)
+}
+
+bgMH <- readRDS("Data/RFD_bg_MHtest_adjBY.rds") 
+resMH <- allplotMH(bgMH)
+```
+
+
+### Add RFD plots
+
+```{r warning=FALSE}
+bs=1000
+rfd_leg <- factor(c("BY","SY"),levels=c("BY","SY"))
+rfd_pal <- mypal[c(1,7)]
+names(rfd_pal) <- rfd_leg
+
+rfdBY <- import("BigWig/rfd_BYBYSY_nt.bw")
+rfdSY <- import("BigWig/rfd_SYSY_nt.bw")
+
+pl_rfdBY <- lapply(seq_along(chromSY), function(i) 
+{
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+	toplot_rfd <- tibble(pos=start(ROI):end(ROI),
+		rfdby=as.numeric(unlist(coverage(rfdBY,weight=rfdBY$score)[ROI])),
+		rfdsy=as.numeric(unlist(coverage(rfdSY,weight=rfdSY$score)[ROI])))
+	toplot_rfd2 <- toplot_rfd %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(rfdby = mean(rfdby,na.rm=T),rfdsy = mean(rfdsy,na.rm=T), .groups = "drop")
+pl <- ggplot(toplot_rfd2)+
+	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=rfdsy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(-1,1))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("RFD")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+
+rfdBY <- import("BigWig/rfdnt_BY1.bw")
+rfdSY <- import("BigWig/rfdnt_SY1.bw")
+
+pl_rfdrep1 <- lapply(seq_along(chromSY), function(i) 
+{
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+	toplot_rfd <- tibble(pos=start(ROI):end(ROI),
+		rfdby=as.numeric(unlist(coverage(rfdBY,weight=rfdBY$score)[ROI])),
+		rfdsy=as.numeric(unlist(coverage(rfdSY,weight=rfdSY$score)[ROI])))
+	toplot_rfd2 <- toplot_rfd %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(rfdby = mean(rfdby,na.rm=T),rfdsy = mean(rfdsy,na.rm=T), .groups = "drop")
+pl <- ggplot(toplot_rfd2)+
+	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=rfdsy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(-1,1))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("RFD")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+
+rfdBY <- import("BigWig/rfdnt_BY2.bw")
+rfdSY <- import("BigWig/rfdnt_SY2.bw")
+
+pl_rfdrep2 <- lapply(seq_along(chromSY), function(i) 
+{
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+	toplot_rfd <- tibble(pos=start(ROI):end(ROI),
+		rfdby=as.numeric(unlist(coverage(rfdBY,weight=rfdBY$score)[ROI])),
+		rfdsy=as.numeric(unlist(coverage(rfdSY,weight=rfdSY$score)[ROI])))
+	toplot_rfd2 <- toplot_rfd %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(rfdby = mean(rfdby,na.rm=T),rfdsy = mean(rfdsy,na.rm=T), .groups = "drop")
+pl <- ggplot(toplot_rfd2)+
+	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=rfdsy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(-1,1))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("RFD")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+
+rfdBY <- import("BigWig/rfdnt_BY3.bw")
+rfdSY <- import("BigWig/rfdnt_SY3.bw")
+
+pl_rfdrep3 <- lapply(seq_along(chromSY), function(i) 
+{
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+	toplot_rfd <- tibble(pos=start(ROI):end(ROI),
+		rfdby=as.numeric(unlist(coverage(rfdBY,weight=rfdBY$score)[ROI])),
+		rfdsy=as.numeric(unlist(coverage(rfdSY,weight=rfdSY$score)[ROI])))
+	toplot_rfd2 <- toplot_rfd %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(rfdby = mean(rfdby,na.rm=T),rfdsy = mean(rfdsy,na.rm=T), .groups = "drop")
+pl <- ggplot(toplot_rfd2)+
+	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=rfdsy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(-1,1))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("RFD")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+```
+
+### adding RFD signif zone
+```{r message=FALSE, warning=FALSE}
+naming <- c("S2B","S2C","S2D","S2E","2","S2F","S2G","S2H","S2I","S2J","S2K","S2L","S2M","S2N","S2O","S2P")
+taging <- c("B","C","D","E"," ","F","G","H","I ","J","K","L","M","N","O","P")
+titling <- c(rep("Supplementary Figure 2",4),"Figure 2",rep("Supplementary Figure 2",11))
+rfd_zone <- import("Data/bgsigMH.bed")
+rfdBY <- import("BigWig/rfd_BYBYSY_nt.bw")
+rfdSY <- import("BigWig/rfd_SYSY_nt.bw")
+
+pl_rfdExp <- lapply(seq_along(chromSY), function(i) 
+{
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+	featROI <- as_tibble(feat[overlapsAny(feat,ROI,type="within")]) %>% rename(featname=name) %>% filter(type %in% c("CEN","chromBY")) 
+	featROI2 <- as_tibble(rfd_zone[overlapsAny(rfd_zone,ROI)]) %>% rename(featname=name)
+	featROI3 <- as_tibble(masked_SY[overlapsAny(masked_SY,ROI)])
+	toplot_rfd <- tibble(pos=start(ROI):end(ROI),
+		rfdby=as.numeric(unlist(coverage(rfdBY,weight=rfdBY$score)[ROI])),
+		rfdsy=as.numeric(unlist(coverage(rfdSY,weight=rfdSY$score)[ROI])))
+	toplot_rfd2 <- toplot_rfd %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(rfdby = mean(rfdby,na.rm=T),rfdsy = mean(rfdsy,na.rm=T), .groups = "drop")
+pl <- ggplot(toplot_rfd2)+
+geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=-1,ymax=1),fill=mypal[15],col=mypal[15])+
+geom_rect(data=featROI2,aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=-1,ymax=1),fill="purple",col=NA,alpha=0.3)+
+		geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
+		geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
+		geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
+	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=rfdsy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(-1,1))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("RFD")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+
+
+for (i in 1:16) 
+{
+pl_testMH <- resMH[[i]]+theme(axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("CMH test")
+pl_gen <- pl_geno[[i]]+theme(legend.title=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Features")
+
+pl_rfd_rep1 <- pl_rfdrep1[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("RFD_rep1")
+pl_rfd_rep2 <- pl_rfdrep2[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("RFD_rep2")
+pl_rfd_rep3 <- pl_rfdrep3[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("RFD_rep3")
+
+pl_rfd_pool <- pl_rfdExp[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("RFD")
+
+pp <- pl_rfd_rep1/pl_rfd_rep2/pl_rfd_rep3/pl_testMH/pl_rfd_pool/pl_gen+
+	plot_layout(ncol = 1, heights = c(rep(3,5),2))+
+	plot_annotation(tag_levels=list(c(taging[i])),title=titling[i],theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+ggsave(paste0("FigArticle/Fig",naming[i],".pdf"),h=7,w=8,device=cairo_pdf)
+}
+```
+
+figure S2A: BY chromosomes on SY genome
+```{r}
+chrom_pal <- mypal[c(1:8,10:12,14:18)]
+names(chrom_pal) <- chromSY$name
+
+ROI=chromSY
+featROI <- as_tibble(chromSY)
+featROI$name <- factor(featROI$name,levels=featROI$name)
+pl0 <- ggplot(featROI)+
+	geom_rect(data=featROI,aes(xmin=start,xmax=end,ymin=0,ymax=1,col=name,fill=name))+
+	scale_fill_manual("",values = chrom_pal)+
+	scale_color_manual("",values = chrom_pal)+
+	xlab(paste0("SY coordinates (kb)"))+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(1,11848804),
+		breaks=seq(floor(1/1000000)*1000000,11848804,1000000),
+		minor_breaks=seq(floor(1/500000)*500000,11848804,500000),
+		expand=c(0,0))+
+	theme(legend.position = "top",axis.ticks.y = element_blank(),axis.text.y = element_blank(),panel.grid.major.y=element_blank(),panel.grid.minor.y=element_blank(),legend.key = element_rect(colour = "black"))+
+	guides(colour="none",fill = guide_legend(nrow=1))
+pl1 <- pl0+plot_annotation(tag_levels="A",title="Supplementary Figure 2",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+ggsave(plot=pl1,file="FigArticle/FigS2A.pdf",h=3,w=12,device=cairo_pdf)
+```

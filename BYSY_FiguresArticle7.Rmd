@@ -1,0 +1,514 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# Figure7,S7 and S9
+
+***  
+
+### Figure 7 : speedmap on chr XV,XIV,X,XIII
+#### Figure S7: speedmap on other chr
+
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+library(patchwork)
+library(ggprism)
+library(DescTools)
+
+theme_set(theme_bw())
+
+mypal <- c(paletteer::paletteer_d("ggthemes::Classic_20"),"grey40","black","gold","greenyellow","grey20")
+
+`%+%` <- paste0
+
+source("Helper_function.r")
+
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+chromSY <- import("Genome_annotations/chromBYonSYgr.bed") %>% NewSeqinfo(seqin=seqinfSY) %>% sort
+bs0 <- 1000
+ovl <- 50000
+```
+
+
+Generate genomic track with chr, CEN and ORI.  
+
+```{r message=FALSE, warning=FALSE}
+CEN <- import("Genome_annotations/SY14_CEN.gff3") %>% NewSeqinfo(seqin=seqinfSY)
+ARS_BYonSY <- import("Data/ars2keep_lim10k_cl1500_2_dtac1500.bed") %>% NewSeqinfo(seqin=seqinfSY)
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),strand="*",seqinfo=seqinfSY)
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds") %>% makeGRangesFromDataFrame()
+ura3d0 <- GRanges("CP029160.1",IRanges(1051200,1051500),strand="*",seqinfo=seqinfSY,type="ura3_masked")
+
+
+geno_leg <- factor(c("CEN","ORI","rDNA","Ty_masked","ura3_masked"),levels=c("CEN","ORI","rDNA","Ty_masked","ura3_masked"))
+geno_pal <- mypal[c(9,13,17,21,25)]
+names(geno_pal) <- geno_leg
+feat.list <- GRangesList(
+	CEN,
+	ARS_BYonSY,
+	rDNA_SY,
+	maskedTy_SY,
+	ura3d0,
+	chromSY
+) 
+names(feat.list) <- c(names(geno_pal),"chromBY")
+chrom_pal <- mypal[c(1:8,10:12,14:18)]
+names(chrom_pal) <- chromSY$name
+geno_pal <- c(geno_pal,chrom_pal)
+
+feat.list <- lapply(seq_along(feat.list), function(x) {feat.list[[x]]$type=names(feat.list)[x];return(feat.list[[x]])})
+feat <- do.call(c,feat.list)
+
+
+pl_geno <- lapply(seq_along(chromSY), function(i) {
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+	featROI <- as_tibble(feat[overlapsAny(feat,ROI)]) %>% rename(featname=name)
+ggplot(featROI)+
+	geom_rect(data=featROI %>% filter(type %in% c("CEN","rDNA","Ty_masked","ura3_masked")),aes(xmin=start,xmax=end,ymin=2,ymax=3,col=type,fill=type))+
+	geom_rect(data=featROI%>% filter(type %in% c("ORI")),aes(xmin=start,xmax=end,ymin=1,ymax=2,col=type,fill=type))+
+	geom_rect(data=featROI%>% filter(type %in% c("chromBY")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=0,ymax=1,col=featname,fill=featname))+
+	geom_text(data=featROI%>% filter(type %in% c("chromBY")),aes(x=(pmax(start,start(ROI))+pmin(end,end(ROI)))/2,y=0.5,label=featname),col="black",show.legend=F)+
+	scale_color_manual("",values = geno_pal)+
+	scale_fill_manual("",values = geno_pal)+	xlab(paste0("SY coordinates (kb)"))+
+	coord_cartesian(ylim=c(0,3),clip = "off")+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	theme(axis.ticks.y = element_blank(),axis.text.y = element_blank(),panel.grid.major.y=element_blank(),panel.grid.minor.y=element_blank(),legend.key = element_rect(colour = "black"))
+})
+
+```
+
+### Speed and Cov track
+```{r message=FALSE, warning=FALSE}
+bingen <- readRDS("Data/centerfullpooledSpeed.rds")
+bg <- as_tibble(bingen)
+
+res_speed21kBY <- bg %>% select(seqnames,start,end,width,strand,contains("BY21k")) %>%
+	mutate(speed21kBY_cov=map_dbl(BY21k, function(x) {
+		if (is.na(x[[1]][1])) {z=NA} else {z=nrow(x)};return(z)})) %>%
+	mutate(speed21kBY_med=map_dbl(BY21k, function(x) {
+		if (is.na(x[[1]][1])) {z=NA} else {y=pull(x,speed);z=median(y,na.rm=T)};return(z)})) %>%
+	mutate(speed21kBY_cinf=map_dbl(BY21k, function(x) {
+		if (is.na(x[[1]][1])) {z=NA} else {
+			y=pull(x,speed)
+			y1=MedianCI(y,na.rm=T,conf.level = 0.98)[2]
+		z=ifelse(is.infinite(y1),NA,y1)}
+		return(z)
+		})) %>%
+	mutate(speed21kBY_csup=map_dbl(BY21k, function(x) {
+		if (is.na(x[[1]][1])) {z=NA} else {
+			y=pull(x,speed)
+			y1=MedianCI(y,na.rm=T,conf.level = 0.98)[3]
+		z=ifelse(is.infinite(y1),NA,y1)}
+		return(z)
+		}))
+res_speed21kSY <- bg %>% select(seqnames,start,end,width,strand,contains("SY21k")) %>%
+	mutate(speed21kSY_cov=map_dbl(SY21k, function(x) {
+		if (is.na(x[[1]][1])) {z=NA} else {z=nrow(x)};return(z)})) %>%
+	mutate(speed21kSY_med=map_dbl(SY21k, function(x) {
+		if (is.na(x[[1]][1])) {z=NA} else {y=pull(x,speed);z=median(y,na.rm=T)};return(z)})) %>%
+	mutate(speed21kSY_cinf=map_dbl(SY21k, function(x) {
+		if (is.na(x[[1]][1])) {z=NA} else {
+			y=pull(x,speed)
+			y1=MedianCI(y,na.rm=T,conf.level = 0.98)[2]
+		z=ifelse(is.infinite(y1),NA,y1)}
+		return(z)
+		})) %>%
+	mutate(speed21kSY_csup=map_dbl(SY21k, function(x) {
+		if (is.na(x[[1]][1])) {z=NA} else {
+			y=pull(x,speed)
+			y1=MedianCI(y,na.rm=T,conf.level = 0.98)[3]
+		z=ifelse(is.infinite(y1),NA,y1)}
+		return(z)
+		}))
+
+speed_leg <- factor(c("speedBY","speedSY"),levels=c("speedBY","speedSY"))
+speed_pal <- mypal[c(1,7)]
+names(speed_pal) <- speed_leg
+
+## 21k
+bs0=1000
+bs=21000
+
+bin_medBY <- makeGRangesFromDataFrame(res_speed21kBY,keep.extra.columns=T,seqinfo=seqinfSY)
+bin_medSY <- makeGRangesFromDataFrame(res_speed21kSY,keep.extra.columns=T,seqinfo=seqinfSY)
+medcovBY <- median(res_speed21kBY$speed21kBY_cov,na.rm=T)
+speedmedgenBY <- median(res_speed21kBY$speed21kBY_med,na.rm=T)
+medcovSY <- median(res_speed21kSY$speed21kSY_cov,na.rm=T)
+speedmedgenSY <- median(res_speed21kSY$speed21kSY_med,na.rm=T)
+
+pl21k <- lapply(seq_along(chromSY), function(i) {
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+toplot_bin <- tibble(pos=start(ROI):end(ROI),
+BYspeed=as.numeric(unlist(coverage(bin_medBY,weight=bin_medBY$speed21kBY_med)[ROI])),
+BYspeedINF=as.numeric(unlist(coverage(bin_medBY,weight=bin_medBY$speed21kBY_cinf)[ROI])),
+BYspeedSUP=as.numeric(unlist(coverage(bin_medBY,weight=bin_medBY$speed21kBY_csup)[ROI])),
+SYspeed=as.numeric(unlist(coverage(bin_medSY,weight=bin_medSY$speed21kSY_med)[ROI])),
+SYspeedINF=as.numeric(unlist(coverage(bin_medSY,weight=bin_medSY$speed21kSY_cinf)[ROI])),
+SYspeedSUP=as.numeric(unlist(coverage(bin_medSY,weight=bin_medSY$speed21kSY_csup)[ROI])))
+toplot_bin[toplot_bin==0] <- NA
+
+toplot_bin2 <- toplot_bin %>%
+		mutate(pos = round(pos/bs0)*bs0+1) %>%
+		group_by(pos) %>%
+		summarise(BYspeed = mean(BYspeed,na.rm=T), BYspeedINF = mean(BYspeedINF,na.rm=T),BYspeedSUP = mean(BYspeedSUP,na.rm=T),SYspeed = mean(SYspeed,na.rm=T),SYspeedINF = mean(SYspeedINF,na.rm=T),SYspeedSUP = mean(SYspeedSUP,na.rm=T),.groups = "drop")
+
+toplot_cov <- tibble(pos=start(ROI):end(ROI),
+coverageBY=as.numeric(unlist(coverage(bin_medBY,weight=bin_medBY$speed21kBY_cov)[ROI])),
+coverageSY=as.numeric(unlist(coverage(bin_medSY,weight=bin_medSY$speed21kSY_cov)[ROI]))
+)
+toplot_cov[toplot_cov==0] <- NA
+toplot_cov2 <- toplot_cov %>%
+		mutate(pos = round(pos/bs0)*bs0+1) %>%
+		group_by(pos) %>%
+		summarise(coverageBY = mean(coverageBY,na.rm=T),coverageSY = mean(coverageSY,na.rm=T), .groups = "drop")
+
+p1 <- ggplot(toplot_bin2)+
+	geom_line(aes(x=pos,y=BYspeed,col="speedBY"))+
+	geom_ribbon(aes(x=pos,ymin=BYspeedINF,ymax=BYspeedSUP,fill="speedBY"),alpha=0.3,col=NA)+
+	geom_line(aes(x=pos,y=SYspeed,col="speedSY"))+
+	geom_ribbon(aes(x=pos,ymin=SYspeedINF,ymax=SYspeedSUP,fill="speedSY"),alpha=0.3,col=NA)+
+	geom_hline(yintercept=speedmedgenBY,linetype=2,alpha=0.5,col=speed_pal[1])+
+	geom_hline(yintercept=speedmedgenSY,linetype=2,alpha=0.5,col=speed_pal[2])+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("Speed (bp/min)")+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	scale_color_manual("",values = speed_pal)+
+	scale_fill_manual("",values = speed_pal)+
+	theme(legend.key = element_rect(colour = "black"))+
+	coord_cartesian(ylim=c(500,3500),expand=F)
+p1cov <- ggplot(toplot_cov2)+
+	geom_hline(yintercept=medcovBY,linetype=2,alpha=0.5,col=speed_pal[1])+
+	geom_hline(yintercept=medcovSY,linetype=2,alpha=0.5,col=speed_pal[2])+
+	geom_line(aes(x=pos,y=coverageBY),col=speed_pal[1])+
+	geom_line(aes(x=pos,y=coverageSY),col=speed_pal[2])+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("Coverage")+
+	coord_cartesian(ylim=c(0,500),expand=F)
+
+return(list(p1,p1cov))
+})
+```
+
+### Scaled tests
+
+```{r message=FALSE, warning=FALSE}
+res_tot <- readRDS("Data/BYspeedtestadjHolm_centered.rds")
+big_gr <- makeGRangesFromDataFrame(res_tot,keep.extra.columns=T,seqinfo=seqinfSY)
+
+pl_MWW_BY <- lapply(seq_along(chromSY), function(i) {
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+toplot_wtl <- bind_rows(
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl1k)[ROI])),type="slow1k",type2="1k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl3k)[ROI])),type="slow3k",type2="3k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl5k)[ROI])),type="slow5k",type2="5k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl11k)[ROI])),type="slow11k",type2="11k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl21k)[ROI])),type="slow21k",type2="21k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl41k)[ROI])),type="slow41k",type2="41k"))
+toplot_wtl$type2 <- factor(toplot_wtl$type2, levels=c("1k","3k","5k","11k","21k","41k"))
+
+toplot_wtl2 <- toplot_wtl %>%
+		mutate(pos = floor((pos-1)/bs0)*bs0+1) %>%
+		group_by(type2,pos) %>%
+		summarise(wt = mean(wt,na.rm=T), .groups = "drop")
+
+toplot_wtg <- bind_rows(
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg1k)[ROI])),type="fast1k",type2="1k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg3k)[ROI])),type="fast3k",type2="3k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg5k)[ROI])),type="fast5k",type2="5k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg11k)[ROI])),type="fast11k",type2="11k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg21k)[ROI])),type="fast21k",type2="21k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg41k)[ROI])),type="fast41k",type2="41k")
+)
+toplot_wtg$type2 <- factor(toplot_wtg$type2, levels=c("1k","3k","5k","11k","21k","41k"))
+
+toplot_wtg2 <- toplot_wtg %>%
+		mutate(pos = floor((pos-1)/bs0)*bs0+1) %>%
+		group_by(type2,pos) %>%
+		summarise(wt = mean(wt,na.rm=T), .groups = "drop")
+
+## group and fix test threshold to 1e-2
+MWW.th <- 1e-2
+toplot_wt2 <- full_join(toplot_wtg2,toplot_wtl2,by=c("type2","pos"),suffix=c(".f",".s")) %>%
+		mutate(wt2=map2_chr(wt.f,wt.s, function(x,y) case_when((x<MWW.th)~"faster",(y<MWW.th)~"slower",(x>=MWW.th & y>=MWW.th)~"n.s.",T~"NA")) %>% as_factor)
+
+custom_breaks <- seq(start(ROI)-1, end(ROI), 10000)
+
+p2 <- ggplot(toplot_wt2)+geom_tile(aes(x=pos+500,y=type2,fill=wt2))+
+	scale_fill_manual("",values=c("purple","green3","white","grey65"),breaks = c("slower", "faster", "n.s.", "NA"),labels = c("slower", "faster", "n.s.", "N/A"),na.value = "grey65")+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("MWW.adj.BY")+
+	coord_cartesian(expand=F)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black"))
+
+return(p2)
+})
+
+res_tot <- readRDS("Data/SYspeedtestadjHolm_centered.rds")
+big_gr <- makeGRangesFromDataFrame(res_tot,keep.extra.columns=T)
+bs0 <- 1000
+pl_MWW_SY <- lapply(seq_along(chromSY), function(i) {
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+toplot_wtl <- bind_rows(
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl1k)[ROI])),type="slow1k",type2="1k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl3k)[ROI])),type="slow3k",type2="3k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl5k)[ROI])),type="slow5k",type2="5k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl11k)[ROI])),type="slow11k",type2="11k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl21k)[ROI])),type="slow21k",type2="21k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl41k)[ROI])),type="slow41k",type2="41k"))
+toplot_wtl$type2 <- factor(toplot_wtl$type2, levels=c("1k","3k","5k","11k","21k","41k"))
+
+toplot_wtl2 <- toplot_wtl %>%
+		mutate(pos = floor((pos-1)/bs0)*bs0+1) %>%
+		group_by(type2,pos) %>%
+		summarise(wt = mean(wt,na.rm=T), .groups = "drop")
+
+toplot_wtg <- bind_rows(
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg1k)[ROI])),type="fast1k",type2="1k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg3k)[ROI])),type="fast3k",type2="3k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg5k)[ROI])),type="fast5k",type2="5k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg11k)[ROI])),type="fast11k",type2="11k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg21k)[ROI])),type="fast21k",type2="21k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg41k)[ROI])),type="fast41k",type2="41k")
+)
+toplot_wtg$type2 <- factor(toplot_wtg$type2, levels=c("1k","3k","5k","11k","21k","41k"))
+
+toplot_wtg2 <- toplot_wtg %>%
+		mutate(pos = floor((pos-1)/bs0)*bs0+1) %>%
+		group_by(type2,pos) %>%
+		summarise(wt = mean(wt,na.rm=T), .groups = "drop")
+
+## group and fix test threshold to 1e-2
+MWW.th <- 1e-2
+toplot_wt2 <- full_join(toplot_wtg2,toplot_wtl2,by=c("type2","pos"),suffix=c(".f",".s")) %>%
+		mutate(wt2=map2_chr(wt.f,wt.s, function(x,y) case_when((x<MWW.th)~"faster",(y<MWW.th)~"slower",(x>=MWW.th & y>=MWW.th)~"n.s.",T~"NA")) %>% as_factor)
+
+custom_breaks <- seq(start(ROI)-1, end(ROI), 10000)
+
+p2 <- ggplot(toplot_wt2)+geom_tile(aes(x=pos+500,y=type2,fill=wt2))+
+	scale_fill_manual("",values=c("purple","green3","white","grey65"),breaks = c("slower", "faster", "n.s.", "NA"),labels = c("slower", "faster", "n.s.", "N/A"),na.value = "grey65")+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("MWW.adj.SY")+
+	coord_cartesian(expand=F)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black"))
+return(p2)
+})
+```
+### Scaled interstrain tests
+```{r message=FALSE, warning=FALSE}
+res_tot <- readRDS("Data/centerfullpooledSpeed_Wtest_Holmpadj.rds")
+big_gr <- makeGRangesFromDataFrame(res_tot,keep.extra.columns=T)
+bs0 <- 1000
+pl_MWW_SYBY <- lapply(seq_along(chromSY), function(i) {
+	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
+toplot_wtl <- bind_rows(
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl1k)[ROI])),type="slow1k",type2="1k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl3k)[ROI])),type="slow3k",type2="3k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl5k)[ROI])),type="slow5k",type2="5k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl11k)[ROI])),type="slow11k",type2="11k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl21k)[ROI])),type="slow21k",type2="21k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtl41k)[ROI])),type="slow41k",type2="41k"))
+toplot_wtl$type2 <- factor(toplot_wtl$type2, levels=c("1k","3k","5k","11k","21k","41k"))
+
+toplot_wtl2 <- toplot_wtl %>%
+		mutate(pos = floor((pos-1)/bs0)*bs0+1) %>%
+		group_by(type2,pos) %>%
+		summarise(wt = mean(wt,na.rm=T), .groups = "drop")
+
+toplot_wtg <- bind_rows(
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg1k)[ROI])),type="fast1k",type2="1k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg3k)[ROI])),type="fast3k",type2="3k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg5k)[ROI])),type="fast5k",type2="5k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg11k)[ROI])),type="fast11k",type2="11k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg21k)[ROI])),type="fast21k",type2="21k"),
+tibble(pos=start(ROI):end(ROI),wt=as.numeric(unlist(coverage(big_gr,weight=big_gr$adj_wtg41k)[ROI])),type="fast41k",type2="41k")
+)
+toplot_wtg$type2 <- factor(toplot_wtg$type2, levels=c("1k","3k","5k","11k","21k","41k"))
+
+toplot_wtg2 <- toplot_wtg %>%
+		mutate(pos = floor((pos-1)/bs0)*bs0+1) %>%
+		group_by(type2,pos) %>%
+		summarise(wt = mean(wt,na.rm=T), .groups = "drop")
+
+## group and fix test threshold to 1e-2
+MWW.th <- 1e-2
+toplot_wt2 <- full_join(toplot_wtg2,toplot_wtl2,by=c("type2","pos"),suffix=c(".f",".s")) %>%
+		mutate(wt2=map2_chr(wt.f,wt.s, function(x,y) case_when((x<MWW.th)~"SY_faster",(y<MWW.th)~"SY_slower",(x>=MWW.th & y>=MWW.th)~"n.s.",T~"NA")) %>% as_factor)
+
+custom_breaks <- seq(start(ROI)-1, end(ROI), 10000)
+
+p2 <- ggplot(toplot_wt2)+geom_tile(aes(x=pos+500,y=type2,fill=wt2))+
+	scale_fill_manual("",values=c("purple","green3","white","grey65"),breaks = c("SY_slower", "SY_faster", "n.s.", "NA"),labels = c("SY_slower", "SY_faster", "n.s.", "N/A"),na.value = "grey65")+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("MWW.adj.SYBY")+
+	coord_cartesian(expand=F)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
+		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		expand=c(0,0))+
+	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black"))
+return(p2)
+})
+```
+
+### Composing with patchwork
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+p_list <- list()
+for (i in 1:16) 
+{
+pl_speed <- pl21k[[i]][[1]]+theme(axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+coord_cartesian(ylim=c(1000,3000))+labs(tag=chromSY$name[i])+theme(plot.tag=element_text(face="bold"))
+pl_gen <- pl_geno[[i]]+theme(legend.title=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Features")
+pl_testSYBY <- pl_MWW_SYBY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Scale_BYvsSY")
+pl_testBY <- pl_MWW_BY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Scale_BY")
+pl_testSY <- pl_MWW_SY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Scale_SY")
+p_list[[i]] <- pl_speed/pl_testSYBY/pl_testBY/pl_testSY/pl_gen+plot_layout(ncol = 1, heights = c(3.8,1.4,1.4,1.4,1))
+}
+
+pp <- wrap_elements(p_list[[7]])+wrap_elements(p_list[[16]])+wrap_elements(p_list[[3]])+wrap_elements(p_list[[4]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels="A",title="Figure 7") & theme(text = element_text(face="bold"))
+ggsave(plot=pp,paste0("FigArticle/Fig7.pdf"),h=14,w=16)
+
+pp <- wrap_elements(p_list[[1]])+wrap_elements(p_list[[2]])+wrap_elements(p_list[[5]])+wrap_elements(p_list[[6]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels="A",title="Supplementary Figure 7") & theme(text = element_text(face="bold"))
+ggsave(plot=pp,paste0("FigArticle/FigS7AD.pdf"),h=14,w=16)
+
+pp <- wrap_elements(p_list[[8]])+wrap_elements(p_list[[9]])+wrap_elements(p_list[[10]])+wrap_elements(p_list[[11]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels=list(c("E","F","G","H")),title="Supplementary Figure 7") & theme(text = element_text(face="bold"))
+ggsave(plot=pp,paste0("FigArticle/FigS7EH.pdf"),h=14,w=16)
+
+pp <- wrap_elements(p_list[[12]])+wrap_elements(p_list[[13]])+wrap_elements(p_list[[14]])+wrap_elements(p_list[[15]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels=list(c("I","J","K","L")),title="Supplementary Figure 7") & theme(text = element_text(face="bold"))
+ggsave(plot=pp,paste0("FigArticle/FigS7IL.pdf"),h=14,w=16)
+
+```
+
+### FigS9: speed distri vs genomic features
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(ggdist)
+
+# Importing Forks
+forksBY <- readRDS("Data/forks_BYBYSY.rds")
+forksSY <- readRDS("Data/forks_SYSY.rds")
+
+fBY <- forksBY %>%
+	select(chrom=chromSY,direc,X0=X0nSY,X1=X1nSY,exp,speed,type) %>%
+	mutate(strain="BY")
+fSY <- forksSY %>%
+	select(chrom,direc,X0,X1,exp,speed,type) %>%
+	mutate(strain="SY")
+
+forks <- bind_rows(fBY,fSY) %>% arrange(X0)
+forksGR <- with(forks,GRanges(seqnames=chrom,range=IRanges(pmin(X0,X1),pmax(X0,X1)),speed=speed,strain=strain,direc=direc,seqinfo=seqinfSY))
+
+### remove forks overlapping  maskedTy and ura3d0
+forksGR <- forksGR[!overlapsAny(forksGR,c(maskedTy_SY,ura3d0))]
+tRNA <- import("Genome_annotations/SY14_tRNA.gff3") %>% NewSeqinfo(seqin=seqinfSY)
+
+feat.list <- GRangesList(
+CEN,
+rDNA_SY,
+tRNA)
+names(feat.list) <- c("centromeres","rDNA","tRNA genes")
+### speed alocation
+speed.cen <- forksGR[overlapsAny(forksGR,feat.list[[1]],ignore.strand=T)]
+speed.cen$feat <- "centromeres"
+speed.rrna <- forksGR[overlapsAny(forksGR,feat.list[[2]],ignore.strand=T)]
+speed.rrna$feat <- "rDNA"
+speed.trna <- forksGR[overlapsAny(forksGR,feat.list[[3]],ignore.strand=T)]
+speed.trna$feat <- "tRNA genes"
+speed.other <- forksGR[!overlapsAny(forksGR,unlist(feat.list,use.names=F),ignore.strand=T)]
+speed.other$feat <- "other"
+### exclusion of ambiguous overlaps
+speed.cen2 <- speed.cen[!overlapsAny(speed.cen,speed.trna,type="equal")]
+speed.rrna2 <- speed.rrna[!overlapsAny(speed.rrna,speed.trna,type="equal")]
+speed.trna2 <- speed.trna[!overlapsAny(speed.trna,speed.cen,type="equal") & !overlapsAny(speed.trna,speed.rrna,type="equal")]
+
+toplot0 <- bind_rows(
+as_tibble(speed.cen2),
+as_tibble(speed.trna2),
+as_tibble(speed.rrna2),
+as_tibble(speed.other)
+) %>% select(speed,feat,strain)
+
+toplot0$feat <- factor(toplot0$feat,levels=c("centromeres","rDNA","tRNA genes","other"))
+
+totext <- toplot0 %>% group_by(feat,strain) %>% summarise(n=n()) %>% ungroup
+tomed <- toplot0 %>% group_by(feat,strain) %>% summarise(med=round(median(speed))) %>% ungroup
+
+fs9a <- ggplot(toplot0,aes(x=feat,y=speed,fill=strain,group=strain))+
+	stat_slab(col=NA,alpha=0.6,scale=0.7,position="dodge")+
+	stat_pointinterval(.width=c(.5,.95),col="grey40",position="dodge",show.legend=F)+
+	geom_text(data=totext,aes(x=feat,y=0,label=n),fontface="italic",position =position_dodge(width=1)) +
+	geom_text(data=tomed,aes(x=feat,y=4800,label=med),col="red",position =position_dodge(width=1)) +
+	scale_fill_manual("Strain",values=mypal[c(1,7)])+
+	coord_cartesian(ylim=c(0,5000))+
+	theme(axis.title.x= element_blank(),axis.ticks.x= element_blank(),plot.tag=element_text(face="bold"))+
+	ylab("Speed (bp/min)")
+
+### CEN
+cen <- feat.list[[1]]
+cen$speed <- lapply(seq_along(cen), function(x) forksGR[overlapsAny(forksGR,cen[x])]$speed)
+cen$strain <- lapply(seq_along(cen), function(x) forksGR[overlapsAny(forksGR,cen[x])]$strain)
+
+speed.feat <- as_tibble(cen) %>% select(feat_name=name,speed,strain) %>% unnest(cols=c(speed,strain))
+
+toplot <- speed.feat
+toplot$feat_name <- factor(toplot$feat_name,levels=paste0("CEN",1:16))
+totext <- toplot %>% group_by(feat_name,strain) %>% summarise(n=n()) %>% ungroup
+tomed <- toplot %>% group_by(feat_name,strain) %>% summarise(med=round(median(speed))) %>% ungroup
+
+fs9b <-  ggplot(toplot,aes(x=feat_name,y=speed,fill=strain,group=strain))+
+	stat_slab(col=NA,alpha=0.6,scale=0.7,position="dodge")+
+	stat_pointinterval(.width=c(.5,.95),col="grey40",position="dodge",show.legend=F)+
+	geom_text(data=totext,aes(x=feat_name,y=0,label=n),fontface="italic",position =position_dodge(width=1)) +
+	geom_text(data=tomed,aes(x=feat_name,y=4800,label=med),col="red",position =position_dodge(width=1)) +
+	scale_fill_manual("Strain",values=mypal[c(1,7)])+
+	coord_cartesian(ylim=c(0,5000))+
+	theme(axis.title.x= element_blank(),axis.ticks.x= element_blank(),plot.tag=element_text(face="bold"))+
+	ylab("Speed (bp/min)")
+
+design <- "
+ 11111#########
+ 22222222222222
+"
+pl <- fs9a+fs9b+plot_layout(guides="collect",design=design)+plot_annotation(tag_levels="A",title="Supplementary Figure 9",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+
+ggsave(plot=pl,paste0("FigArticle/FigS9.pdf"),h=8,w=16)
+
+```

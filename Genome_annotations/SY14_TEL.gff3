@@ -1,0 +1,5 @@
+##gff-version 3
+##source-version rtracklayer 1.66.0
+##date 2025-04-10
+CP029160.1	rtracklayer	Tel_repeat	7201	7535	.	.	.	name=intern
+CP029160.1	rtracklayer	Tel_repeat	11837679	11838011	.	.	.	name=intern

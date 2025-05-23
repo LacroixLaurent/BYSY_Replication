@@ -1,0 +1,387 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# 11_Speed Map  
+
+***  
+
+To evaluate the differences in replication fork speed between the SY and BY strain, we proceed similarly as in [Theulot et al, 2022](https://doi.org/10.1038/s41467-022-31012-0).  
+Forks were reduced to their center. We choose to remove forks mapping on the  problematic Ty loci from chrIII and chrXVI and the ura3∆0 locus. 
+The SY genome was parted into non overlapping 1kb bins on which forks were affected with respect to their center.  
+When we computed the forks speed distribution for genomic bins above 1kb, we choose to proceed by merging consecutive 1kb bins, keeping a 1kb shift.  
+As an illustration, the bin 73 at the 3kb scale contains the forks mapping on the bins 72,73 and 74 from the 1kb scale.
+For all this procedure, data were pooled by strain.  
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+library(future.apply)
+library(parallel)
+library(furrr)
+library(patchwork)
+library(ggprism)
+library(DescTools)
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),strand="*",seqinfo=seqinfSY)
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds")
+masked_ura3d0 <- GRanges("CP029160.1",IRanges(1051200,1051500),strand="*",seqinfo=seqinfSY,type="ura3d0")
+masked_SY <- c(maskedTy_SY,masked_ura3d0) 
+
+source("Helper_function.r")
+theme_set(theme_bw())
+mypal <- c(paletteer::paletteer_d("ggthemes::Classic_20"),"grey40","black")
+```
+
+### Importing forks
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+forksBY <- readRDS("Data/forks_BYBYSY.rds")
+forksSY <- readRDS("Data/forks_SYSY.rds")
+
+fBY <- forksBY %>%
+	select(chrom=chromSY,direc,X0=X0nSY,X1=X1nSY,exp,speed,type) %>%
+	mutate(Rep=map_chr(exp,function(x) x %>% str_remove("BY_"))) %>%
+	mutate(strain="BY")
+fSY <- forksSY %>%
+	select(chrom,direc,X0,X1,exp,speed,type) %>%
+	mutate(Rep=map_chr(exp,function(x) x %>% str_remove("SY_"))) %>%
+	mutate(strain="SY")
+
+
+forkBY.gr<- with(fBY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="L"~"+",T~"-"),seqinfo=seqinfSY,speed=speed,direc=direc,type=type,Rep=Rep))
+## exclude TychrIII, TychrXVI and ura3d0 forks
+forkBY.gr <- forkBY.gr[!overlapsAny(forkBY.gr,masked_SY)]
+speedmedgenBY <- median(forkBY.gr$speed,na.rm=T)
+# 2402
+forkSY.gr<- with(fSY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="L"~"+",T~"-"),seqinfo=seqinfSY,speed=speed,direc=direc,type=type,Rep=Rep))
+forkSY.gr <- forkSY.gr[!overlapsAny(forkSY.gr,masked_SY)]
+speedmedgenSY <- median(forkSY.gr$speed,na.rm=T)
+# 2432
+forkBY.grc <- resize(forkBY.gr,fix="center",width=1)
+forkSY.grc <- resize(forkSY.gr,fix="center",width=1)
+```
+
+### Affecting speeds to genomic bins
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+bs <- 1000 
+bingen <- tileGenome(seqinfSY,tilewidth=bs, cut.last.tile.in.chrom=T)
+nc <- 8L
+
+ol1 <- findOverlaps(forkBY.grc,bingen)
+bingen$BY1k <- mclapply(1:length(bingen), function(x) tibble(speed=forkBY.grc[queryHits(ol1)[subjectHits(ol1)==x]]$speed,direc=forkBY.grc[queryHits(ol1)[subjectHits(ol1)==x]]$direc,type=forkBY.grc[queryHits(ol1)[subjectHits(ol1)==x]]$type,Rep=forkBY.grc[queryHits(ol1)[subjectHits(ol1)==x]]$Rep),mc.cores=nc)
+
+ol1 <- findOverlaps(forkSY.grc,bingen)
+bingen$SY1k <- mclapply(1:length(bingen), function(x) tibble(speed=forkSY.grc[queryHits(ol1)[subjectHits(ol1)==x]]$speed,direc=forkSY.grc[queryHits(ol1)[subjectHits(ol1)==x]]$direc,type=forkSY.grc[queryHits(ol1)[subjectHits(ol1)==x]]$type,Rep=forkSY.grc[queryHits(ol1)[subjectHits(ol1)==x]]$Rep),mc.cores=nc)
+```
+
+### Generating other scales binning
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+roll_c_mc <- function(x,win=3,nc=4L)
+{
+# x is a list
+	require(future.apply)
+	plan(multicore, workers = nc)
+
+	res0 <- future_lapply(1:(length(x)-win+1), function(i) {
+		purrr::reduce(x[i:(i+win-1)], dplyr::full_join, by = c("speed","direc","type","Rep"))
+		})
+	if (win%%2==0) 
+	{res <- c(rep(list(NA),win%/%2-1),res0,rep(list(NA),win%/%2))
+	}else{res <- c(rep(list(NA),win%/%2),res0,rep(list(NA),win%/%2))
+	}
+return(res)
+}
+
+bingen$BY3k <- roll_c_mc(bingen$BY1k,win=3)
+bingen$SY3k <- roll_c_mc(bingen$SY1k,win=3)
+#saveRDS(bingen,"centerfullpooledSpeed_" %+% data_suff %+% ".rds")
+bingen$BY5k <- roll_c_mc(bingen$BY1k,win=5)
+bingen$SY5k <- roll_c_mc(bingen$SY1k,win=5)
+#saveRDS(bingen,"centerfullpooledSpeed_" %+% data_suff %+% ".rds")
+bingen$BY11k <- roll_c_mc(bingen$BY1k,win=11)
+bingen$SY11k <- roll_c_mc(bingen$SY1k,win=11)
+#saveRDS(bingen,"centerfullpooledSpeed_" %+% data_suff %+% ".rds")
+bingen$BY21k <- roll_c_mc(bingen$BY1k,win=21)
+bingen$SY21k <- roll_c_mc(bingen$SY1k,win=21)
+#saveRDS(bingen,"centerfullpooledSpeed_" %+% data_suff %+% ".rds")
+bingen$BY41k <- roll_c_mc(bingen$BY1k,win=41)
+bingen$SY41k <- roll_c_mc(bingen$SY1k,win=41)
+saveRDS(bingen,"Data/centerfullpooledSpeed.rds")
+```
+
+### Exporting 21k speed and coverage
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+bingen <- readRDS("Data/centerfullpooledSpeed.rds")
+speedBY21k <- lapply(bingen$BY21k, function(x) {
+	if (!is.na(x)[1])
+	{res <- summarize(x,speedmed=MedianCI(speed)[1],speedmedCIinf=MedianCI(speed)[2],speedmedCIsup=MedianCI(speed)[3],n=n())} else {res <- tibble(speedmed=NA,speedmedCIinf=NA,speedmedCIsup=NA,n=NA)}
+	return(res)
+	}) 
+speedBY21k2 <- do.call(bind_rows,speedBY21k)
+speedSY21k <- lapply(bingen$SY21k, function(x) {
+	if (!is.na(x)[1])
+	{res <- summarize(x,speedmed=MedianCI(speed)[1],speedmedCIinf=MedianCI(speed)[2],speedmedCIsup=MedianCI(speed)[3],n=n())} else {res <- tibble(speedmed=NA,speedmedCIinf=NA,speedmedCIsup=NA,n=NA)}
+	return(res)
+	}) 
+speedSY21k2 <- do.call(bind_rows,speedSY21k)
+
+export(coverage(bingen,weight=speedBY21k2$n),con="BigWig/BYforkcovC21k.bw")
+export(coverage(bingen,weight=speedBY21k2$speedmed),con="BigWig/BYforkspeedmedC21k.bw")
+export(coverage(bingen,weight=speedSY21k2$n),con="BigWig/SYforkcovC21k.bw")
+export(coverage(bingen,weight=speedSY21k2$speedmed),con="BigWig/SYforkspeedmedC21k.bw")
+```
+
+### By strain comparison
+
+We choose to test for each strain and for each bin if the speed distribution in this bin is different from the whole genome speed distribution. rDNA speeds were excluded from the whole genome distribution.
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+	require(future.apply)
+	plan(multicore, workers = 10L)
+
+bingenNoR <- bingen[!overlapsAny(bingen,rDNA_SY)]
+# BY
+speed.binBY <- do.call(c,lapply(bingenNoR$BY1k,function(x) x%>%pull(speed)))
+BYtest <- bingen
+BYtest$wtl1k <- future_sapply(BYtest$BY1k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binBY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+BYtest$wtg1k <- 1-BYtest$wtl1k
+BYtest$wtl3k <- future_sapply(BYtest$BY3k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binBY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+BYtest$wtg3k <- 1-BYtest$wtl3k
+BYtest$wtl5k <- future_sapply(BYtest$BY5k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binBY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+BYtest$wtg5k <- 1-BYtest$wtl5k
+BYtest$wtl11k <- future_sapply(BYtest$BY11k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binBY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+BYtest$wtg11k <- 1-BYtest$wtl11k
+BYtest$wtl21k <- future_sapply(BYtest$BY21k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binBY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+BYtest$wtg21k <- 1-BYtest$wtl21k
+BYtest$wtl41k <- future_sapply(BYtest$BY41k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binBY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+BYtest$wtg41k <- 1-BYtest$wtl41k
+saveRDS(BYtest,file="Data/BYspeedtest_centered.rds")
+# SY
+speed.binSY <- do.call(c,lapply(bingenNoR$SY1k,function(x) x%>%pull(speed)))
+
+SYtest <- bingen
+SYtest$wtl1k <- future_sapply(SYtest$SY1k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binSY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+SYtest$wtg1k <- 1-SYtest$wtl1k
+SYtest$wtl3k <- future_sapply(SYtest$SY3k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binSY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+SYtest$wtg3k <- 1-SYtest$wtl3k
+SYtest$wtl5k <- future_sapply(SYtest$SY5k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binSY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+SYtest$wtg5k <- 1-SYtest$wtl5k
+SYtest$wtl11k <- future_sapply(SYtest$SY11k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binSY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+SYtest$wtg11k <- 1-SYtest$wtl11k
+SYtest$wtl21k <- future_sapply(SYtest$SY21k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binSY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+SYtest$wtg21k <- 1-SYtest$wtl21k
+SYtest$wtl41k <- future_sapply(SYtest$SY41k, function(x) {
+		test <- nrow(x)!=0
+		if (length(test)==0) {test=F}
+		if (test) {		
+			res <- wilcox.test(x$speed,speed.binSY,alternative="l")$p.value} else {res<- NA}
+	return(res)
+	})
+SYtest$wtg41k <- 1-SYtest$wtl41k
+saveRDS(SYtest,file="Data/SYspeedtest_centered.rds")
+
+### holm correction for the pvalues
+BYwtl_adj <- as_tibble(BYtest) %>% 
+	select(seqnames,start,end,strand,contains("wtl")) %>% 
+	pivot_longer(contains("wtl")) %>%
+	mutate(padj=p.adjust(value,"holm")) %>% 
+	select(-"value") %>%
+	pivot_wider(names_from = name,values_from=c(padj),names_prefix="adj_")
+BYwtg_adj <- as_tibble(BYtest) %>% 
+	select(seqnames,start,end,strand,contains("wtg")) %>% 
+	pivot_longer(contains("wtg")) %>%
+	mutate(padj=p.adjust(value,"holm")) %>% 
+	select(-"value") %>%
+	pivot_wider(names_from = name,values_from=c(padj),names_prefix="adj_")
+
+BYwt_adj <- left_join(BYwtl_adj,BYwtg_adj)
+saveRDS(BYwt_adj,file="Data/BYspeedtestadjHolm_centered.rds")
+
+SYwtl_adj <- as_tibble(SYtest) %>% 
+	select(seqnames,start,end,strand,contains("wtl")) %>% 
+	pivot_longer(contains("wtl")) %>%
+	mutate(padj=p.adjust(value,"holm")) %>% 
+	select(-"value") %>%
+	pivot_wider(names_from = name,values_from=c(padj),names_prefix="adj_")
+SYwtg_adj <- as_tibble(SYtest) %>% 
+	select(seqnames,start,end,strand,contains("wtg")) %>% 
+	pivot_longer(contains("wtg")) %>%
+	mutate(padj=p.adjust(value,"holm")) %>% 
+	select(-"value") %>%
+	pivot_wider(names_from = name,values_from=c(padj),names_prefix="adj_")
+
+SYwt_adj <- left_join(SYwtl_adj,SYwtg_adj)
+saveRDS(SYwt_adj,file="Data/SYspeedtestadjHolm_centered.rds")
+
+```
+
+#### SY vs BY stat test
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+bg <- as_tibble(bingen)
+
+bg2 <- bg %>%
+	mutate(wtl1k=pmap_dbl(.,function(SY1k,BY1k,...) {
+		if (nrow(SY1k)!=0 & nrow(BY1k)!=0) {
+			x <- SY1k %>% pull(speed)
+			y <- BY1k %>% pull(speed)
+			res <- wilcox.test(x,y,alternative="l")$p.value
+			}else{
+			res<- NA}
+		return(res)
+		})) %>%
+	mutate(wtg1k=1-wtl1k)
+	
+bg3 <- bg2 %>%
+	mutate(wtl3k=future_pmap_dbl(.,function(SY3k,BY3k,...) {
+		test <- (nrow(SY3k)!=0 & nrow(BY3k)!=0)
+		if (length(test)==0) {test=F}
+		if (test) {
+			x <- SY3k %>% pull(speed)
+			y <- BY3k %>% pull(speed)
+			res <- wilcox.test(x,y,alternative="l")$p.value
+			}else{
+			res<- NA}
+		return(res)
+		})) %>%
+	mutate(wtg3k=1-wtl3k)%>%
+	mutate(wtl5k=future_pmap_dbl(.,function(SY5k,BY5k,...) {
+		test <- (nrow(SY5k)!=0 & nrow(BY5k)!=0)
+		if (length(test)==0) {test=F}
+		if (test) {
+			x <- SY5k %>% pull(speed)
+			y <- BY5k %>% pull(speed)
+			res <- wilcox.test(x,y,alternative="l")$p.value
+			}else{
+			res<- NA}
+		return(res)
+		})) %>%
+	mutate(wtg5k=1-wtl5k)%>%
+	mutate(wtl11k=future_pmap_dbl(.,function(SY11k,BY11k,...) {
+		test <- (nrow(SY11k)!=0 & nrow(BY11k)!=0)
+		if (length(test)==0) {test=F}
+		if (test) {
+			x <- SY11k %>% pull(speed)
+			y <- BY11k %>% pull(speed)
+			res <- wilcox.test(x,y,alternative="l")$p.value
+			}else{
+			res<- NA}
+		return(res)
+		})) %>%
+	mutate(wtg11k=1-wtl11k)%>%
+	mutate(wtl21k=future_pmap_dbl(.,function(SY21k,BY21k,...) {
+		test <- (nrow(SY21k)!=0 & nrow(BY21k)!=0)
+		if (length(test)==0) {test=F}
+		if (test) {
+			x <- SY21k %>% pull(speed)
+			y <- BY21k %>% pull(speed)
+			res <- wilcox.test(x,y,alternative="l")$p.value
+			}else{
+			res<- NA}
+		return(res)
+		})) %>%
+	mutate(wtg21k=1-wtl21k)%>%
+	mutate(wtl41k=future_pmap_dbl(.,function(SY41k,BY41k,...) {
+		test <- (nrow(SY41k)!=0 & nrow(BY41k)!=0)
+		if (length(test)==0) {test=F}
+		if (test) {
+			x <- SY41k %>% pull(speed)
+			y <- BY41k %>% pull(speed)
+			res <- wilcox.test(x,y,alternative="l")$p.value
+			}else{
+			res<- NA}
+		return(res)
+		})) %>%
+	mutate(wtg41k=1-wtl41k)
+	
+saveRDS(bg3,file="Data/centerfullpooledSpeed_Wtest.rds")
+
+
+### Holm correction for the pvalues
+wtl_adj <- bg3 %>% 
+	select(seqnames,start,end,strand,contains("wtl")) %>% 
+	pivot_longer(contains("wtl")) %>%
+	mutate(padj=p.adjust(value,"holm")) %>% 
+	select(-"value") %>%
+	pivot_wider(names_from = name,values_from=c(padj),names_prefix="adj_")
+wtg_adj <- bg3 %>% 
+	select(seqnames,start,end,strand,contains("wtg")) %>% 
+	pivot_longer(contains("wtg")) %>%
+	mutate(padj=p.adjust(value,"holm")) %>% 
+	select(-"value") %>%
+	pivot_wider(names_from = name,values_from=c(padj),names_prefix="adj_")
+
+res_tot <- left_join(bg3,wtl_adj) %>% left_join(wtg_adj)
+
+saveRDS(res_tot,file="Data/centerfullpooledSpeed_Wtest_Holmpadj.rds")
+```
+

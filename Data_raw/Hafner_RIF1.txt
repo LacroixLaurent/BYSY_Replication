@@ -1,0 +1,627 @@
+chrom	start	end	rif1_	rif1_RVxF/SILK	rif1_RBM
+chrI	650	1791	.	.	.
+chrI	6136	7136	pos	pos	no difference
+chrI	7998	8548	pos	pos	no difference
+chrI	9775	10485	pos	pos	no difference
+chrI	16855	17565	pos	pos	no difference
+chrI	30946	31184	.	.	.
+chrI	40716	43300	pos	pos	.
+chrI	70258	70491	no difference	no difference	no difference
+chrI	98769	105769	.	no difference	.
+chrI	124350	124599	no difference	.	no difference
+chrI	136900	137900	.	.	.
+chrI	146703	147690	neg	no difference	no difference
+chrI	159906	160127	.	.	.
+chrI	162000	170000	.	.	.
+chrI	176154	176402	no difference	no difference	no difference
+chrI	197385	198095	non common peak	.	.
+chrI	202769	209769	non common peak	.	.
+chrI	214879	215635	.	.	.
+chrI	222871	224037	.	.	.
+chrI	226100	227000	.	.	.
+chrI	229635	230208	.	.	.
+chrII	39	686	.	.	.
+chrII	6123	7127	.	.	.
+chrII	28933	29152	pos	.	.
+chrII	38623	39068	.	.	.
+chrII	63186	63421	no difference	no difference	no difference
+chrII	70650	73350	.	.	.
+chrII	93410	93811	non common peak	.	.
+chrII	142868	144016	no difference	no difference	neg
+chrII	170049	170298	no difference	.	no difference
+chrII	177529	177877	no difference	.	no difference
+chrII	187205	187915	.	.	.
+chrII	198193	198434	no difference	no difference	no difference
+chrII	209187	210063	.	.	.
+chrII	237644	237879	no difference	no difference	no difference
+chrII	254890	255136	no difference	no difference	no difference
+chrII	258430	259601	no difference	no difference	no difference
+chrII	283015	283913	.	.	.
+chrII	326099	326335	neg	neg	no difference
+chrII	378434	379194	.	.	.
+chrII	389245	390368	.	.	.
+chrII	407831	408064	no difference	no difference	no difference
+chrII	417739	418035	.	.	.
+chrII	440859	441697	.	.	.
+chrII	486661	486909	no difference	no difference	no difference
+chrII	497650	499350	.	.	.
+chrII	503701	505102	.	.	.
+chrII	516805	517805	non common peak	.	.
+chrII	539137	539699	no difference	.	no difference
+chrII	543600	553600	no difference	.	no difference
+chrII	582650	584350	.	.	.
+chrII	591424	591713	no difference	no difference	no difference
+chrII	611269	613200	.	.	.
+chrII	622625	622894	no difference	no difference	no difference
+chrII	627135	627845	no difference	no difference	no difference
+chrII	631934	632246	no difference	no difference	no difference
+chrII	675947	676667	no difference	no difference	no difference
+chrII	704250	704521	no difference	no difference	no difference
+chrII	707158	708262	no difference	no difference	no difference
+chrII	720601	721038	.	.	.
+chrII	741512	741802	pos	no difference	no difference
+chrII	757390	757621	.	no difference	.
+chrII	760355	761713	.	no difference	.
+chrII	773918	774348	.	.	.
+chrII	792116	792340	pos	.	.
+chrII	796259	797162	pos	.	.
+chrII	801930	802617	pos	.	.
+chrIII	837	1551	.	.	.
+chrIII	11145	11401	.	.	.
+chrIII	11303	14854	.	.	.
+chrIII	14574	14849	.	.	.
+chrIII	14870	15213	.	.	.
+chrIII	15213	16274	.	.	.
+chrIII	30199	30657	.	.	.
+chrIII	39158	39706	no difference	no difference	no difference
+chrIII	74457	74677	no difference	no difference	no difference
+chrIII	108775	109291	no difference	no difference	no difference
+chrIII	114314	114933	no difference	no difference	no difference
+chrIII	131978	132322	no difference	no difference	no difference
+chrIII	166494	167340	no difference	no difference	no difference
+chrIII	194256	194505	non common peak	non common peak	.
+chrIII	197369	197601	non common peak	non common peak	.
+chrIII	199935	200645	non common peak	non common peak	.
+chrIII	203876	207534	non common peak	non common peak	.
+chrIII	224807	225053	no difference	no difference	no difference
+chrIII	272844	273088	pos	no difference	pos
+chrIII	292524	292826	.	.	.
+chrIII	294396	295027	.	.	.
+chrIII	304363	311363	.	no difference	.
+chrIII	315346	316232	.	.	.
+chrIV	137	1392	.	.	.
+chrIV	7596	11052	.	.	.
+chrIV	15492	15739	pos	no difference	.
+chrIV	21265	22262	pos	no difference	.
+chrIV	46181	46237	no difference	no difference	no difference
+chrIV	50245	50955	no difference	no difference	no difference
+chrIV	85945	86177	no difference	no difference	no difference
+chrIV	95435	96145	.	.	.
+chrIV	100380	101355	.	.	.
+chrIV	123617	123902	no difference	no difference	no difference
+chrIV	137445	137808	.	.	.
+chrIV	157744	158235	.	.	non common peak
+chrIV	212420	212669	no difference	no difference	no difference
+chrIV	232140	232618	.	.	non common peak
+chrIV	235935	236184	.	.	non common peak
+chrIV	253789	254038	non common peak	non common peak	.
+chrIV	256029	257132	non common peak	non common peak	.
+chrIV	316719	317111	.	.	.
+chrIV	329564	329813	no difference	no difference	no difference
+chrIV	350835	351804	.	.	.
+chrIV	408070	408312	no difference	no difference	no difference
+chrIV	435056	435388	no difference	no difference	no difference
+chrIV	443318	444447	.	.	.
+chrIV	462430	462700	no difference	no difference	.
+chrIV	476003	477577	.	.	non common peak
+chrIV	483846	484091	.	.	.
+chrIV	505336	505578	no difference	no difference	no difference
+chrIV	555224	555461	no difference	no difference	.
+chrIV	567490	567737	.	.	non common peak
+chrIV	629072	629669	.	.	.
+chrIV	639859	640108	no difference	no difference	neg
+chrIV	641291	648291	no difference	no difference	neg
+chrIV	702879	703125	no difference	no difference	no difference
+chrIV	719873	721227	.	.	.
+chrIV	748384	748630	no difference	no difference	no difference
+chrIV	753159	753391	no difference	no difference	no difference
+chrIV	806044	806270	no difference	no difference	no difference
+chrIV	844597	845593	non common peak	non common peak	.
+chrIV	858640	859840	.	.	.
+chrIV	875791	882791	.	.	.
+chrIV	898253	899887	.	.	.
+chrIV	903824	904655	.	.	.
+chrIV	913780	914029	no difference	no difference	no difference
+chrIV	921682	921930	.	.	.
+chrIV	942983	943975	.	.	.
+chrIV	970250	980250	no difference	no difference	no difference
+chrIV	1016624	1016922	no difference	no difference	no difference
+chrIV	1021545	1022255	no difference	no difference	no difference
+chrIV	1033069	1034182	.	.	.
+chrIV	1057828	1058076	no difference	no difference	no difference
+chrIV	1109955	1110196	no difference	no difference	no difference
+chrIV	1130672	1131155	.	.	.
+chrIV	1159250	1159499	non common peak	non common peak	.
+chrIV	1165998	1166221	non common peak	non common peak	.
+chrIV	1199800	1209800	.	.	.
+chrIV	1240869	1241098	no difference	no difference	no difference
+chrIV	1276212	1276440	no difference	no difference	no difference
+chrIV	1302579	1302819	no difference	no difference	no difference
+chrIV	1307650	1308850	no difference	no difference	no difference
+chrIV	1353494	1353667	no difference	no difference	no difference
+chrIV	1379198	1380752	no difference	no difference	no difference
+chrIV	1385151	1385630	no difference	no difference	no difference
+chrIV	1404277	1404512	no difference	no difference	no difference
+chrIV	1447298	1448928	.	.	.
+chrIV	1454012	1455590	.	.	.
+chrIV	1461849	1462161	no difference	no difference	no difference
+chrIV	1486905	1487149	.	.	.
+chrIV	1495291	1502291	pos	no difference	pos
+chrIV	1502624	1503221	pos	no difference	pos
+chrIV	1505300	1507153	pos	no difference	pos
+chrIV	1522298	1526152	.	.	.
+chrIX	6794	9748	.	.	.
+chrIX	15901	19066	pos	.	.
+chrIX	30065	31646	pos	no difference	no difference
+chrIX	33335	33803	pos	no difference	no difference
+chrIX	73803	74220	no difference	no difference	no difference
+chrIX	80058	80557	no difference	no difference	no difference
+chrIX	105821	106048	no difference	no difference	no difference
+chrIX	136094	136335	no difference	no difference	no difference
+chrIX	162936	163302	.	.	.
+chrIX	175034	175355	no difference	.	no difference
+chrIX	179591	186591	no difference	.	no difference
+chrIX	189523	190747	.	.	.
+chrIX	201591	208591	no difference	no difference	.
+chrIX	214675	214826	.	.	non common peak
+chrIX	216591	223591	.	.	non common peak
+chrIX	224943	227297	.	.	.
+chrIX	245694	245932	pos	pos	neg
+chrIX	247579	247800	pos	pos	neg
+chrIX	247893	249347	pos	pos	neg
+chrIX	279618	280818	.	.	.
+chrIX	310583	311070	no difference	no difference	no difference
+chrIX	341853	342096	non common peak	.	.
+chrIX	357156	357393	no difference	no difference	no difference
+chrIX	405633	407617	no difference	no difference	no difference
+chrIX	411817	412053	no difference	no difference	no difference
+chrIX	432496	432994	.	.	.
+chrIX	437553	439847	.	.	.
+chrV	4097	4185	.	.	.
+chrV	6464	7230	.	.	.
+chrV	8786	10019	.	.	.
+chrV	11713	12194	.	.	.
+chrV	17067	19023	.	.	.
+chrV	59282	59516	no difference	no difference	no difference
+chrV	93977	94218	no difference	no difference	no difference
+chrV	108553	110467	.	.	.
+chrV	145539	145782	no difference	no difference	pos
+chrV	173636	173874	neg	no difference	no difference
+chrV	192493	192926	.	.	.
+chrV	212381	212630	no difference	neg	pos
+chrV	255623	256957	.	.	no difference
+chrV	276127	276526	.	.	.
+chrV	278073	278355	.	.	.
+chrV	287504	287750	no difference	neg	no difference
+chrV	301565	302061	.	.	.
+chrV	316043	317307	no difference	no difference	no difference
+chrV	353504	353751	no difference	no difference	no difference
+chrV	406747	406949	no difference	no difference	no difference
+chrV	429861	431061	.	.	.
+chrV	438929	439178	neg	neg	no difference
+chrV	442412	442731	neg	neg	no difference
+chrV	498417	499343	no difference	no difference	no difference
+chrV	520767	521025	.	.	.
+chrV	549560	549809	pos	pos	.
+chrV	559886	566886	.	.	non common peak
+chrV	569020	570085	.	.	.
+chrVI	23	1527	pos	pos	pos
+chrVI	5435	6155	pos	pos	pos
+chrVI	12174	13028	pos	pos	pos
+chrVI	18682	19864	pos	pos	pos
+chrVI	19669	20826	pos	pos	pos
+chrVI	32472	32995	pos	no difference	no difference
+chrVI	32666	33247	pos	no difference	no difference
+chrVI	61781	62981	pos	pos	no difference
+chrVI	68690	68869	pos	pos	no difference
+chrVI	95000	103000	.	.	.
+chrVI	104456	104695	.	.	.
+chrVI	118631	118952	no difference	no difference	no difference
+chrVI	127745	128066	.	.	.
+chrVI	135979	136080	no difference	no difference	no difference
+chrVI	167606	168041	no difference	no difference	no difference
+chrVI	199382	199493	no difference	no difference	no difference
+chrVI	216344	216692	.	.	.
+chrVI	253316	253800	pos	no difference	pos
+chrVI	256263	256418	pos	no difference	pos
+chrVI	268255	268965	.	.	.
+chrVI	269404	270022	.	.	.
+chrVII	6261	8789	.	.	.
+chrVII	17629	18112	pos	no difference	pos
+chrVII	22647	29647	pos	no difference	pos
+chrVII	31980	34434	.	.	.
+chrVII	64279	64528	pos	no difference	pos
+chrVII	112080	112319	pos	pos	neg
+chrVII	114385	115095	pos	pos	neg
+chrVII	117471	117955	pos	pos	neg
+chrVII	163180	163447	no difference	no difference	no difference
+chrVII	170773	172017	.	.	.
+chrVII	187241	187651	.	.	.
+chrVII	203917	204159	no difference	no difference	no difference
+chrVII	231909	231984	.	.	.
+chrVII	240972	241441	non common peak	.	non common peak
+chrVII	266526	267726	.	.	.
+chrVII	268879	270680	.	.	.
+chrVII	274818	275367	.	.	.
+chrVII	285951	286246	no difference	no difference	no difference
+chrVII	287952	289013	no difference	no difference	no difference
+chrVII	318745	319455	no difference	no difference	pos
+chrVII	352695	352917	no difference	no difference	pos
+chrVII	388658	388892	no difference	no difference	no difference
+chrVII	421093	421342	no difference	no difference	no difference
+chrVII	479993	482537	no difference	no difference	no difference
+chrVII	484932	485160	no difference	no difference	no difference
+chrVII	508729	508978	no difference	no difference	no difference
+chrVII	534750	544750	.	.	.
+chrVII	568490	568738	no difference	no difference	no difference
+chrVII	574622	574916	no difference	no difference	no difference
+chrVII	574978	576840	no difference	no difference	no difference
+chrVII	607176	607619	.	.	.
+chrVII	620243	622517	non common peak	.	.
+chrVII	653611	654091	no difference	no difference	no difference
+chrVII	659809	660054	no difference	no difference	no difference
+chrVII	715273	715556	no difference	no difference	no difference
+chrVII	777967	778216	no difference	no difference	no difference
+chrVII	795134	796306	.	.	.
+chrVII	800891	802091	.	.	.
+chrVII	834492	834736	no difference	no difference	no difference
+chrVII	845923	848287	.	.	.
+chrVII	888350	888599	no difference	no difference	no difference
+chrVII	916675	917170	no difference	.	.
+chrVII	969741	970941	.	.	.
+chrVII	977730	977979	no difference	no difference	no difference
+chrVII	999448	999695	no difference	no difference	no difference
+chrVII	1002182	1002571	no difference	no difference	no difference
+chrVII	1004198	1006102	no difference	no difference	no difference
+chrVII	1063254	1063715	.	.	.
+chrVII	1073298	1074352	.	.	non common peak
+chrVII	1082959	1084336	.	.	.
+chrVII	1089548	1090902	.	.	.
+chrVIII	5158	6168	.	.	.
+chrVIII	7534	7782	.	.	.
+chrVIII	9711	11566	.	.	.
+chrVIII	45589	46076	.	.	.
+chrVIII	56650	59172	.	.	.
+chrVIII	64255	64489	no difference	no difference	neg
+chrVIII	94759	95192	.	.	.
+chrVIII	111293	111766	no difference	no difference	no difference
+chrVIII	115683	117257	no difference	no difference	no difference
+chrVIII	133347	133591	no difference	no difference	no difference
+chrVIII	134268	135517	no difference	no difference	no difference
+chrVIII	140340	141265	no difference	no difference	no difference
+chrVIII	168531	168773	no difference	no difference	no difference
+chrVIII	192459	193659	.	.	.
+chrVIII	197814	199014	.	.	.
+chrVIII	213179	213861	no difference	no difference	neg
+chrVIII	214885	215595	no difference	no difference	neg
+chrVIII	218344	219498	no difference	no difference	neg
+chrVIII	245719	245968	no difference	no difference	no difference
+chrVIII	286650	287981	.	.	.
+chrVIII	296882	297475	no difference	no difference	no difference
+chrVIII	344375	345085	.	.	.
+chrVIII	359469	359928	no difference	no difference	no difference
+chrVIII	363335	370335	no difference	no difference	no difference
+chrVIII	380153	382157	.	.	.
+chrVIII	392148	392391	pos	no difference	no difference
+chrVIII	406012	406508	.	.	.
+chrVIII	447619	447853	no difference	no difference	no difference
+chrVIII	474309	474793	no difference	.	no difference
+chrVIII	501751	501992	no difference	no difference	no difference
+chrVIII	520016	520630	pos	no difference	no difference
+chrVIII	535403	535836	.	.	.
+chrVIII	550163	551317	.	.	.
+chrVIII	555996	556327	.	.	.
+chrX	64	577	.	.	.
+chrX	7444	7943	.	.	.
+chrX	16123	16762	pos	.	.
+chrX	23661	24158	.	.	.
+chrX	67467	67949	no difference	no difference	no difference
+chrX	99359	99796	.	non common peak	non common peak
+chrX	113226	113828	no difference	.	.
+chrX	161435	161860	no difference	no difference	no difference
+chrX	167433	174433	no difference	no difference	no difference
+chrX	203729	204614	.	.	.
+chrX	228248	228740	no difference	.	no difference
+chrX	248600	249300	.	non common peak	non common peak
+chrX	268050	269250	.	.	.
+chrX	298471	298952	no difference	no difference	no difference
+chrX	301433	308433	no difference	no difference	no difference
+chrX	336976	337225	no difference	no difference	no difference
+chrX	353463	355722	.	.	.
+chrX	374575	374818	no difference	no difference	no difference
+chrX	375401	375923	no difference	no difference	no difference
+chrX	416888	417134	no difference	no difference	no difference
+chrX	442248	442658	neg	no difference	no difference
+chrX	454276	455248	.	.	.
+chrX	459029	459588	.	.	.
+chrX	469670	479670	.	.	.
+chrX	501595	502525	.	.	.
+chrX	540239	540474	no difference	no difference	no difference
+chrX	609000	609750	no difference	no difference	no difference
+chrX	612542	612975	no difference	no difference	no difference
+chrX	643813	644767	.	.	.
+chrX	654069	654309	no difference	.	.
+chrX	683328	683817	no difference	no difference	no difference
+chrX	711590	711837	.	.	no difference
+chrX	713860	723860	.	.	no difference
+chrX	729677	730208	non common peak	.	.
+chrX	736728	736970	non common peak	.	.
+chrX	744102	744703	non common peak	.	.
+chrXI	23	2746	.	.	.
+chrXI	7397	9007	.	.	.
+chrXI	15455	16165	pos	no difference	pos
+chrXI	42110	42563	.	.	.
+chrXI	55670	55917	no difference	no difference	no difference
+chrXI	98329	98568	no difference	no difference	no difference
+chrXI	113073	115127	.	.	.
+chrXI	145433	145893	.	.	.
+chrXI	152934	153173	no difference	no difference	no difference
+chrXI	196038	196284	.	.	.
+chrXI	199886	200537	.	.	.
+chrXI	213080	213385	no difference	neg	no difference
+chrXI	235293	236577	.	.	.
+chrXI	257390	257839	no difference	neg	no difference
+chrXI	302152	302524	neg	no difference	no difference
+chrXI	329322	329571	neg	neg	no difference
+chrXI	333114	334557	neg	neg	no difference
+chrXI	388607	388902	no difference	no difference	neg
+chrXI	416822	417055	no difference	no difference	no difference
+chrXI	444561	445028	no difference	no difference	no difference
+chrXI	447657	447892	no difference	no difference	no difference
+chrXI	454453	459197	no difference	no difference	no difference
+chrXI	462033	463697	.	.	.
+chrXI	500415	501125	.	.	.
+chrXI	516653	516902	no difference	no difference	no difference
+chrXI	530070	530560	.	.	.
+chrXI	581468	581706	no difference	no difference	no difference
+chrXI	611874	612107	no difference	no difference	no difference
+chrXI	632003	634377	.	.	.
+chrXI	642355	642602	pos	pos	pos
+chrXI	658278	666417	.	.	.
+chrXII	23	2077	.	.	.
+chrXII	51860	52210	no difference	pos	no difference
+chrXII	76711	77163	no difference	pos	no difference
+chrXII	91417	91659	no difference	pos	neg
+chrXII	93166	93659	no difference	pos	neg
+chrXII	150914	151421	neg	no difference	no difference
+chrXII	156646	156883	neg	no difference	no difference
+chrXII	222410	222792	.	.	.
+chrXII	231179	231422	no difference	no difference	no difference
+chrXII	243527	243960	.	.	.
+chrXII	289220	289469	pos	no difference	no difference
+chrXII	343577	344033	non common peak	.	.
+chrXII	373156	373400	no difference	no difference	no difference
+chrXII	412668	412897	no difference	no difference	no difference
+chrXII	450485	450726	no difference	pos	neg
+chrXII	458826	459141	.	.	.
+chrXII	512868	513117	no difference	no difference	no difference
+chrXII	602938	603155	non common peak	.	.
+chrXII	622672	623123	.	.	non common peak
+chrXII	644937	645426	.	.	.
+chrXII	659823	660072	no difference	no difference	no difference
+chrXII	687249	687738	.	.	.
+chrXII	730275	730832	.	.	.
+chrXII	744942	745179	no difference	no difference	no difference
+chrXII	794020	794269	neg	neg	no difference
+chrXII	821907	822336	no difference	no difference	no difference
+chrXII	888569	888810	no difference	no difference	no difference
+chrXII	928051	928540	no difference	no difference	no difference
+chrXII	947908	948358	no difference	no difference	no difference
+chrXII	1007180	1007470	.	.	.
+chrXII	1013789	1014017	.	.	.
+chrXII	1016304	1023304	.	.	.
+chrXII	1023967	1024207	no difference	.	.
+chrXII	1042798	1043952	.	.	.
+chrXII	1052304	1059304	non common peak	non common peak	non common peak
+chrXII	1059486	1059919	non common peak	non common peak	non common peak
+chrXII	1062398	1065752	non common peak	non common peak	non common peak
+chrXII	1070198	1071952	.	.	.
+chrXIII	23	1261	.	.	.
+chrXIII	4983	7702	.	.	.
+chrXIII	8791	10699	.	.	.
+chrXIII	31687	31935	pos	pos	pos
+chrXIII	39922	40355	.	.	.
+chrXIII	44666	45681	.	.	.
+chrXIII	49645	50141	.	.	.
+chrXIII	73874	74373	.	.	.
+chrXIII	94216	94463	no difference	no difference	no difference
+chrXIII	137299	137548	no difference	no difference	no difference
+chrXIII	158846	159279	.	.	.
+chrXIII	183793	184037	no difference	no difference	no difference
+chrXIII	227023	227487	no difference	.	pos
+chrXIII	263062	263296	no difference	no difference	no difference
+chrXIII	268223	269987	no difference	no difference	no difference
+chrXIII	286782	287067	no difference	no difference	no difference
+chrXIII	289203	290548	no difference	no difference	no difference
+chrXIII	341313	342207	non common peak	.	.
+chrXIII	370976	371221	no difference	no difference	no difference
+chrXIII	420429	421629	.	.	.
+chrXIII	432851	433347	no difference	no difference	no difference
+chrXIII	468177	468468	no difference	no difference	no difference
+chrXIII	480233	483637	.	.	.
+chrXIII	503346	504087	no difference	no difference	neg
+chrXIII	535595	535843	no difference	no difference	no difference
+chrXIII	554392	554750	.	.	.
+chrXIII	568128	569097	.	.	.
+chrXIII	569500	577500	.	.	.
+chrXIII	611273	611488	no difference	no difference	no difference
+chrXIII	634479	634714	.	.	.
+chrXIII	649307	649551	no difference	neg	no difference
+chrXIII	688766	689221	no difference	no difference	no difference
+chrXIII	723574	730574	no difference	no difference	no difference
+chrXIII	758222	758470	no difference	no difference	no difference
+chrXIII	759074	766074	no difference	no difference	no difference
+chrXIII	772629	772878	.	.	.
+chrXIII	805116	805338	.	.	.
+chrXIII	815341	815567	no difference	no difference	no difference
+chrXIII	836823	838167	.	.	.
+chrXIII	865288	865683	.	.	.
+chrXIII	878619	879115	.	.	.
+chrXIII	897804	898040	no difference	no difference	pos
+chrXIII	918073	919137	.	.	.
+chrXIII	922023	924397	.	.	.
+chrXIV	50	2241	.	.	.
+chrXIV	6282	10914	.	.	.
+chrXIV	13998	16375	.	.	.
+chrXIV	28467	28699	pos	no difference	.
+chrXIV	61597	61894	no difference	no difference	no difference
+chrXIV	84295	85005	no difference	no difference	pos
+chrXIV	89528	89802	no difference	no difference	pos
+chrXIV	111000	121000	.	.	.
+chrXIV	126488	126981	no difference	no difference	no difference
+chrXIV	136575	137285	.	.	.
+chrXIV	169566	169804	no difference	no difference	no difference
+chrXIV	196055	196291	pos	no difference	no difference
+chrXIV	250259	250506	no difference	no difference	no difference
+chrXIV	252383	254147	no difference	no difference	no difference
+chrXIV	279875	280108	no difference	no difference	no difference
+chrXIV	321917	322210	no difference	no difference	no difference
+chrXIV	324551	325764	no difference	no difference	no difference
+chrXIV	342963	344117	.	.	.
+chrXIV	352509	352996	non common peak	.	.
+chrXIV	357215	357925	non common peak	.	.
+chrXIV	358745	359455	non common peak	.	.
+chrXIV	412263	412493	no difference	no difference	no difference
+chrXIV	415731	416931	no difference	no difference	no difference
+chrXIV	449343	449588	no difference	no difference	neg
+chrXIV	498987	499232	no difference	no difference	no difference
+chrXIV	512969	519969	.	.	.
+chrXIV	545966	546201	no difference	no difference	no difference
+chrXIV	550890	560890	no difference	no difference	no difference
+chrXIV	561106	561384	.	.	.
+chrXIV	567715	569020	.	.	.
+chrXIV	609458	609706	no difference	no difference	no difference
+chrXIV	615807	617621	no difference	no difference	no difference
+chrXIV	635660	635901	neg	no difference	no difference
+chrXIV	691482	691727	no difference	no difference	neg
+chrXIV	713642	714136	.	no difference	.
+chrXIV	734135	734845	pos	no difference	no difference
+chrXIV	738550	738982	pos	no difference	no difference
+chrXIV	764001	764500	.	.	.
+chrXIV	769969	776969	.	.	.
+chrXIV	781453	784287	.	.	.
+chrXV	23	2646	.	.	.
+chrXV	9761	12672	.	.	non common peak
+chrXV	18367	20227	non common peak	.	.
+chrXV	22523	24675	non common peak	.	.
+chrXV	35667	35903	no difference	no difference	no difference
+chrXV	72636	72872	non common peak	.	.
+chrXV	74000	84000	non common peak	.	.
+chrXV	85195	85444	.	no difference	no difference
+chrXV	103253	104167	.	.	.
+chrXV	113843	114084	no difference	no difference	no difference
+chrXV	128922	130182	.	.	.
+chrXV	154972	155462	.	.	.
+chrXV	166974	167220	no difference	no difference	no difference
+chrXV	227481	228117	no difference	no difference	no difference
+chrXV	277529	277778	no difference	no difference	no difference
+chrXV	308969	309462	no difference	.	no difference
+chrXV	331493	332707	no difference	no difference	no difference
+chrXV	337279	337528	no difference	no difference	no difference
+chrXV	347633	348862	.	.	.
+chrXV	353743	354887	.	.	.
+chrXV	371693	372627	.	.	.
+chrXV	397773	399037	.	.	.
+chrXV	436732	436966	no difference	no difference	no difference
+chrXV	458023	459327	neg	neg	no difference
+chrXV	463698	464877	neg	neg	no difference
+chrXV	489645	490129	no difference	no difference	no difference
+chrXV	497144	497603	no difference	no difference	no difference
+chrXV	514258	515458	.	.	no difference
+chrXV	520541	521040	.	.	no difference
+chrXV	566409	566643	no difference	no difference	no difference
+chrXV	575463	578947	.	.	.
+chrXV	600885	600960	no difference	no difference	no difference
+chrXV	601221	608221	no difference	no difference	no difference
+chrXV	616913	618427	no difference	.	pos
+chrXV	645796	646996	.	.	.
+chrXV	656632	656876	.	.	.
+chrXV	662888	663957	.	.	.
+chrXV	669805	670515	.	.	.
+chrXV	681112	681611	no difference	no difference	no difference
+chrXV	699500	709500	.	.	.
+chrXV	729739	729969	no difference	no difference	no difference
+chrXV	733221	740221	no difference	no difference	no difference
+chrXV	759221	766221	no difference	no difference	no difference
+chrXV	766617	766862	no difference	no difference	no difference
+chrXV	783344	783563	.	.	.
+chrXV	847666	848866	no difference	no difference	no difference
+chrXV	854735	855228	no difference	no difference	no difference
+chrXV	874190	874434	no difference	no difference	no difference
+chrXV	898603	900567	.	.	.
+chrXV	908288	908537	neg	neg	no difference
+chrXV	945350	946550	.	non common peak	non common peak
+chrXV	981454	981690	no difference	neg	no difference
+chrXV	997703	999357	.	.	.
+chrXV	1011435	1012635	.	.	.
+chrXV	1022548	1023652	.	.	.
+chrXV	1053490	1053901	no difference	no difference	no difference
+chrXV	1056048	1059952	no difference	no difference	no difference
+chrXV	1077498	1085252	.	.	.
+chrXV	1089998	1091252	.	.	.
+chrXVI	6778	8439	pos	pos	pos
+chrXVI	12290	13227	pos	pos	pos
+chrXVI	18202	19681	pos	pos	pos
+chrXVI	42976	43212	no difference	no difference	pos
+chrXVI	73038	73283	no difference	no difference	no difference
+chrXVI	89758	92975	.	.	no difference
+chrXVI	116505	116765	no difference	no difference	no difference
+chrXVI	161693	163447	no difference	no difference	no difference
+chrXVI	178643	179827	non common peak	.	non common peak
+chrXVI	189963	191457	.	no difference	.
+chrXVI	194903	196097	.	no difference	.
+chrXVI	210467	211723	no difference	no difference	no difference
+chrXVI	214486	216511	no difference	no difference	no difference
+chrXVI	241223	242267	.	.	.
+chrXVI	250245	250955	.	.	.
+chrXVI	261168	262687	no difference	.	no difference
+chrXVI	273918	274962	.	.	.
+chrXVI	289483	289704	no difference	no difference	no difference
+chrXVI	297813	299287	.	.	.
+chrXVI	303433	305027	.	.	.
+chrXVI	316743	318397	.	.	.
+chrXVI	319000	329000	.	.	.
+chrXVI	331678	332074	no difference	no difference	no difference
+chrXVI	369003	369737	.	.	.
+chrXVI	376723	377937	.	.	.
+chrXVI	384536	384784	no difference	no difference	no difference
+chrXVI	414032	416072	no difference	no difference	no difference
+chrXVI	418132	418359	no difference	no difference	no difference
+chrXVI	427273	428757	.	.	.
+chrXVI	439113	441372	.	.	.
+chrXVI	453658	454627	no difference	no difference	pos
+chrXVI	456557	456805	no difference	no difference	pos
+chrXVI	498853	500557	.	.	.
+chrXVI	511619	511940	no difference	no difference	no difference
+chrXVI	552403	554287	.	.	non common peak
+chrXVI	556133	563133	.	.	non common peak
+chrXVI	563822	564061	no difference	no difference	.
+chrXVI	565046	565289	no difference	no difference	.
+chrXVI	584037	584486	.	.	.
+chrXVI	633868	634117	no difference	neg	neg
+chrXVI	684383	684632	no difference	no difference	no difference
+chrXVI	687133	694133	no difference	no difference	no difference
+chrXVI	695432	695681	.	.	.
+chrXVI	728393	729207	.	.	no difference
+chrXVI	749094	749341	.	.	.
+chrXVI	776921	777152	no difference	no difference	no difference
+chrXVI	819153	819393	no difference	no difference	no difference
+chrXVI	822993	825387	no difference	no difference	no difference
+chrXVI	842646	842894	neg	no difference	no difference
+chrXVI	850007	851124	neg	no difference	no difference
+chrXVI	863303	864667	.	.	.
+chrXVI	880854	881102	no difference	no difference	no difference
+chrXVI	929725	930435	.	.	.
+chrXVI	932976	933223	.	.	.
+chrXVI	940923	943157	.	.	.
+chrXVI	946803	947997	.	.	.

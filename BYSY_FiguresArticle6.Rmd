@@ -1,0 +1,362 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# Figure 6
+
+***  
+
+### Figure 6 : RFD, RFD_BY, Init,Ter,NanoT on ARS affected and non(TEL/CEN) 4 examples using Table3
+#### Figure S6: RFD, RFD_BY, Init,Ter,NanoT on ARS affected and non(TEL/CEN) all the others (26?) using Table3
+
+
+```{r}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+library(patchwork)
+library(ggprism)
+library(ggrepel)
+theme_set(theme_bw())
+mypal <- c(paletteer::paletteer_d("ggthemes::Classic_20"),"grey40","black","gold","greenyellow","grey20")
+
+`%+%` <- paste0
+
+source("Helper_function.r")
+
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+chromSY <- import("Genome_annotations/chromBYonSYgr.bed") %>% NewSeqinfo(seqin=seqinfSY) %>% sort
+bs0 <- 1000
+ovl <- 100000
+```
+
+### Importing generic genomic data and defining ROI as surrounding of affected ARS
+```{r message=FALSE, warning=FALSE}
+CEN <- import("Genome_annotations/SY14_CEN.gff3") %>% NewSeqinfo(seqin=seqinfSY)
+CEN$type <- NULL
+
+ARS_BYonSY <- import("Data/ars2keep_lim10k_cl1500_2_dtac1500.bed") %>% NewSeqinfo(seqin=seqinfSY)
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),strand="*",seqinfo=seqinfSY)
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds")
+ura3d0 <- GRanges("CP029160.1",IRanges(1051200,1051500),strand="*",seqinfo=seqinfSY,type="ura3_masked")
+masked_SY <- c(maskedTy_SY,ura3d0)
+
+chromJunction <- gaps(chromSY-10)
+chromJunction <- chromJunction[strand(chromJunction)=="*"]
+chromJunction$name <- c("16L","16R-5L","5R-6L","6R-14L","14R-13L","13R-12L","12R-15L","15R-11L","11R-1L","1R-2L","2R-3L","3R-4L","4R-7L","7R-8L","8R-9L","9R-10L","10R")
+
+CTF19 <- import("Data/ARS_SYwCTF19.bed")
+CTF19 <- CTF19[overlapsAny(CTF19,ARS_BYonSY,type="equal")]
+RIF1r <- import("Data/ARS_SYwRIF1r.bed")
+RIF1r <- RIF1r[overlapsAny(RIF1r,ARS_BYonSY,type="equal")]
+RIF1a <- import("Data/ARS_SYwRIF1a.bed")
+RIF1a <- RIF1a[overlapsAny(RIF1a,ARS_BYonSY,type="equal")]
+FKHa <- import("Data/ARS_SYwFKHa.bed")
+FKHa <- FKHa[overlapsAny(FKHa,ARS_BYonSY,type="equal")]
+FKHr <- import("Data/ARS_SYwFKHr.bed")
+FKHr <- FKHr[overlapsAny(FKHr,ARS_BYonSY,type="equal")]
+
+MasterTable <- read_tsv("Data/BYSY_MasterTable_simple_Table123.tsv",show_col_types = FALSE)
+ars2plot <- inner_join(as_tibble(ARS_BYonSY),MasterTable,by = join_by(name)) %>%
+	mutate(center=(start+end)/2) %>%
+	mutate(ars_col=case_when(Table123=="R"~"OriRep",Table123=="A"~"OriAct",T~"OriNull"))
+	
+ARS_BYonSY2 <- makeGRangesFromDataFrame(ars2plot,keep.extra.columns=T)
+
+geno_leg <- factor(c("CEN","ORI","rDNA","Ty_masked","ura3_masked","CTF19","FKHa","FKHr","RIF1r","RIF1a"),levels=rev(c("CEN","ORI","rDNA","Ty_masked","ura3_masked","CTF19","FKHa","FKHr","RIF1r","RIF1a")))
+geno_pal <- mypal[c(9,13,17,21,25,19,5,3,7,1)]
+names(geno_pal) <- geno_leg
+chrom_pal <- mypal[c(1:8,10:12,14:18)]
+names(chrom_pal) <- chromSY$name
+
+feat.list <- GRangesList(
+	chromSY,
+	CEN,
+	ARS_BYonSY2,
+	rDNA_SY,
+	maskedTy_SY,
+	ura3d0,
+	CTF19,FKHa,FKHr,RIF1r,RIF1a
+) 
+names(feat.list) <- c("chromBY",names(geno_pal))
+#geno_pal <- c(chrom_pal,geno_pal)
+feat.list <- lapply(seq_along(feat.list), function(x) {feat.list[[x]]$type=names(feat.list)[x];return(feat.list[[x]])})
+feat <- do.call(c,feat.list)
+
+geno_leg2 <- factor(c("CEN","ORI","rDNA","Ty_masked","ura3_masked","CTF19","FKHa","FKHr","RIF1r","RIF1a","OriNull","OriAct","OriRep"),levels=c("CEN","ORI","rDNA","Ty_masked","ura3_masked","CTF19","FKHa","FKHr","RIF1r","RIF1a","OriNull","OriAct","OriRep"))
+geno_pal2 <- mypal[c(9,13,17,21,25,19,5,3,7,1,22,7,1)]
+names(geno_pal2) <- geno_leg2
+
+chrom_pal <- mypal[c(1:8,10:12,14:18)]
+names(chrom_pal) <- chromSY$name
+geno_pal3 <- c(chrom_pal,geno_pal2)
+
+legend_ord <- c(chromSY$name,as.character(geno_leg2))
+legend_ord2 <- factor(legend_ord,levels=legend_ord)
+
+ars2plot2 <- ars2plot %>% filter(Table3 %in% c("A","R"))
+
+
+ARS_ROI <- ARS_BYonSY[ARS_BYonSY$name %in% ars2plot2$name]
+```
+
+### Generate genomic track with chr, CEN and ORI.  
+
+```{r}
+pl_geno <- lapply(seq_along(ARS_ROI), function(i) {
+	ROI <- suppressWarnings(trim(ARS_ROI[i]+ovl))
+	featROI <- as_tibble(feat[overlapsAny(feat,ROI)]) %>% rename(featname=name)
+
+	ggplot(featROI)+
+	geom_rect(data=featROI%>% filter(type %in% c("ORI")),aes(xmin=start,xmax=end,ymin=1,ymax=2,col=type,fill=type))+	geom_rect(data=featROI %>% filter(type %in% c("CEN","rDNA","Ty_masked","ura3_masked")),aes(xmin=start,xmax=end,ymin=1,ymax=2,col=type,fill=type))+
+	geom_rect(data=featROI%>% filter(type %in% c("CTF19")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=1,ymax=2,col=type,fill=type))+
+	geom_rect(data=featROI%>% filter(type %in% c("FKHa","FKHr")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=2,ymax=3,col=type,fill=type))+
+	geom_rect(data=featROI%>% filter(type %in% c("RIF1r","RIF1a")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=3,ymax=4,col=type,fill=type))+
+	geom_rect(data=featROI%>% filter(type %in% c("chromBY")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=0,ymax=1,col=featname,fill=featname))+
+	geom_text_repel(data=featROI%>% filter(type %in% c("ORI")),aes(x=start,y=4.4,label=featname,col=ars_col),size=2,angle=45,hjust = 0,show.legend=F,direction="x",seed=12,ylim=c(4,8),min.segment.length=5)+
+		coord_cartesian(ylim=c(0,4),clip = "off")+
+	scale_color_manual("",values = geno_pal3,breaks=legend_ord2,guide = guide_legend(reverse = TRUE))+
+	scale_fill_manual("",values = geno_pal3,breaks=legend_ord2,guide = guide_legend(reverse = TRUE))+
+	xlab(paste0("SY coordinates [",ROI$name,"]"," (kb)"))+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		minor_breaks=seq(floor(start(ROI)/10000)*10000,end(ROI),10000),
+		expand=c(0,0))+
+	theme(axis.ticks.y = element_blank(),axis.text.y = element_blank(),panel.grid.major.y=element_blank(),panel.grid.minor.y=element_blank(),legend.key = element_rect(colour = "black"))+
+	guides(colour="none")
+})
+```
+
+### RFD with zone
+```{r warning=FALSE}
+bs=1000
+rfd_leg <- factor(c("BY","SY"),levels=c("BY","SY"))
+rfd_pal <- mypal[c(1,7)]
+names(rfd_pal) <- rfd_leg
+
+
+rfdBY <- import("BigWig/rfd_BYBYSY_nt.bw")
+rfdSY <- import("BigWig/rfd_SYSY_nt.bw")
+
+rfd_zone <- import("Data/bgsigMH.bed")
+
+pl_rfd <- lapply(seq_along(ARS_ROI), function(i) {
+	ROI <- suppressWarnings(trim(ARS_ROI[i]+ovl))
+	featROI <- as_tibble(feat[overlapsAny(feat,ROI)]) %>% rename(featname=name) %>% filter(type %in% c("CEN","chromBY")) 
+	featROI2 <- as_tibble(rfd_zone[overlapsAny(rfd_zone,ROI)]) %>% rename(featname=name)
+	featROI3 <- as_tibble(masked_SY[overlapsAny(masked_SY,ROI)])
+	toplot_rfd <- tibble(pos=start(ROI):end(ROI),
+		rfdby=as.numeric(unlist(coverage(rfdBY,weight=rfdBY$score)[ROI])),
+		rfdsy=as.numeric(unlist(coverage(rfdSY,weight=rfdSY$score)[ROI])))
+	toplot_rfd2 <- toplot_rfd %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(rfdby = mean(rfdby,na.rm=T),rfdsy = mean(rfdsy,na.rm=T), .groups = "drop")
+pl <- ggplot(toplot_rfd2)+
+	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=-1,ymax=1),fill=mypal[15],col=mypal[15])+
+	geom_rect(data=featROI2,aes(xmin=start,xmax=end,ymin=-1,ymax=1),fill="purple",col=NA,alpha=0.3)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
+	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=rfdsy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		minor_breaks=seq(floor(start(ROI)/10000)*10000,end(ROI),10000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(-1,1))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("RFD")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+```
+
+
+### Init plots
+```{r warning=FALSE}
+bs=1000
+rfd_leg <- factor(c("BY","SY"))
+rfd_pal <- mypal[c(1,7)]
+names(rfd_pal) <- rfd_leg
+
+initBY <- import("BigWig/ICgn_BY.bw")
+initSY <- import("BigWig/ICgn_SY.bw")
+
+init_ARS <- import("Data/ARSinitMAnorm2_1e-2.bed")
+
+pl_init <- lapply(seq_along(ARS_ROI), function(i) {
+	ROI <- suppressWarnings(trim(ARS_ROI[i]+ovl))
+	featROI <- as_tibble(feat[overlapsAny(feat,ROI)]) %>% rename(featname=name) %>% filter(type %in% c("CEN","chromBY")) 
+	featROI2 <- as_tibble(init_ARS[overlapsAny(init_ARS,ROI)]) %>% rename(featname=name)
+	featROI3 <- as_tibble(masked_SY[overlapsAny(masked_SY,ROI)])
+	toplot_init <- tibble(pos=start(ROI):end(ROI),
+		initby=as.numeric(unlist(coverage(initBY,weight=initBY$score)[ROI])),
+		initsy=as.numeric(unlist(coverage(initSY,weight=initSY$score)[ROI]))
+		)
+	toplot_init2 <- toplot_init %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(
+		initby = mean(initby,na.rm=T),initsy = mean(initsy,na.rm=T),
+		 .groups = "drop")
+pl <- ggplot(toplot_init2)+
+	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0,ymax=10),fill=mypal[15],col=mypal[15])+
+	geom_text(data=featROI2,aes(x=start,y=7),label="*",size=8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
+	geom_line(aes(x=pos,y=initby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=initsy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		minor_breaks=seq(floor(start(ROI)/10000)*10000,end(ROI),10000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(0,10))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("Init")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+```
+
+
+### Ter plots
+```{r warning=FALSE}
+bs=1000
+rfd_leg <- factor(c("BY","SY"))
+rfd_pal <- mypal[c(1,7)]
+names(rfd_pal) <- rfd_leg
+
+terBY <- import("BigWig/TCgn_BY.bw")
+terSY <- import("BigWig/TCgn_SY.bw")
+
+pl_ter <- lapply(seq_along(ARS_ROI), function(i) {
+	ROI <- suppressWarnings(trim(ARS_ROI[i]+ovl))
+	featROI <- as_tibble(feat[overlapsAny(feat,ROI)]) %>% rename(featname=name) %>% filter(type %in% c("CEN","chromBY")) 
+	featROI3 <- as_tibble(masked_SY[overlapsAny(masked_SY,ROI)])
+	toplot_ter <- tibble(pos=start(ROI):end(ROI),
+		terby=as.numeric(unlist(coverage(terBY,weight=terBY$score)[ROI])),
+		tersy=as.numeric(unlist(coverage(terSY,weight=terSY$score)[ROI]))
+		)
+	toplot_ter2 <- toplot_ter %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(
+		terby = mean(terby,na.rm=T),tersy = mean(tersy,na.rm=T),
+		 .groups = "drop")
+pl <- ggplot(toplot_ter2)+
+	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0,ymax=10),fill=mypal[15],col=mypal[15])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
+	geom_line(aes(x=pos,y=terby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=tersy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		minor_breaks=seq(floor(start(ROI)/10000)*10000,end(ROI),10000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(0,10))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("Ter")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+```
+
+### nanoT plots
+```{r warning=FALSE}
+bs=1000
+rfd_leg <- factor(c("BY","SY"))
+rfd_pal <- mypal[c(1,7)]
+names(rfd_pal) <- rfd_leg
+
+nanoBY <- import("BigWig/nanoT_BYBYSY.bw")
+nanoSY <- import("BigWig/nanoT_SYSY.bw")
+
+nanoT_ARS <- import("Data/ARS_nanotiming_MApadj0.01.bed")
+
+pl_nano <- lapply(seq_along(ARS_ROI), function(i) {
+	ROI <- suppressWarnings(trim(ARS_ROI[i]+ovl))
+	featROI <- as_tibble(feat[overlapsAny(feat,ROI)]) %>% rename(featname=name) %>% filter(type %in% c("CEN","chromBY")) 
+	featROI2 <- as_tibble(nanoT_ARS[overlapsAny(nanoT_ARS,ROI)]) %>% rename(featname=name)
+	featROI3 <- as_tibble(masked_SY[overlapsAny(masked_SY,ROI)])
+	toplot_nano <- tibble(pos=start(ROI):end(ROI),
+		nanoby=as.numeric(unlist(coverage(nanoBY,weight=nanoBY$score)[ROI])),
+		nanosy=as.numeric(unlist(coverage(nanoSY,weight=nanoSY$score)[ROI]))
+		)
+	toplot_nano2 <- toplot_nano %>% mutate(pos = floor(pos/bs)*bs+1) %>%
+		group_by(pos) %>%
+		summarise(
+		nanoby = mean(nanoby,na.rm=T),nanosy = mean(nanosy,na.rm=T), 
+		.groups = "drop")
+
+pl <- ggplot(toplot_nano2)+
+	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0.8,ymax=2.2),fill=mypal[15],col=mypal[15])+
+	geom_text(data=featROI2,aes(x=start,y=1.9),label="*",size=8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
+	geom_line(aes(x=pos,y=nanoby,col="BY"),size=0.3)+
+	geom_line(aes(x=pos,y=nanosy,col="SY"),size=0.3)+
+	scale_x_continuous(
+		guide = "prism_minor",
+		labels=scales::unit_format(big.mark ="",suffix="",scale=1e-3,sep=""),
+		limits=c(start(ROI),end(ROI)),
+		breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
+		minor_breaks=seq(floor(start(ROI)/10000)*10000,end(ROI),10000),
+		expand=c(0,0))+
+	coord_cartesian(ylim=c(0.8,2.2))+
+	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
+	ylab("nanoTiming")+
+	scale_color_manual("",values = rfd_pal)+
+	guides(colour = guide_legend(override.aes = list(size=2)))
+}
+)
+```
+
+
+### Composing with patchwork
+
+```{r warning=FALSE, include=FALSE}
+p_list <- list()
+for (i in 1:21) 
+{
+pl_rfdpooled <- pl_rfd[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("RFD")
+pl_initpooled <- pl_init[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("IC")
+pl_terpooled <- pl_ter[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("TC")
+pl_nanopooled <- pl_nano[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("RT")
+pl_gen <- pl_geno[[i]]+theme(legend.title=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Features")
+
+p_list[[i]] <- pl_rfdpooled/pl_initpooled/pl_terpooled/pl_nanopooled/plot_spacer()/pl_gen+plot_layout(ncol = 1, heights = c(rep(3,4),0.6,3))
+}
+
+pp <- wrap_elements(p_list[[9]])+wrap_elements(p_list[[11]])+wrap_elements(p_list[[14]])+wrap_elements(p_list[[20]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels="A",title="Figure 6") & theme(text = element_text(face="bold"))
+ ggsave(plot=pp,paste0("FigArticle/Fig6.pdf"),h=14,w=10)
+
+pp <- wrap_elements(p_list[[1]])+wrap_elements(p_list[[2]])+wrap_elements(p_list[[4]])+wrap_elements(p_list[[5]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels="A",title="Supplementary Figure 6") & theme(text = element_text(face="bold"))
+ ggsave(plot=pp,paste0("FigArticle/FigS6AD.pdf"),h=14,w=10)
+
+pp <- wrap_elements(p_list[[6]])+wrap_elements(p_list[[7]])+wrap_elements(p_list[[12]])+wrap_elements(p_list[[13]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels=list(c("E","F","G","H")),title="Supplementary Figure 6") & theme(text = element_text(face="bold"))
+ ggsave(plot=pp,paste0("FigArticle/FigS6EH.pdf"),h=14,w=10)
+
+pp <- wrap_elements(p_list[[17]])+wrap_elements(p_list[[19]])+plot_spacer() + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels=list(c("I","J")),title="Supplementary Figure 6") & theme(text = element_text(face="bold"))
+ ggsave(plot=pp,paste0("FigArticle/FigS6IJ.pdf"),h=14,w=10)
+
+```

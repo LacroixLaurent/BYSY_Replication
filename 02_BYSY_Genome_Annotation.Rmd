@@ -1,0 +1,317 @@
+---
+title: "BYSY project"
+output: html_notebook
+---  
+# 02_Genome Annotation
+
+***  
+
+Using the published genome sequences for SY14 and BY4742, genomic feature  annotation was performed using LRSDAY. This allowed to map genes, mobile elements, tRNA, X and Y’ elements. The gff file resulting from the LRSDAY pipeline was reformated in R using the following procedure.  
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(GenomicFeatures))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+seqinfBY <- readRDS("Data/seqinfBY.rds")
+```
+
+The GFF file from S288C downloaded from [SGD](http://sgd-archive.yeastgenome.org/sequence/S288C_reference/genome_releases/S288C_reference_genome_R64-3-1_20210421.tgz) was used to import the gene names to add this information to the SY GFF. The S288C GFF was manually curated for small error that prevent its importation in R  
+
+```{r message=FALSE, warning=FALSE}
+S288Cgff <- import.gff("Data_raw/saccharomyces_cerevisiae_R64-3-1_20210421_mod.gff")
+gene_name <- as_tibble(S288Cgff) %>% filter(type=="gene") %>% select(gene,Name) %>% unique
+```
+Gene names were then added to the SY GFF file.  
+```{r message=FALSE, warning=FALSE}
+SYgff <- readGFF("Data_raw/SY.tidy.gff3") %>% 
+	as_tibble()%>% 
+	select(chrom=seqid,type,start,end,strand,ID,Name) %>%
+	mutate(strand=case_when(strand=="0"~"*",T~strand)) %>%
+	filter(chrom!="chrM")
+### add gene names
+SYgff2 <- SYgff %>% 
+	mutate(asYname=map_lgl(Name,function(z) substr(z,1,1)=="Y" & substr(z,2,2)!="_" )) %>%
+	mutate(name_split=map2(Name,asYname, function(x,y) if (y) {strsplit(x,"/")[[1]]})) %>%
+#	mutate(mapchr=map2(name_split,asYname, function(x,y) {
+#		if (y)
+#			{
+#			sapply(x, function(z) {
+#				ch <- grep(substr(z,2,2),LETTERS) %>% as.roman
+#				paste0("chr",ch)
+#				})
+#			}
+#	})) %>%
+#	mutate(mapstr=map2(name_split,asYname, function(x,y) {
+#		if (y)
+#			{
+#			sapply(x, function(z) {
+#				ifelse(substr(z,7,7)=="W","+","-")
+#				})
+#			}
+#	})) %>%
+#	mutate(genename=pmap_chr(., function(chrom,strand,asYname,mapchr,mapstr,Name,...){
+#		if (asYname)
+#			{
+#			newname <- mapchr[mapchr==chrom & mapstr==strand] %>% names(.)
+#			}else{
+#			newname <- Name	
+#			}
+#		if (length(newname)==0 & asYname) {newname=NA}
+#		if (length(newname)==1 & asYname) {
+#			newstr <- case_when(substr(newname,7,7)=="W"~"+",substr(newname,7,7)=="C"~"-",T~"ambiguous")
+#			newchr <- ifelse(!is.na(newname),paste0("chr",as.roman(grep(substr(newname,2,2),LETTERS))),"ambiguous")
+#			if (newstr!=strand | newchr!=chrom) {newname=NA}
+#			}
+#		if (length(newname)!=1 & asYname) {newname=paste0(Name,"_ambiguous")}
+#		return(newname)
+#		}))
+mutate(genename=pmap_chr(., function(name_split,asYname,Name,...){
+	newname <- NA
+	if (length(name_split)==0 & asYname) {newname=NA}
+	if (length(name_split)==1 & asYname) {newname=Name}
+	if (length(name_split)>1 & asYname) {newname=paste0(Name,"_ambiguous")}
+	return(newname)
+	}))
+SYgff3 <- left_join(SYgff2,gene_name,by=join_by(genename==Name)) %>% mutate(gene=map2_chr(gene,genename, function(x,y) ifelse(is.na(x),y,x)))%>% filter(!is.na(gene))
+## looks better
+
+```
+The table was then split by features type
+```{r message=FALSE, warning=FALSE}
+gene <- SYgff3 %>% filter(type=="gene")
+trna <- SYgff2 %>% filter(type=="tRNA")
+tel_elmnt <- SYgff2 %>% filter(type %in% c("X_element","Y_prime_element"))
+Transposon <- SYgff2 %>% filter(type %in% c("mobile_element"))
+```
+
+Ribosomal RNA gene were mapped manually by positioning the neighbouring gene on chrXII.  
+
+```{r message=FALSE, warning=FALSE}
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),"*",seqinfSY) %>% as_tibble %>% mutate(type="rRNA") %>% mutate(name="rDNA locus")
+```
+
+Telomeric repeat were map using Telofinder.  
+```{r message=FALSE, warning=FALSE}
+tel <- read_tsv("Data_raw/SY.tel.bed",col_names=c("seqnames","start","end","name"),show_col_types = FALSE) %>% mutate(type="Tel_repeat")
+```
+Please note that the bed file from Telofinder appears to be 1-based and not 0-based as expected for bed files.  
+
+Centromere were mapped also with LRSDAY but only for BY4742 and CEN15 for SY14 as all of the other were deleted in the SY14 strain. The positions of the deleted centromeres in SY14 were manually mapped by inspecting the position of the sequences the closest to the former centromere in SY14 genome. Thus, all CEN positions, with the exception of CEN15 in the SY14 annotations are not the positions of the centromeres but rather the position of the deletion point. 
+Features were then exported in GFF3 file format.  
+
+```{r message=FALSE, warning=FALSE}
+cenSY <- import("Data_raw/CEN_SY_LL.bed") %>% as_tibble %>% mutate(type="centromere") %>% mutate(Name=name)
+export(cenSY, con="Genome_annotations/SY14_CEN.gff3", format = "GFF3")
+export(gene, con="Genome_annotations/SY14_gene.gff3", format = "GFF3")
+export(rDNA_SY, con="Genome_annotations/SY14_rRNA.gff3", format = "GFF3")
+export(trna, con="Genome_annotations/SY14_tRNA.gff3", format = "GFF3")
+export(tel, con="Genome_annotations/SY14_TEL.gff3", format = "GFF3")
+export(tel_elmnt, con="Genome_annotations/SY14_TEL_ELMNT.gff3", format = "GFF3")
+export(Transposon, con="Genome_annotations/SY14_TE_LTR.gff3", format = "GFF3")
+SYgff4 <- c(
+	import("Genome_annotations/SY14_TEL.gff3"),
+	import("Genome_annotations/SY14_gene.gff3"),
+	import("Genome_annotations/SY14_CEN.gff3"),
+	import("Genome_annotations/SY14_rRNA.gff3"),
+	import("Genome_annotations/SY14_tRNA.gff3"),
+	import("Genome_annotations/SY14_TEL_ELMNT.gff3"),
+	import("Genome_annotations/SY14_TE_LTR.gff3")
+	)
+export(SYgff4,con="Genome_annotations/SY14.gff3", format = "GFF3")
+```
+
+BY4742 annotation were processed similarly.  
+
+```{r message=FALSE, warning=FALSE}
+BYgff <- readGFF("Data_raw/BY.tidy.gff3") %>% 
+	as_tibble()%>% 
+	select(chrom=seqid,type,start,end,strand,ID,Name) %>%
+	mutate(strand=case_when(strand=="0"~"*",T~strand)) %>%
+	filter(chrom!="chrM")
+BYgff2 <- BYgff %>% 
+	mutate(asYname=map_lgl(Name,function(z) substr(z,1,1)=="Y" & substr(z,2,2)!="_" )) %>%
+	mutate(name_split=map2(Name,asYname, function(x,y) if (y) {strsplit(x,"/")[[1]]})) %>%
+	# mutate(mapchr=map2(name_split,asYname, function(x,y) {
+	# 	if (y)
+	# 		{
+	# 		sapply(x, function(z) {
+	# 			ch <- grep(substr(z,2,2),LETTERS) %>% as.roman
+	# 			paste0("chr",ch)
+	# 			})
+	# 		}
+	# })) %>%
+	# mutate(mapstr=map2(name_split,asYname, function(x,y) {
+	# 	if (y)
+	# 		{
+	# 		sapply(x, function(z) {
+	# 			ifelse(substr(z,7,7)=="W","+","-")
+	# 			})
+	# 		}
+	# })) %>%
+	# mutate(genename=pmap_chr(., function(chrom,strand,asYname,mapchr,mapstr,Name,...){
+	# 	if (asYname)
+	# 		{
+	# 		newname <- mapchr[mapchr==chrom & mapstr==strand] %>% names(.)
+	# 		}else{
+	# 		newname <- Name	
+	# 		}
+	# 	if (length(newname)==0 & asYname) {newname=NA}
+	# 	if (length(newname)==1 & asYname) {
+	# 		newstr <- case_when(substr(newname,7,7)=="W"~"+",substr(newname,7,7)=="C"~"-",T~"ambiguous")
+	# 		newchr <- ifelse(!is.na(newname),paste0("chr",as.roman(grep(substr(newname,2,2),LETTERS))),"ambiguous")
+	# 		if (newstr!=strand | newchr!=chrom) {newname=NA}
+	# 		}
+	# 	if (length(newname)!=1 & asYname) {newname=paste0(Name,"_ambiguous")}
+	# 	return(newname)
+	# 	}))
+	mutate(genename=pmap_chr(., function(name_split,asYname,Name,...){
+	newname <- NA
+	if (length(name_split)==0 & asYname) {newname=NA}
+	if (length(name_split)==1 & asYname) {newname=Name}
+	if (length(name_split)>1 & asYname) {newname=paste0(Name,"_ambiguous")}
+	return(newname)
+	}))
+BYgff3 <- left_join(BYgff2,gene_name,by=join_by(genename==Name)) %>% mutate(gene=map2_chr(gene,genename, function(x,y) ifelse(is.na(x),y,x)))%>% filter(!is.na(gene))
+## looks better
+
+
+gene <- BYgff3 %>% filter(type=="gene")
+trna <- BYgff2 %>% filter(type=="tRNA")
+tel <- read_tsv("Data_raw/BY.tel.bed",col_names=c("seqnames","start","end","name"),show_col_types = FALSE) %>% mutate(type="Tel_repeat")
+tel_elmnt <- BYgff2 %>% filter(type %in% c("X_element","Y_prime_element"))
+Transposon <- BYgff2 %>% filter(type %in% c("mobile_element"))
+cen <- BYgff2 %>% filter(type=="centromere")
+rDNA_BY <- GRanges(seqnames="CP026300.1",ranges=IRanges(441284,495332),strand="*",seqinfo=seqinfBY) %>% as_tibble %>% mutate(type="rRNA") %>% mutate(name="rDNA locus")
+# based on the coverage of reads
+export(gene, con="Genome_annotations/BY4742_gene.gff3", format = "GFF3")
+export(cen, con="Genome_annotations/BY4742_CEN.gff3", format = "GFF3")
+export(rDNA_BY, con="Genome_annotations/BY4742_rRNA.gff3", format = "GFF3")
+export(trna, con="Genome_annotations/BY4742_tRNA.gff3", format = "GFF3")
+export(tel, con="Genome_annotations/BY4742_TEL.gff3", format = "GFF3")
+export(tel_elmnt, con="Genome_annotations/BY4742_TEL_ELMNT.gff3", format = "GFF3")
+export(Transposon, con="Genome_annotations/BY4742_TE_LTR.gff3", format = "GFF3")
+
+BYgff4 <- c(
+	import("Genome_annotations/BY4742_TEL.gff3"),
+	import("Genome_annotations/BY4742_gene.gff3"),
+	import("Genome_annotations/BY4742_CEN.gff3"),
+	import("Genome_annotations/BY4742_rRNA.gff3"),
+	import("Genome_annotations/BY4742_tRNA.gff3"),
+	import("Genome_annotations/BY4742_TEL_ELMNT.gff3"),
+	import("Genome_annotations/BY4742_TE_LTR.gff3")
+	)
+export(BYgff4,con="Genome_annotations/BY4742.gff3", format = "GFF3")
+```
+
+In order to map known ARS on the BY and SY genome, ARS position were download from [OriDB](http://cerevisiae.oridb.org/) (20231204). A unique naming scheme was designed for the Likely (or respectively Dubious) ARS by adding the chromosome name and the order of the likely (or respectively dubious) ARS in this chromosome. There were two ARS names ARS302 which were then names ARS302_1 and ARS302_2. The DNA sequence corresponding to these ARS was then extracted from the reference genome used in OriDB (sacCer1). The resulting fasta file (AllARS_sacCer1_20231218.fa) was then mapped either in the BY4742 or the SY14 genome using bwa mem and the bam file was then converted to bed using bedtools bamtobed.  
+Warning ARS1311.7 is mapped on chrXIV on OriDB despite the name.  
+```{r message=FALSE, warning=FALSE}
+### 1- Extract Fasta from Genome
+suppressMessages(library("BSgenome.Scerevisiae.UCSC.sacCer1"))
+suppressMessages(library(rtracklayer))
+suppressMessages(library(tidyverse))
+`%+%`<-paste0
+
+genome_sacCer1 <- BSgenome.Scerevisiae.UCSC.sacCer1
+
+ARS_oriDB <- read_tsv("Data_raw/ARSfromOriDB20231204.txt",show_col_types = FALSE) %>%
+	mutate(chrRom="chr" %+% as.roman(chr))%>% 
+	mutate(chr="chr" %+% chr)
+### create a naming for ARS oriDB
+ARS_oriDB2 <- ARS_oriDB %>%
+	mutate(newname=pmap_chr(., function(name,chrRom,status,...) {
+		if (status %in% c("Likely","Dubious"))
+			{res=paste(status,chrRom,sep="_")}
+			else
+			{res=name}
+			return(res)
+		}))%>%
+	group_by(newname) %>%
+	mutate(newname2=ifelse((!status %in% c("Likely","Dubious") & name!="ARS302"),name,paste(newname,1:n(),sep="_"))) %>% 
+	ungroup %>%
+	mutate(name=ifelse(is.na(name),"putative_ARS",name))
+ARS_oriDB2_GR <- makeGRangesFromDataFrame(ARS_oriDB2,starts.in.df.are.0based=T)
+
+ARS_oriDB2_seq <- getSeq(genome_sacCer1,ARS_oriDB2_GR)
+names(ARS_oriDB2_seq) <- ARS_oriDB2$newname2
+writeXStringSet(ARS_oriDB2_seq, "Data/AllARS_sacCer1_20250312.fa")
+```
+These sequence from the fasta file were then mapped on SY and BY genome using bwa (Version: 0.7.17-r1198-dirty), samtools (Version: 1.17) and bedtools (Version: 2.26.0-0)
+
+```{sh eval=FALSE, include=FALSE}
+fafile=AllARS_sacCer1_20250312
+
+# BY4742
+genome=../Data_raw/BY4742.fa
+genosuff=BY4742
+
+~/work/bin/bwa/bwa index $genome
+~/work/bin/bwa/bwa mem -t 10 $genome $fafile.fa | samtools sort -@ 5 -o $fafile$genosuff.sorted.bam
+samtools index $fafile$genosuff.sorted.bam
+bedtools bamtobed -i $fafile$genosuff.sorted.bam > $fafile$genosuff.bed
+
+# SY14
+genome=../Data_raw/SY14.fa
+genosuff=SY14
+~/work/bin/bwa/bwa index $genome
+~/work/bin/bwa/bwa mem -t 10 $genome $fafile.fa | samtools sort -@ 5 -o $fafile$genosuff.sorted.bam
+samtools index $fafile$genosuff.sorted.bam
+bedtools bamtobed -i $fafile$genosuff.sorted.bam > $fafile$genosuff.bed
+```
+I need to add the test for ARS mapped on the wrong chromosome.  
+ARS1311.7 is on chrXIV in oriDB and ARS131a and 131n generate NA
+
+
+```{r message=FALSE, warning=FALSE}
+ARS_BY <- import("Data/AllARS_sacCer1_20250312BY4742.bed")
+toto <- as_tibble(ARS_BY) %>%
+	 mutate(chromROM=factor(seqnames) %>%
+	fct_recode("chrI"="CP026301.1","chrII"="CP026296.1","chrIII"="CP026297.1","chrIV"="CP026298.1","chrV"="CP026299.1","chrVI"="CP026302.1","chrVII"="CP026294.1","chrVIII"="CP026287.1","chrIX"="CP026295.1","chrX"="CP026288.1","chrXI"="CP026289.1","chrXII"="CP026300.1","chrXIII"="CP026291.1","chrXIV"="CP026293.1","chrXV"="CP026303.1","chrXVI"="CP026290.1")) %>%
+	mutate(chrARS=map_chr(name, function(x) {
+		y <- strsplit(x,"_")[[1]]
+		if (y[1] %in% c("Likely","Dubious")) 
+			{res <- y[2]}
+		else
+			{res1 <- y[1] %>%
+				str_remove("ARS") %>%
+				as.numeric()
+			res <- paste0("chr",floor(res1/100) %>% as.roman)
+			}
+		return(res)
+	}))
+## ARS131n and 131a generate NA --> add an exception for those
+
+ARS_OriDB_cleaned <- toto %>% filter(chromROM==chrARS | name %in% c("ARS131a","ARS131n","ARS1311.7"))
+```
+Then I add the othernames from OriDB using a previous mapping by Jade Pellet
+```{r message=FALSE, warning=FALSE}
+ARS_BY_JPGR <- import("Data_raw/ARS_BYmappedJP_20231214.bed")
+ARS_BY_cleaned <- left_join(ARS_OriDB_cleaned %>% select(-c(chrARS,score)),as_tibble(ARS_BY_JPGR) %>% rename(other_name=name) %>% select(-c(strand,score)),by = join_by(seqnames, start, end, width))
+saveRDS(ARS_BY_cleaned,file="Data/ARS_BY_cleaned.rds")
+export(makeGRangesFromDataFrame(ARS_BY_cleaned,keep.extra.columns=T),con="Genome_annotations/ARS_BY_cleaned.bed")
+
+```
+
+Then I need to transpose them to SY
+
+```{r message=FALSE, warning=FALSE}
+BY2SY <- read_tsv("BigFiles/Data/BY2SYcon.tsv.gz",show_col_types = FALSE)
+arsBY <- ARS_BY_cleaned
+arsBY$fid <- 1:nrow(arsBY)
+arsBY2 <- arsBY %>% mutate(BYpos=map2(start,end,function(x,y) x:y)) %>% select(chromBY=seqnames,start,end,BYpos,fid,name)
+res <- inner_join(unnest(arsBY2,cols=c(BYpos)),BY2SY,by = c("chromBY", "BYpos")) %>%
+	group_by(fid,chromBY) %>%
+	nest() %>%
+	ungroup %>%
+	mutate(startn=map_int(data,function(x) dplyr::slice(x,1) %>% pull(BYpos))) %>%
+	mutate(endn=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(BYpos))) %>%
+	mutate(startnSY=map_int(data,function(x) dplyr::slice(x,1) %>% pull(SYpos))) %>%
+	mutate(endnSY=map_dbl(data,function(x) dplyr::slice(x,nrow(x)) %>% pull(SYpos))) %>%
+	select(-data)
+arsBYSY <- inner_join(arsBY,res,by = join_by(fid)) %>% mutate(chromSY="CP029160.1") %>% arrange(startnSY)
+saveRDS(arsBYSY,file="Data/ARS_BYonSY.rds")
+ARS_BYSY_GR <- with(arsBYSY,GRanges(seqnames=chromSY,ranges=IRanges(start=startnSY,end=endnSY),seqinfo=seqinfSY,name=name)) %>% sort
+export(ARS_BYSY_GR,con="Genome_annotations/ARS_BYonSY.bed")
+```

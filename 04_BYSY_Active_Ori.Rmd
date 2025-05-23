@@ -1,0 +1,149 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# 04_Actives Ori  
+
+***  
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+seqinfBY <- readRDS("Data/seqinfBY.rds")
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds")
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),"*",seqinfo=seqinfSY)
+```
+Loading init coordinates
+
+```{r message=FALSE, warning=FALSE}
+initerSY <- readRDS("Data/initer_SYSY.rds") %>%
+	mutate(strain="SY")
+initerBY <- readRDS("Data/initer_BYBYSY.rds") %>%
+	mutate(strain="BY")
+```
+In order to identify active Ori in BY and/or SY datasets, we filtered initiation event to keep those with a minimal width of 100 (to avoid ponctual detection/transposition artifact) and with a maximum width of 10kb to reduce the probability to keep initiation events coming from fused replication bubbles. Initiations event mapping on rDNA and on the problematic Ty from chrIII and chrXVI were also excluded.
+
+```{r message=FALSE, warning=FALSE}
+initSY <-initerSY %>% 
+	filter(type=="Init")  %>%
+	filter(between(x1-x0,100,10000)) %>%
+	select(chrom,center,x0,x1,exp,strain,strand)
+initSY.gr <- with(initSY,GRanges(seqnames=chrom,ranges=IRanges(x0,x1),strand="*",seqinfo=seqinfSY))
+initSY2 <- initSY[!overlapsAny(initSY.gr,c(rDNA_SY,maskedTy_SY)),]
+
+initBY <-initerBY %>% 
+	filter(type=="Init")  %>%
+	filter(between(wid,100,10000)) %>%
+	select(chrom=chromSY,center=centerSY,x0=x0nSY,x1=x1nSY,exp,strain,strand) %>%
+	mutate(strain="BY")
+initBY.gr <- with(initBY,GRanges(seqnames=chrom,ranges=IRanges(x0,x1),strand="*",seqinfo=seqinfSY))
+initBY2 <- initBY[!overlapsAny(initBY.gr,c(rDNA_SY,maskedTy_SY)),] %>% arrange(center)
+```
+Then initiation events were clustered like in the Forkseq paper using a clustering distance of 1.5kb
+
+```{r message=FALSE, warning=FALSE}
+function.cluster2 <- function(input,clust.dist0=clust.dist)
+	# input is a tibble of genomic objects with a width of 1
+{
+	require(tidygenomics)
+	test <- genome_cluster(input, by=c("chrom", "center", "center"),max_distance=clust.dist0)
+	test2 <- test %>%
+		group_by(cluster_id) %>%
+		nest %>%
+		mutate(eff=map_int(data,nrow)) %>%
+		mutate(cl.med=map_dbl(data,function(x) median(x$center))) %>%
+		mutate(cl.start=map_dbl(data,function(x) min(x$center)))%>%
+		mutate(cl.end=map_dbl(data,function(x) max(x$center)))%>%
+		mutate(cl.mad=map_dbl(data,function(x) mad(x$center)))%>%
+		unnest(cols=c(data))
+	test3 <- test2 %>% select(chrom,cl.med,cl.start,cl.end,eff,cl.mad,cluster_id) %>% group_by(cluster_id) %>% dplyr::slice(1)
+	res <- list(test2,test3)
+	return(res)
+}
+clust_dist <- 1500
+
+# SY
+iniforks.clustSY <- function.cluster2(initSY2, clust.dist0=clust_dist)
+ini.clustSY <- iniforks.clustSY[[2]] %>% mutate(cl.width=1+cl.end-cl.start)
+ini.clSY <- with(ini.clustSY,GRanges(seqnames=chrom, ranges=IRanges(start=cl.med, width=1),seqinfo=seqinfSY,eff=eff))
+
+# BYSY
+iniforks.clustBY <- function.cluster2(initBY2, clust.dist0=clust_dist)
+ini.clustBY <- iniforks.clustBY[[2]] %>% mutate(cl.width=1+cl.end-cl.start)
+ini.clBY <- with(ini.clustBY,GRanges(seqnames=chrom, ranges=IRanges(start=cl.med, width=1),seqinfo=seqinfSY,eff=eff))
+```
+We then decide to keep only the cluster for which at least 2 initiation events have been observed in SY or BY data
+```{r message=FALSE, warning=FALSE}
+### keep cluster>=2
+iniSY2keep <- ini.clSY[ini.clSY$eff>=2]
+iniBY2keep <- ini.clBY[ini.clBY$eff>=2]
+```
+Using this information we defined as "active origin" the known ARS for which these "efficient" inititiation clusters were localised at less than 1.5kb for the ARS center
+```{r message=FALSE, warning=FALSE}
+ars <- import("Genome_annotations/ARS_BYonSY.bed")
+dist2ars <- 1500
+
+dtnSY <- as_tibble(distanceToNearest(iniSY2keep,resize(ars,fix="center",width=1)))
+dtnBY <- as_tibble(distanceToNearest(iniBY2keep,resize(ars,fix="center",width=1)))
+ars2keep <- ars[unique(c(dtnSY %>% filter(distance<dist2ars) %>% pull(subjectHits),dtnBY %>% filter(distance<dist2ars) %>% pull(subjectHits)))] %>% sort
+
+export(ars2keep,con="Data/ars2keep_lim10k_cl1500_2_dtac1500.bed")
+export(iniSY2keep,con="Data/iniSY2keep_lim10k_cl1500_2.bed")
+export(iniBY2keep,con="Data/iniBY2keep_lim10k_cl1500_2.bed")
+```
+
+From these data, dispersive initiations can be defined as initiation events that do not overlap with active ori in the SY/BY system.  
+This can be computed with the 10kb width limit
+
+```{r}
+initSY2.gr <- initSY.gr[!overlapsAny(initSY.gr,c(rDNA_SY,maskedTy_SY)),]
+length(initSY2.gr[!overlapsAny(initSY2.gr,ars2keep)])/length(initSY2.gr)
+initBY2.gr <- initBY.gr[!overlapsAny(initBY.gr,c(rDNA_SY,maskedTy_SY)),]
+length(initBY2.gr[!overlapsAny(initBY2.gr,ars2keep)])/length(initBY2.gr)
+```
+and without the 10kb limit
+
+```{r}
+initSYb <-initerSY %>% 
+	filter(type=="Init")  %>%
+	filter(x1-x0>100) %>%
+	select(chrom,center,x0,x1,exp,strain,strand)
+initSYb.gr <- with(initSYb,GRanges(seqnames=chrom,ranges=IRanges(x0,x1),strand="*",seqinfo=seqinfSY))
+initSY2b.gr <- initSYb.gr[!overlapsAny(initSYb.gr,c(rDNA_SY,maskedTy_SY)),]
+length(initSY2b.gr[!overlapsAny(initSY2b.gr,ars2keep)])/length(initSY2b.gr)
+initBYb <-initerBY %>% 
+	filter(type=="Init")  %>%
+	filter(x1-x0>100) %>%
+	select(chrom=chromSY,center=centerSY,x0=x0nSY,x1=x1nSY,exp,strain,strand)
+initBYb.gr <- with(initBYb,GRanges(seqnames=chrom,ranges=IRanges(x0,x1),strand="*",seqinfo=seqinfSY))
+initBY2b.gr <- initBYb.gr[!overlapsAny(initBYb.gr,c(rDNA_SY,maskedTy_SY)),]
+length(initBY2b.gr[!overlapsAny(initBY2b.gr,ars2keep)])/length(initBY2b.gr)
+```
+Or it could be defined from the clustering
+```{r}
+length(ini.clSY[ini.clSY$eff==1])/length(initSY2.gr)
+length(ini.clBY[ini.clBY$eff==1])/length(initBY2.gr)
+```
+OR define it on all ARS_BYonSY without the 10kb limit
+
+```{r}
+ars <- import("Genome_annotations/ARS_BYonSY.bed")
+initSYb <-initerSY %>% 
+	filter(type=="Init")  %>%
+	filter(x1-x0>100) %>%
+	select(chrom,center,x0,x1,exp,strain,strand)
+initSYb.gr <- with(initSYb,GRanges(seqnames=chrom,ranges=IRanges(x0,x1),strand="*",seqinfo=seqinfSY))
+initSY2b.gr <- initSYb.gr[!overlapsAny(initSYb.gr,c(rDNA_SY,maskedTy_SY)),]
+length(initSY2b.gr[!overlapsAny(initSY2b.gr,ars)])/length(initSY2b.gr)
+initBYb <-initerBY %>% 
+	filter(type=="Init")  %>%
+	filter(x1-x0>100) %>%
+	select(chrom=chromSY,center=centerSY,x0=x0nSY,x1=x1nSY,exp,strain,strand)
+initBYb.gr <- with(initBYb,GRanges(seqnames=chrom,ranges=IRanges(x0,x1),strand="*",seqinfo=seqinfSY))
+initBY2b.gr <- initBYb.gr[!overlapsAny(initBYb.gr,c(rDNA_SY,maskedTy_SY)),]
+length(initBY2b.gr[!overlapsAny(initBY2b.gr,ars)])/length(initBY2b.gr)
+```
+

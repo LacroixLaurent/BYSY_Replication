@@ -1,0 +1,286 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+
+## Figure 1  
+
+***  
+
+### Figure 1: correlation between RFD
+
+Starting from forks then work with 1kb bins using Pearson correlation
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+library(ggcorrplot)
+source("Helper_function.r")
+
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),strand="*",seqinfo=seqinfSY)
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds")
+masked_ura3d0 <- GRanges("CP029160.1",IRanges(1051200,1051500),strand="*",seqinfo=seqinfSY,type="ura3d0")
+masked_SY <- c(maskedTy_SY,masked_ura3d0) 
+
+### rearrange forks
+forksBY <- readRDS("Data/forks_BYBYSY.rds") %>%
+	select(chrom=chromSY,direc,X0=X0nSY,X1=X1nSY,exp) %>%
+	mutate(Rep=map_chr(exp,function(x) x %>% str_remove("BY_"))) %>%
+	mutate(strain="BY")
+forks_BYSY.gr<- with(forksBY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+fBY <- forksBY %>% 
+	mutate(filt=!overlapsAny(forks_BYSY.gr,c(masked_SY))) %>%
+	filter(filt)
+
+forksSY <- readRDS("Data/forks_SYSY.rds") %>%
+	select(chrom,direc,X0,X1,exp) %>%
+	mutate(Rep=map_chr(exp,function(x) x %>% str_remove("SY_"))) %>%	mutate(strain="SY")
+forks_SYSY.gr<- with(forksSY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+fSY <- forksSY %>% 
+	mutate(filt=!overlapsAny(forks_SYSY.gr,c(masked_SY))) %>%
+	filter(filt)
+
+### creating GRanges
+forkBY1 <- fBY %>% filter(Rep=="rep1")
+forkBY1$fid <- 1:nrow(forkBY1)
+forkBY1_R <- forkBY1 %>% filter(direc=="R")
+forkBY1_L <- forkBY1 %>% filter(direc=="L")
+forkBY1_R.gr<- with(forkBY1_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY1_L.gr<- with(forkBY1_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+covR <- coverage(forkBY1_R.gr)
+covL <- coverage(forkBY1_L.gr)
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY1 <- RFD
+
+forkBY2 <- fBY %>% filter(Rep=="rep2")
+forkBY2$fid <- 1:nrow(forkBY2)
+forkBY2_R <- forkBY2 %>% filter(direc=="R")
+forkBY2_L <- forkBY2 %>% filter(direc=="L")
+forkBY2_R.gr<- with(forkBY2_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY2_L.gr<- with(forkBY2_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+covR <- coverage(forkBY2_R.gr)
+covL <- coverage(forkBY2_L.gr)
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY2 <- RFD
+
+forkSY1 <- fSY %>% filter(Rep=="rep1")
+forkSY1$fid <- 1:nrow(forkSY1)
+forkSY1_R <- forkSY1 %>% filter(direc=="R")
+forkSY1_L <- forkSY1 %>% filter(direc=="L")
+forkSY1_R.gr<- with(forkSY1_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY1_L.gr<- with(forkSY1_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+covR <- coverage(forkSY1_R.gr)
+covL <- coverage(forkSY1_L.gr)
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY1 <- RFD
+
+forkSY2 <- fSY %>% filter(Rep=="rep2")
+forkSY2$fid <- 1:nrow(forkSY2)
+forkSY2_R <- forkSY2 %>% filter(direc=="R")
+forkSY2_L <- forkSY2 %>% filter(direc=="L")
+forkSY2_R.gr<- with(forkSY2_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY2_L.gr<- with(forkSY2_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+covR <- coverage(forkSY2_R.gr)
+covL <- coverage(forkSY2_L.gr)
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY2 <- RFD
+
+forkBY3 <- fBY %>% filter(Rep=="rep3")
+forkBY3$fid <- 1:nrow(forkBY3)
+forkBY3_R <- forkBY3 %>% filter(direc=="R")
+forkBY3_L <- forkBY3 %>% filter(direc=="L")
+forkBY3_R.gr<- with(forkBY3_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY3_L.gr<- with(forkBY3_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+covR <- coverage(forkBY3_R.gr)
+covL <- coverage(forkBY3_L.gr)
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY3 <- RFD
+
+forkSY3 <- fSY %>% filter(Rep=="rep3")
+forkSY3$fid <- 1:nrow(forkSY3)
+forkSY3_R <- forkSY3 %>% filter(direc=="R")
+forkSY3_L <- forkSY3 %>% filter(direc=="L")
+forkSY3_R.gr<- with(forkSY3_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY3_L.gr<- with(forkSY3_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+covR <- coverage(forkSY3_R.gr)
+covL <- coverage(forkSY3_L.gr)
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY3 <- RFD
+
+bs <- 1000 
+bingen <- tileGenome(seqinfSY,tilewidth=bs, cut.last.tile.in.chrom=T)
+bingen <- binnedAverage(bingen,rfd_BY1,"rfdBY1")
+bingen <- binnedAverage(bingen,rfd_BY2,"rfdBY2")
+bingen <- binnedAverage(bingen,rfd_SY1,"rfdSY1")
+bingen <- binnedAverage(bingen,rfd_SY2,"rfdSY2")
+bingen <- binnedAverage(bingen,rfd_BY3,"rfdBY3")
+bingen <- binnedAverage(bingen,rfd_SY3,"rfdSY3")
+
+cvBY1 <- coverage(bingen,weight=bingen$rfdBY1)
+cvBY2 <- coverage(bingen,weight=bingen$rfdBY2)
+cvBY3 <- coverage(bingen,weight=bingen$rfdBY3)
+cvSY1 <- coverage(bingen,weight=bingen$rfdSY1)
+cvSY2 <- coverage(bingen,weight=bingen$rfdSY2)
+cvSY3 <- coverage(bingen,weight=bingen$rfdSY3)
+
+rfd.listnt <- list(cvBY1,cvBY2,cvBY3,cvSY1,cvSY2,cvSY3)
+mcornt <- sapply(rfd.listnt, function(x) sapply(rfd.listnt, function(y) cor(x,y,use="pairwise.complete.obs",method="p")))
+colnames(mcornt) <- rownames(mcornt) <- c("BY_rep1","BY_rep2","BY_rep3","SY_rep1","SY_rep2","SY_rep3")
+f1A <- ggcorrplot(mcornt,lab=T,lab_size=4)+
+scale_fill_gradient2("PCC",limit=c(-1,1),low="blue",mid="white",high="red",midpoint=0) + 
+theme(panel.grid=element_blank())
+```
+
+
+add sub figure for correlation without CEN(±20kb) and Junction(±20kb).  
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+CEN <- import("Genome_annotations/SY14_CEN.gff3") %>% NewSeqinfo(seqin=seqinfSY)
+chromSY <- import("Genome_annotations/chromBYonSYgr.bed") %>% NewSeqinfo(seqin=seqinfSY) %>% sort
+chromJunction <- gaps(chromSY-10)
+chromJunction <- chromJunction[strand(chromJunction)=="*"]
+chromJunction$name <- c("16L","16R-5L","5R-6L","6R-14L","14R-13L","13R-12L","12R-15L","15R-11L","11R-1L","1R-2L","2R-3L","3R-4L","4R-7L","7R-8L","8R-9L","9R-10L","10R")
+
+Tel2exclude <- chromJunction[c(1,17)]
+Tel2exclude[1] <- resize(Tel2exclude[1],fix="start",width=20000)
+Tel2exclude[2] <- resize(Tel2exclude[2],fix="end",width=20000)
+Junction2exclude <- resize(chromJunction[2:16],fix="center",width=40000)
+Cen2exclude <- resize(CEN,fix="center",width=40000)
+```
+
+
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+covR <- coverage(forkBY1_R.gr[!overlapsAny(forkBY1_R.gr,c(Cen2exclude,Junction2exclude,Tel2exclude))])
+covL <- coverage(forkBY1_L.gr[!overlapsAny(forkBY1_L.gr,c(Cen2exclude,Junction2exclude,Tel2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY1 <- RFD
+
+covR <- coverage(forkBY2_R.gr[!overlapsAny(forkBY2_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkBY2_L.gr[!overlapsAny(forkBY2_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY2 <- RFD
+
+covR <- coverage(forkSY1_R.gr[!overlapsAny(forkSY1_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkSY1_L.gr[!overlapsAny(forkSY1_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY1 <- RFD
+
+covR <- coverage(forkSY2_R.gr[!overlapsAny(forkSY2_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkSY2_L.gr[!overlapsAny(forkSY2_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY2 <- RFD
+
+covR <- coverage(forkBY3_R.gr[!overlapsAny(forkBY3_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkBY3_L.gr[!overlapsAny(forkBY3_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY3 <- RFD
+
+covR <- coverage(forkSY3_R.gr[!overlapsAny(forkSY3_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkSY3_L.gr[!overlapsAny(forkSY3_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY3 <- RFD
+
+
+bs <- 1000 
+bingen <- tileGenome(seqinfSY,tilewidth=bs, cut.last.tile.in.chrom=T)
+bingen <- binnedAverage(bingen,rfd_BY1,"rfdBY1")
+bingen <- binnedAverage(bingen,rfd_BY2,"rfdBY2")
+bingen <- binnedAverage(bingen,rfd_SY1,"rfdSY1")
+bingen <- binnedAverage(bingen,rfd_SY2,"rfdSY2")
+bingen <- binnedAverage(bingen,rfd_BY3,"rfdBY3")
+bingen <- binnedAverage(bingen,rfd_SY3,"rfdSY3")
+
+bg_no <- bingen
+
+cvBY1n <- coverage(bg_no,weight=bg_no$rfdBY1)
+cvBY2n <- coverage(bg_no,weight=bg_no$rfdBY2)
+cvBY3n <- coverage(bg_no,weight=bg_no$rfdBY3)
+cvSY1n <- coverage(bg_no,weight=bg_no$rfdSY1)
+cvSY2n <- coverage(bg_no,weight=bg_no$rfdSY2)
+cvSY3n <- coverage(bg_no,weight=bg_no$rfdSY3)
+
+rfd.listnt <- list(cvBY1n,cvBY2n,cvBY3n,cvSY1n,cvSY2n,cvSY3n)
+mcornt <- sapply(rfd.listnt, function(x) sapply(rfd.listnt, function(y) cor(x,y,use="pairwise.complete.obs",method="p")))
+colnames(mcornt) <- rownames(mcornt) <- c("BY_rep1","BY_rep2","BY_rep3","SY_rep1","SY_rep2","SY_rep3")
+f1C <- ggcorrplot(mcornt,lab=T,lab_size=4)+
+scale_fill_gradient2("PCC",limit=c(-1,1),low="blue",mid="white",high="red",midpoint=0)+ 
+theme(panel.grid=element_blank())
+```
+
+And keeping only forks on the excluded part
+
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+covR <- coverage(forkBY1_R.gr[overlapsAny(forkBY1_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkBY1_L.gr[overlapsAny(forkBY1_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY1 <- RFD
+
+covR <- coverage(forkBY2_R.gr[overlapsAny(forkBY2_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkBY2_L.gr[overlapsAny(forkBY2_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY2 <- RFD
+
+covR <- coverage(forkSY1_R.gr[overlapsAny(forkSY1_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkSY1_L.gr[overlapsAny(forkSY1_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY1 <- RFD
+
+covR <- coverage(forkSY2_R.gr[overlapsAny(forkSY2_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkSY2_L.gr[overlapsAny(forkSY2_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY2 <- RFD
+
+covR <- coverage(forkBY3_R.gr[overlapsAny(forkBY3_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkBY3_L.gr[overlapsAny(forkBY3_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_BY3 <- RFD
+
+covR <- coverage(forkSY3_R.gr[overlapsAny(forkSY3_R.gr,c(Cen2exclude,Junction2exclude))])
+covL <- coverage(forkSY3_L.gr[overlapsAny(forkSY3_L.gr,c(Cen2exclude,Junction2exclude))])
+RFD <- (covR-covL)/(covR+covL)
+rfd_SY3 <- RFD
+
+
+bs <- 1000 
+bingen <- tileGenome(seqinfSY,tilewidth=bs, cut.last.tile.in.chrom=T)
+bingen <- binnedAverage(bingen,rfd_BY1,"rfdBY1")
+bingen <- binnedAverage(bingen,rfd_BY2,"rfdBY2")
+bingen <- binnedAverage(bingen,rfd_SY1,"rfdSY1")
+bingen <- binnedAverage(bingen,rfd_SY2,"rfdSY2")
+bingen <- binnedAverage(bingen,rfd_BY3,"rfdBY3")
+bingen <- binnedAverage(bingen,rfd_SY3,"rfdSY3")
+
+bg_no <- bingen
+
+cvBY1n <- coverage(bg_no,weight=bg_no$rfdBY1)
+cvBY2n <- coverage(bg_no,weight=bg_no$rfdBY2)
+cvBY3n <- coverage(bg_no,weight=bg_no$rfdBY3)
+cvSY1n <- coverage(bg_no,weight=bg_no$rfdSY1)
+cvSY2n <- coverage(bg_no,weight=bg_no$rfdSY2)
+cvSY3n <- coverage(bg_no,weight=bg_no$rfdSY3)
+
+rfd.listnt <- list(cvBY1n,cvBY2n,cvBY3n,cvSY1n,cvSY2n,cvSY3n)
+mcornt <- sapply(rfd.listnt, function(x) sapply(rfd.listnt, function(y) cor(x,y,use="pairwise.complete.obs",method="p")))
+colnames(mcornt) <- rownames(mcornt) <- c("BY_rep1","BY_rep2","BY_rep3","SY_rep1","SY_rep2","SY_rep3")
+f1B <- ggcorrplot(mcornt,lab=T,lab_size=4)+
+scale_fill_gradient2("PCC",limit=c(-1,1),low="blue",mid="white",high="red",midpoint=0)+ 
+theme(panel.grid=element_blank())
+```
+
+### Exporting Figure 1: compose and add percent cov
+```{r message=FALSE, warning=FALSE, cache=TRUE}
+require(patchwork)
+
+A <- sum(width(c(Cen2exclude,Junction2exclude)))
+B <- as.numeric(seqlengths(seqinfSY))
+
+#p1 <- f1A+ggtitle("Whole genome")+f1B+ggtitle(paste0("CEN and Junction ",round(A/B*100,0),"%"))+f1C+ggtitle(paste0("No CEN, no Junction ",round((B-A)/B*100,0),"%"))+plot_layout(guides="collect")+plot_annotation(tag_levels="A",title="Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+
+p1 <- f1A+ggtitle("Whole genome")+f1B+ggtitle(paste0("CENs and Junctions"))+f1C+ggtitle(paste0("No CEN, no Junction"))+plot_layout(guides="collect")+plot_annotation(tag_levels="A",title="Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+ggsave(plot=p1,file="FigArticle/Fig1.pdf",h=5,w=10)
+```
+

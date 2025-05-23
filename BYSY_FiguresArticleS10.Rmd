@@ -1,0 +1,163 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# FigureS10
+
+***  
+
+### Figure S10: plot test classification biblio
+
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(patchwork)
+theme_set(theme_bw())
+library(ggpmisc)
+library(ggprism)
+
+mypal <- c(paletteer::paletteer_d("ggthemes::Classic_20"),"grey40","black","gold","greenyellow")
+
+`%+%` <- paste0
+
+```
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+
+allres <- read_tsv("Data/BYSY_MasterTable_simple_Table123.tsv")
+sig_pal <- mypal[c(1,7,5,3)]
+ars_annot <- allres %>% 
+	mutate(SYmod=map_chr(Table123, function(x) ifelse(x %in% c("A","R"),"affected","not affected")) %>% fct_rev(.)) %>%
+	mutate(GenoPos=case_when(dt_CEN<20000~"CEN",dt_JUNC<20000~"TEL_JUNC",T~"OTHER")) %>%
+	mutate(inTable1or2=(!is.na(Table1) | !is.na(Table2)))
+
+toplot <- ars_annot %>%
+	group_by(ctf19_Natsume,SYmod) %>%
+	summarise(eff=n(), .groups="drop") %>%
+	group_by(ctf19_Natsume) %>%
+	mutate(label_y = 1-(cumsum(eff)-(0.5*eff))/sum(eff)) %>%
+	ungroup
+totext <- ars_annot %>% group_by(ctf19_Natsume) %>% summarise(eff=n(), .groups="drop")
+totest <- pivot_wider(toplot %>% select(-label_y),names_from="SYmod",values_from="eff") 
+result <- fisher.test(totest %>% slice(2:1) %>% select(-ctf19_Natsume))$p.value
+result <- signif(result, digits = 3)
+df_p_val <- data.frame(
+  group1 = 1,
+  group2 = 2,
+  label = result,
+  y.position = 1.1
+) #%>% mutate(label=ifelse(label<=0.05,label,"n.s."))
+
+p_CTF19 <- ggplot(toplot) +
+	geom_bar(aes(x=ctf19_Natsume,y=eff,fill=SYmod),stat="identity",position="fill")+
+	scale_y_continuous(labels = scales::percent,breaks=c(0,0.25,0.5,0.75,1))+
+	labs(x="Ctf19 status",y="Proportion")+
+	geom_text(aes(x=ctf19_Natsume,y=label_y,label=eff))+
+	scale_fill_manual("SY status",values = sig_pal)+
+	geom_text(data=totext,aes(x=ctf19_Natsume,y=1.05,label=eff))+
+	add_pvalue(df_p_val,xmin = "group1",xmax = "group2",
+		label = "label",y.position = "y.position",tip.length = 0.0001)
+
+toplot <- ars_annot %>%
+	group_by(rif1_Hafner,SYmod) %>%
+	summarise(eff=n(), .groups="drop") %>%
+	group_by(rif1_Hafner) %>%
+	mutate(label_y = 1-(cumsum(eff)-(0.5*eff))/sum(eff)) %>%
+	ungroup
+
+totext <- ars_annot %>% group_by(rif1_Hafner) %>% summarise(eff=n(), .groups="drop")
+totest <- pivot_wider(toplot %>% select(-label_y),names_from="SYmod",values_from="eff")
+result <- c(
+	fisher.test(totest %>% slice(1,2) %>% select(-1))$p.value,
+	fisher.test(totest %>% slice(3,2) %>% select(-1))$p.value)
+result <- signif(result, digits = 3)
+df_p_val <- tibble(
+  group1 = c(1,3),
+  group2 = c(2,2),
+  label = result,
+  y.position = c(1.1,1.15)
+) #%>% mutate(label=ifelse(label<=0.05,label,"n.s."))
+
+p_RIF1 <- ggplot(toplot) +
+	geom_bar(aes(x=rif1_Hafner,y=eff,fill=SYmod),stat="identity",position="fill")+
+	scale_y_continuous(labels = scales::percent,breaks=c(0,0.25,0.5,0.75,1))+
+	geom_text(aes(x=rif1_Hafner,y=label_y,label=eff))+
+	labs(x="Rif1 status",y="Proportion")+
+	scale_fill_manual("SY status",values = sig_pal)+
+	geom_text(data=totext,aes(x=rif1_Hafner,y=1.05,label=eff))+
+	add_pvalue(df_p_val,xmin = "group1",xmax = "group2",
+		label = "label",y.position = "y.position",tip.length = 0.0001)
+
+toplot <- ars_annot %>%
+	group_by(rif1RBM,SYmod) %>%
+	summarise(eff=n(), .groups="drop") %>%
+	group_by(rif1RBM) %>%
+	mutate(label_y = 1-(cumsum(eff)-(0.5*eff))/sum(eff)) %>%
+	ungroup
+
+totext <- ars_annot %>% group_by(rif1RBM) %>% summarise(eff=n(), .groups="drop")
+totest <- pivot_wider(toplot %>% select(-label_y),names_from="SYmod",values_from="eff")
+result <- c(
+	fisher.test(totest %>% slice(1,2) %>% select(-1))$p.value,
+	fisher.test(totest %>% slice(3,2) %>% select(-1))$p.value)
+result <- signif(result, digits = 3)
+df_p_val <- tibble(
+  group1 = c(1,3),
+  group2 = c(2,2),
+  label = result,
+  y.position = c(1.1,1.15)
+) #%>% mutate(label=ifelse(label<=0.05,label,"n.s."))
+
+p_RIF1RBM <- ggplot(toplot) +
+	geom_bar(aes(x=rif1RBM,y=eff,fill=SYmod),stat="identity",position="fill")+
+	scale_y_continuous(labels = scales::percent,breaks=c(0,0.25,0.5,0.75,1))+
+	geom_text(aes(x=rif1RBM,y=label_y,label=eff))+
+	labs(x="rif1-RBM status",y="Proportion")+
+	scale_fill_manual("SY status",values = sig_pal)+
+	geom_text(data=totext,aes(x=rif1RBM,y=1.05,label=eff))+
+	add_pvalue(df_p_val,xmin = "group1",xmax = "group2",
+		label = "label",y.position = "y.position",tip.length = 0.0001)
+
+toplot <- ars_annot %>%
+	group_by(fkh1fkh2_Knott,SYmod) %>%
+	summarise(eff=n(), .groups="drop") %>%
+	group_by(fkh1fkh2_Knott) %>%
+	mutate(label_y = 1-(cumsum(eff)-(0.5*eff))/sum(eff)) %>%
+	ungroup
+
+totext <- ars_annot %>% group_by(fkh1fkh2_Knott) %>% summarise(eff=n(), .groups="drop")
+totest <- pivot_wider(toplot %>% select(-label_y),names_from="SYmod",values_from="eff")
+result <- c(
+	fisher.test(totest %>% slice(1,2) %>% select(-1))$p.value,
+	fisher.test(totest %>% slice(3,2) %>% select(-1))$p.value)
+result <- signif(result, digits = 3)
+df_p_val <- tibble(
+  group1 = c(1,3),
+  group2 = c(2,2),
+  label = result,
+  y.position = c(1.1,1.15)
+) #%>% mutate(label=ifelse(label<=0.05,label,"n.s."))
+
+p_FKH1FKH2 <- ggplot(toplot) +
+	geom_bar(aes(x=fkh1fkh2_Knott,y=eff,fill=SYmod),stat="identity",position="fill")+
+	scale_y_continuous(labels = scales::percent,breaks=c(0,0.25,0.5,0.75,1))+
+	geom_text(aes(x=fkh1fkh2_Knott,y=label_y,label=eff))+
+	labs(x="Fkh1/2 status",y="Proportion")+
+	scale_fill_manual("SY status",values = sig_pal)+
+	geom_text(data=totext,aes(x=fkh1fkh2_Knott,y=1.05,label=eff))+
+	add_pvalue(df_p_val,
+                     xmin = "group1",
+                     xmax = "group2",
+                     label = "label",
+                     y.position = "y.position",
+                     tip.length = 0.0001)
+
+pp2 <- (p_CTF19 | p_FKH1FKH2 | p_RIF1 | p_RIF1RBM)  + plot_layout(guides='collect')+plot_annotation(title="Supplementary Figure 10",theme=theme(plot.title = element_text(face="bold")))
+
+
+quartz(file=paste0("FigArticle/FigS10.pdf"),height=4,width=12,type="pdf")
+pp2
+dev.off()
+```
+

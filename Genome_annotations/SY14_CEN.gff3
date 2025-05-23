@@ -1,0 +1,19 @@
+##gff-version 3
+##source-version rtracklayer 1.66.0
+##date 2025-04-10
+CP029160.1	rtracklayer	centromere	6389593	6389597	0	.	.	name=CEN1;Name=CEN1
+CP029160.1	rtracklayer	centromere	6669721	6669722	0	.	.	name=CEN2;Name=CEN2
+CP029160.1	rtracklayer	centromere	7347016	7347017	0	.	.	name=CEN3;Name=CEN3
+CP029160.1	rtracklayer	centromere	7995495	7995496	0	.	.	name=CEN4;Name=CEN4
+CP029160.1	rtracklayer	centromere	1086126	1086127	0	.	.	name=CEN5;Name=CEN5
+CP029160.1	rtracklayer	centromere	1648526	1648527	0	.	.	name=CEN6;Name=CEN6
+CP029160.1	rtracklayer	centromere	9567466	9567467	0	.	.	name=CEN7;Name=CEN7
+CP029160.1	rtracklayer	centromere	10243770	10243771	0	.	.	name=CEN8;Name=CEN8
+CP029160.1	rtracklayer	centromere	11033559	11033560	0	.	.	name=CEN9;Name=CEN9
+CP029160.1	rtracklayer	centromere	11528387	11528388	0	.	.	name=CEN10;Name=CEN10
+CP029160.1	rtracklayer	centromere	6022753	6022754	0	.	.	name=CEN11;Name=CEN11
+CP029160.1	rtracklayer	centromere	3579498	3579499	0	.	.	name=CEN12;Name=CEN12
+CP029160.1	rtracklayer	centromere	2794477	2794478	0	.	.	name=CEN13;Name=CEN13
+CP029160.1	rtracklayer	centromere	2380172	2380173	0	.	.	name=CEN14;Name=CEN14
+CP029160.1	rtracklayer	centromere	4839199	4839317	0	.	.	name=CEN15;Name=CEN15
+CP029160.1	rtracklayer	centromere	563610	563611	0	.	.	name=CEN16;Name=CEN16

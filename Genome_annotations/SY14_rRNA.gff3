@@ -1,0 +1,4 @@
+##gff-version 3
+##source-version rtracklayer 1.66.0
+##date 2025-04-10
+CP029160.1	rtracklayer	rRNA	3879940	3934000	.	.	.	seqinfSY.seqlengths=11848804;seqinfSY.isCircular=FALSE;seqinfSY.genome=SY14;name=rDNA locus

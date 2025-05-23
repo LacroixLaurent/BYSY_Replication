@@ -1,0 +1,8 @@
+##gff-version 3
+##source-version rtracklayer 1.66.0
+##date 2025-04-10
+CP029160.1	rtracklayer	Y_prime_element	263	6787	.	+	.	ID=Y_prime_element:CP029160.1:263-6787:+;Name=Y_prime_element:CP029160.1:263-6787:+;asYname=FALSE;name_split=NULL;mapchr=NULL;mapstr=NULL;genename=Y_prime_element:CP029160.1:263-6787:+
+CP029160.1	rtracklayer	Y_prime_element	7534	14142	.	-	.	ID=Y_prime_element:CP029160.1:7534-14142:-;Name=Y_prime_element:CP029160.1:7534-14142:-;asYname=FALSE;name_split=NULL;mapchr=NULL;mapstr=NULL;genename=Y_prime_element:CP029160.1:7534-14142:-
+CP029160.1	rtracklayer	X_element	14443	14888	.	-	.	ID=X_element:CP029160.1:14443-14888:-;Name=X_element:CP029160.1:14443-14888:-;asYname=FALSE;name_split=NULL;mapchr=NULL;mapstr=NULL;genename=X_element:CP029160.1:14443-14888:-
+CP029160.1	rtracklayer	X_element	11836918	11837377	.	+	.	ID=X_element:CP029160.1:11836918-11837377:+;Name=X_element:CP029160.1:11836918-11837377:+;asYname=FALSE;name_split=NULL;mapchr=NULL;mapstr=NULL;genename=X_element:CP029160.1:11836918-11837377:+
+CP029160.1	rtracklayer	X_element	11838710	11839169	.	-	.	ID=X_element:CP029160.1:11838710-11839169:-;Name=X_element:CP029160.1:11838710-11839169:-;asYname=FALSE;name_split=NULL;mapchr=NULL;mapstr=NULL;genename=X_element:CP029160.1:11838710-11839169:-

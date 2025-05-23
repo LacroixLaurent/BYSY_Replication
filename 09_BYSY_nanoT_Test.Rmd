@@ -1,0 +1,100 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# 09_nanoT test  
+
+***  
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),strand="*",seqinfo=seqinfSY)
+ source("Helper_function.r")
+```
+
+We use the same approach than for the initiation. We affected a nanotiming value for each selected active ori and then used MANorm2 to evaluate differences.
+
+### Import nanoT data
+```{r message=FALSE, warning=FALSE}
+BY_rep1 <- readRDS("Data/nanoT_BYBYSY_rep1.rds")
+BYrep1.gr <- with(BY_rep1,GRanges(seqnames=chromSY,ranges=IRanges(start=startnSY,end=endnSY),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(BYrep1.gr,weight=BYrep1.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+cov2exp_BY1 <- cov2exp
+BY_rep2 <- readRDS("Data/nanoT_BYBYSY_rep2.rds")
+BYrep2.gr <- with(BY_rep2,GRanges(seqnames=chromSY,ranges=IRanges(start=startnSY,end=endnSY),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(BYrep2.gr,weight=BYrep2.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+cov2exp_BY2 <- cov2exp
+BY_rep3 <- readRDS("Data/nanoT_BYBYSY_rep3.rds")
+BYrep3.gr <- with(BY_rep3,GRanges(seqnames=chromSY,ranges=IRanges(start=startnSY,end=endnSY),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(BYrep3.gr,weight=BYrep3.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+cov2exp_BY3 <- cov2exp
+
+SY_rep1 <- readRDS("Data/nanoT_SYSY_rep1.rds")
+SYrep1.gr <- with(SY_rep1,GRanges(seqnames=chromSY,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(SYrep1.gr,weight=SYrep1.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+cov2exp_SY1 <- cov2exp
+SY_rep2 <- readRDS("Data/nanoT_SYSY_rep2.rds")
+SYrep2.gr <- with(SY_rep2,GRanges(seqnames=chromSY,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(SYrep2.gr,weight=SYrep2.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+cov2exp_SY2 <- cov2exp
+SY_rep3 <- readRDS("Data/nanoT_SYSY_rep3.rds")
+SYrep3.gr <- with(SY_rep3,GRanges(seqnames=chromSY,ranges=IRanges(start=positions,end=positions+999),strand="*",seqinfo=seqinfSY,nanoT=nanoTsc99))
+cov2exp <- coverage(SYrep3.gr,weight=SYrep3.gr$nanoT)
+cov2exp[cov2exp<0.1] <- NA
+cov2exp_SY3 <- cov2exp
+```
+
+### Importing Ori dataset
+```{r message=FALSE, warning=FALSE}
+ars2keep <- import("Data/ars2keep_lim10k_cl1500_2_dtac1500.bed") %>% sort
+ars2keep$score <- NULL
+```
+
+### Affecting nanoT to Ori
+
+```{r message=FALSE, warning=FALSE}
+ars2 <- ars2keep
+
+ars2$SY_rep1 <- sapply(cov2exp_SY1[ars2],function(x) mean(x,na.rm=T))
+ars2$SY_rep2 <- sapply(cov2exp_SY2[ars2],function(x) mean(x,na.rm=T))
+ars2$SY_rep3 <- sapply(cov2exp_SY3[ars2],function(x) mean(x,na.rm=T))
+ars2$BY_rep1 <- sapply(cov2exp_BY1[ars2],function(x) mean(x,na.rm=T))
+ars2$BY_rep2 <- sapply(cov2exp_BY2[ars2],function(x) mean(x,na.rm=T))
+ars2$BY_rep3 <- sapply(cov2exp_BY3[ars2],function(x) mean(x,na.rm=T))
+```
+
+### Testing with MANorm2
+
+```{r message=FALSE, warning=FALSE}
+ars2test2 <- as_tibble(mcols(ars2)) %>% mutate(uid=1:nrow(.) %>% as.character)
+require(MAnorm2)
+eff.mat <- ars2test2[2:7]
+occ.mat <- eff.mat>0
+test.mat <- cbind(eff.mat,occ.mat)
+norm <- normalize(test.mat,count=c(1:3),occupancy=c(7:9))
+norm <- normalize(norm,count=c(4:6),occupancy=c(10:12))
+
+conds <- list(	SY= bioCond(norm[c(1:3)],norm[c(7:9)],name="SY"),
+				BY=bioCond(norm[c(4:6)],norm[c(10:12)],name="BY"))
+conds <- normBioCond(conds)
+conds <- fitMeanVarCurve(conds, method = "parametric", occupy.only = TRUE,init.coef = c(0.1, 10))
+res <- diffTest(conds[[1]], conds[[2]])
+ars.res <- bind_cols(ars2test2,res)
+min(ars.res$padj)
+# 3.436511e-13
+ars.res %>% filter(padj<=0.01) %>% nrow
+# 29 
+ars2$padjMA2 <- ars.res$padj
+ars2MA_gr <- ars2[ars2$padjMA2<=0.01]
+export(ars2MA_gr,con="Data/ARS_nanotiming_MApadj0.01.bed")
+saveRDS(ars.res,file="Data/ARS_nanotiming_MApadj.rds")
+```

@@ -1,0 +1,64 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# FigureS8
+
+***  
+
+### Figure S8
+
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+seqinfBY <- readRDS("Data/seqinfBY.rds")
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds")
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),"*",seqinfo=seqinfSY)
+```
+
+Loading init coordinates
+
+```{r message=FALSE, warning=FALSE}
+initerSY <- readRDS("Data/initer_SYSY.rds") %>%
+	mutate(strain="SY")
+initerBY <- readRDS("Data/initer_BYBYSY.rds") %>%
+	mutate(strain="BY")
+```
+
+Compute Distance to nearest ARS center for BY and SY init
+```{r}
+mypal <- c(paletteer::paletteer_d("ggthemes::Classic_20"),"grey40","black","gold","greenyellow")
+theme_set(theme_bw())
+ars <- import("Genome_annotations/ARS_BYonSY.bed")
+initSYb <-initerSY %>% 
+	filter(type=="Init")  %>%
+	filter(x1-x0>100) %>%
+	select(chrom,center,x0,x1,exp,strain,strand)
+initSYb.gr <- with(initSYb,GRanges(seqnames=chrom,ranges=IRanges(x0,x1),strand="*",seqinfo=seqinfSY,exp=exp,strain=strain))
+initSY2b.gr <- initSYb.gr[!overlapsAny(initSYb.gr,c(rDNA_SY,maskedTy_SY)),]
+initBYb <-initerBY %>% 
+	filter(type=="Init")  %>%
+	filter(x1-x0>100) %>%
+	select(chrom=chromSY,center=centerSY,x0=x0nSY,x1=x1nSY,exp,strain,strand)
+initBYb.gr <- with(initBYb,GRanges(seqnames=chrom,ranges=IRanges(x0,x1),strand="*",seqinfo=seqinfSY,exp=exp,strain=strain))
+initBY2b.gr <- initBYb.gr[!overlapsAny(initBYb.gr,c(rDNA_SY,maskedTy_SY)),]
+
+initSY2b.gr$dtac <- data.frame(distanceToNearest(resize(initSY2b.gr,fix="center",width=1),resize(ars,fix="center",width=1)))[,3]
+initBY2b.gr$dtac <- data.frame(distanceToNearest(resize(initBY2b.gr,fix="center",width=1),resize(ars,fix="center",width=1)))[,3]
+
+toplot <- bind_rows(as_tibble(initSY2b.gr),as_tibble(initBY2b.gr))
+library(patchwork)
+
+plo <- ggplot(toplot)+
+	stat_ecdf(aes(x=dtac,col=strain))+
+	coord_cartesian(xlim=c(0,5000))+
+	labs(y="ECDF",x="Distance to the nearest ARS centre")+
+	scale_colour_manual(values=mypal[c(1,7)])
+quartz(file=paste0("FigArticle/FigS8.pdf"),height=4,width=6,type="pdf")
+plo+plot_annotation(title="Supplementary Figure 8",theme=theme(plot.title = element_text(face="bold")))
+dev.off()
+```

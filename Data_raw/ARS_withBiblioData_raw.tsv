@@ -1,0 +1,830 @@
+chr	start	end	name	othernames	status	chrRom	newname	newname2	Rif1	Rif1RBM	Rif1SILK	fkh1	fkh2	fkh1fkh2	rpd3d	ctf19d	orc_dna
+chr1	650	1791	ARS102	proARS102	Confirmed	chrI	ARS102	ARS102	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr1	6136	7136	ARS102.5	proARS103	Confirmed	chrI	ARS102.5	ARS102.5	rep	null	rep	NA	NA	NA	NA	NA	NA
+chr1	7998	8548	ARS103	proARS103	Confirmed	chrI	ARS103	ARS103	rep	null	rep	NA	NA	NA	NA	NA	NA
+chr1	9775	10485	putative_ARS	NA	Likely	chrI	Likely_chrI	Likely_chrI_1	rep	null	rep	NA	NA	NA	NA	NA	NA
+chr1	16855	17565	putative_ARS	NA	Likely	chrI	Likely_chrI	Likely_chrI_2	rep	null	rep	NA	NA	NA	NA	NA	NA
+chr1	30946	31184	ARS104	proARS104	Confirmed	chrI	ARS104	ARS104	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr1	40716	43300	ARS105	proARS105	Confirmed	chrI	ARS105	ARS105	rep	NA	rep	0	0	0	reg	NA	C
+chr1	70258	70491	ARS106	proARS106	Confirmed	chrI	ARS106	ARS106	null	null	null	0	0	1	reg	NA	NA
+chr1	98769	105769	putative_ARS	NA	Likely	chrI	Likely_chrI	Likely_chrI_3	NA	NA	null	NA	NA	NA	NA	NA	NA
+chr1	124350	124599	ARS107	proARS107	Confirmed	chrI	ARS107	ARS107	null	null	NA	0	0	0	not reg	NA	NA
+chr1	136900	137900	ARS107.5	NA	Confirmed	chrI	ARS107.5	ARS107.5	NA	NA	NA	0	0	0	not reg	1	NA
+chr1	146703	147690	ARS108	proARS108	Confirmed	chrI	ARS108	ARS108	act	null	null	0	0	0	not reg	1	NA
+chr1	159906	160127	ARS109	ARS101, proARS109	Confirmed	chrI	ARS109	ARS109	NA	NA	NA	0	0	0	not reg	1	NA
+chr1	162000	170000	putative_ARS	NA	Likely	chrI	Likely_chrI	Likely_chrI_4	NA	NA	NA	0	0	1	NA	1	NA
+chr1	176154	176402	ARS110	ADE1	Confirmed	chrI	ARS110	ARS110	null	null	null	0	0	-1	not reg	1	W
+chr1	197385	198095	putative_ARS	NA	Likely	chrI	Likely_chrI	Likely_chrI_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr1	202769	209769	putative_ARS	NA	Likely	chrI	Likely_chrI	Likely_chrI_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr1	214879	215635	ARS111	proARS111	Confirmed	chrI	ARS111	ARS111	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr1	222871	224037	ARS112	NA	Confirmed	chrI	ARS112	ARS112	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr1	226100	227000	ARS113	NA	Confirmed	chrI	ARS113	ARS113	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr1	229635	230208	putative_ARS	NA	Likely	chrI	Likely_chrI	Likely_chrI_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	39	686	ARS200	NA	Confirmed	chrII	ARS200	ARS200	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	6123	7127	ARS201	proARS201	Confirmed	chrII	ARS201	ARS201	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	28933	29152	ARS201.5	ARS230	Confirmed	chrII	ARS201.5	ARS201.5	rep	NA	NA	NA	NA	NA	not reg	NA	NA
+chr2	38623	39068	ARS201.7	NA	Confirmed	chrII	ARS201.7	ARS201.7	NA	NA	NA	0	0	0	NA	NA	NA
+chr2	63186	63421	ARS202	proARS202	Confirmed	chrII	ARS202	ARS202	null	null	null	0	0	-1	not reg	NA	D
+chr2	70650	73350	putative_ARS	NA	Likely	chrII	Likely_chrII	Likely_chrII_1	NA	NA	NA	0	0	0	not reg	NA	NA
+chr2	80201	81401	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_1	NA	NA	NA	0	0	0	not reg	NA	NA
+chr2	93410	93811	ARS203	proARS203	Confirmed	chrII	ARS203	ARS203	NA	NA	NA	0	0	1	reg	NA	NA
+chr2	95377	97400	putative_ARS	proARS204	Dubious	chrII	Dubious_chrII	Dubious_chrII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	99765	100829	putative_ARS	proARS205	Dubious	chrII	Dubious_chrII	Dubious_chrII_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	121302	136302	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	142868	144016	ARS206	proARS206	Confirmed	chrII	ARS206	ARS206	null	act	null	0	0	1	NA	NA	NA
+chr2	170049	170298	ARS207	proARS207	Confirmed	chrII	ARS207	ARS207	null	null	NA	0	0	0	NA	NA	NA
+chr2	177529	177877	ARS207.1	ARS207.3	Confirmed	chrII	ARS207.1	ARS207.1	null	null	NA	NA	NA	NA	reg	NA	NA
+chr2	187205	187915	putative_ARS	NA	Likely	chrII	Likely_chrII	Likely_chrII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	198193	198434	ARS207.5	ARS231	Confirmed	chrII	ARS207.5	ARS207.5	null	null	null	0	0	-1	not reg	NA	NA
+chr2	209187	210063	ARS207.8	NA	Confirmed	chrII	ARS207.8	ARS207.8	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr2	221842	236842	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_5	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr2	237644	237879	ARS208	proARS208	Confirmed	chrII	ARS208	ARS208	null	null	null	0	0	0	not reg	1	NA
+chr2	238849	253849	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_6	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr2	254890	255136	ARS209	ARSH4, proARS209	Confirmed	chrII	ARS209	ARS209	null	null	null	0	0	0	not reg	NA	NA
+chr2	258430	259601	putative_ARS	proARS210	Likely	chrII	Likely_chrII	Likely_chrII_3	null	null	null	NA	NA	NA	NA	NA	NA
+chr2	262978	269978	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_7	NA	NA	NA	1	0	0	NA	NA	NA
+chr2	279083	279847	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	283015	283913	ARS210.5	NA	Confirmed	chrII	ARS210.5	ARS210.5	NA	NA	NA	0	0	0	reg	NA	NA
+chr2	292854	294054	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	296000	306000	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	308406	309606	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	326099	326335	ARS211	proARS211	Confirmed	chrII	ARS211	ARS211	act	null	act	0	0	0	not reg	NA	NA
+chr2	341918	343118	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	358898	373898	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	378434	379194	ARS212	proARS212	Confirmed	chrII	ARS212	ARS212	NA	NA	NA	0	0	1	not reg	NA	NA
+chr2	389245	390368	ARS213	proARS213	Confirmed	chrII	ARS213	ARS213	NA	NA	NA	0	0	0	NA	NA	NA
+chr2	407831	408064	ARS214	proARS214	Confirmed	chrII	ARS214	ARS214	null	null	null	0	0	0	not reg	NA	W
+chr2	417739	418035	ARS215	proARS215	Confirmed	chrII	ARS215	ARS215	NA	NA	NA	0	0	0	NA	NA	NA
+chr2	440859	441697	ARS215.5	NA	Confirmed	chrII	ARS215.5	ARS215.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	477783	479267	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_14	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	486661	486909	ARS216	proARS216	Confirmed	chrII	ARS216	ARS216	null	null	null	-1	0	-1	not reg	NA	NA
+chr2	497650	499350	putative_ARS	NA	Likely	chrII	Likely_chrII	Likely_chrII_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	503701	505102	putative_ARS	proARS217	Likely	chrII	Likely_chrII	Likely_chrII_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	516805	517805	ARS217	NA	Confirmed	chrII	ARS217	ARS217	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	539137	539699	ARS218	proARS218	Confirmed	chrII	ARS218	ARS218	null	null	NA	0	0	0	NA	NA	NA
+chr2	543600	553600	putative_ARS	NA	Likely	chrII	Likely_chrII	Likely_chrII_6	null	null	NA	NA	NA	NA	NA	NA	NA
+chr2	582650	584350	putative_ARS	NA	Likely	chrII	Likely_chrII	Likely_chrII_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	591424	591713	ARS219	proARS219	Confirmed	chrII	ARS219	ARS219	null	null	null	NA	NA	NA	NA	NA	NA
+chr2	611269	613200	ARS219.5	NA	Confirmed	chrII	ARS219.5	ARS219.5	NA	NA	NA	0	0	0	reg	NA	C
+chr2	622625	622894	ARS220	proARS220	Confirmed	chrII	ARS220	ARS220	null	null	null	0	0	-1	not reg	NA	NA
+chr2	627135	627845	putative_ARS	NA	Likely	chrII	Likely_chrII	Likely_chrII_8	null	null	null	NA	NA	NA	NA	NA	NA
+chr2	631934	632246	ARS221	proARS221	Confirmed	chrII	ARS221	ARS221	null	null	null	-1	0	-1	not reg	NA	NA
+chr2	675947	676667	ARS221.5	NA	Confirmed	chrII	ARS221.5	ARS221.5	null	null	null	NA	NA	NA	NA	NA	NA
+chr2	687531	702531	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_15	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	704250	704521	ARS222	proARS222	Confirmed	chrII	ARS222	ARS222	null	null	null	NA	NA	NA	NA	NA	NA
+chr2	707158	708262	ARS222.5	NA	Confirmed	chrII	ARS222.5	ARS222.5	null	null	null	0	0	1	NA	NA	NA
+chr2	720601	721038	ARS223	proARS223	Confirmed	chrII	ARS223	ARS223	NA	NA	NA	0	0	0	NA	NA	NA
+chr2	724546	739546	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_16	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	741512	741802	ARS224	proARS224	Confirmed	chrII	ARS224	ARS224	rep	null	null	0	0	0	NA	NA	D
+chr2	757390	757621	ARS225	proARS225	Confirmed	chrII	ARS225	ARS225	NA	NA	null	0	0	1	NA	NA	NA
+chr2	760355	761713	putative_ARS	proARS226	Likely	chrII	Likely_chrII	Likely_chrII_9	NA	NA	null	NA	NA	NA	NA	NA	NA
+chr2	773918	774348	ARS227	proARS227	Confirmed	chrII	ARS227	ARS227	NA	NA	NA	0	0	0	reg	NA	NA
+chr2	792116	792340	ARS228	proARS228	Confirmed	chrII	ARS228	ARS228	rep	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	796259	797162	ARS228.5	NA	Confirmed	chrII	ARS228.5	ARS228.5	rep	NA	NA	NA	NA	NA	NA	NA	NA
+chr2	801930	802617	ARS229	proARS229	Confirmed	chrII	ARS229	ARS229	rep	NA	NA	-1	0	-1	not reg	NA	NA
+chr2	810493	813067	putative_ARS	NA	Dubious	chrII	Dubious_chrII	Dubious_chrII_17	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	837	1551	ARS300	X-ARS, proARS300	Confirmed	chrIII	ARS300	ARS300	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	3814	5892	putative_ARS	proARS300.5	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	11145	11401	ARS301	proARS301	Confirmed	chrIII	ARS301	ARS301	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	11303	14854	ARS302	proARS301, proARS302, proARS303/proARS320	Confirmed	chrIII	ARS302	ARS302_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	14574	14849	ARS302	proARS302, proARS303/proARS320	Confirmed	chrIII	ARS302	ARS302_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	14870	15213	ARS303	proARS302, proARS303/proARS320	Confirmed	chrIII	ARS303	ARS303	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	15213	16274	ARS320	proARS302, proARS303/proARS320	Confirmed	chrIII	ARS320	ARS320	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	30199	30657	ARS304	NA	Confirmed	chrIII	ARS304	ARS304	NA	NA	NA	0	0	0	reg	NA	NA
+chr3	39158	39706	ARS305	ARS A6C, proARS305	Confirmed	chrIII	ARS305	ARS305	null	null	null	-1	0	-1	not reg	NA	C
+chr3	53807	55007	putative_ARS	NA	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	74457	74677	ARS306	NA	Confirmed	chrIII	ARS306	ARS306	null	null	null	0	0	-1	not reg	NA	NA
+chr3	81000	89000	putative_ARS	NA	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	108775	109291	ARS307	ARS C2G1, proARS307	Confirmed	chrIII	ARS307	ARS307	null	null	null	0	0	0	not reg	1	NA
+chr3	114314	114933	ARS308	NA	Confirmed	chrIII	ARS308	ARS308	null	null	null	1	0	1	NA	1	NA
+chr3	131978	132322	ARS309	ARS J11D1, proARS309	Confirmed	chrIII	ARS309	ARS309	null	null	null	0	0	0	not reg	1	NA
+chr3	137843	138897	putative_ARS	NA	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_4	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr3	138948	153948	putative_ARS	NA	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_5	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr3	159363	166363	putative_ARS	NA	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	166494	167340	ARS310	proARS310	Confirmed	chrIII	ARS310	ARS310	null	null	null	0	0	-1	not reg	NA	NA
+chr3	192527	193643	putative_ARS	proARS313	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	194256	194505	ARS313	NA	Confirmed	chrIII	ARS313	ARS313	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	197369	197601	ARS314	proARS314	Confirmed	chrIII	ARS314	ARS314	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	199935	200645	putative_ARS	NA	Likely	chrIII	Likely_chrIII	Likely_chrIII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	203876	207534	ARS314.5	NA	Confirmed	chrIII	ARS314.5	ARS314.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	222963	224792	putative_ARS	proARS315	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	224807	225053	ARS315	NA	Confirmed	chrIII	ARS315	ARS315	null	null	null	0	0	-1	not reg	NA	NA
+chr3	261680	262880	putative_ARS	NA	Dubious	chrIII	Dubious_chrIII	Dubious_chrIII_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	272844	273088	ARS316	proARS316	Confirmed	chrIII	ARS316	ARS316	rep	rep	null	0	0	0	not reg	NA	NA
+chr3	292524	292826	ARS317	proARS317, proARS318	Confirmed	chrIII	ARS317	ARS317	NA	NA	NA	NA	NA	NA	NA	NA	D
+chr3	294396	295027	ARS318	NA	Confirmed	chrIII	ARS318	ARS318	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr3	304363	311363	putative_ARS	NA	Likely	chrIII	Likely_chrIII	Likely_chrIII_2	NA	NA	null	NA	NA	NA	NA	NA	NA
+chr3	315346	316232	ARS319	X-ARS	Confirmed	chrIII	ARS319	ARS319	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	137	1392	ARS400	NA	Confirmed	chrIV	ARS400	ARS400	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	7596	11052	putative_ARS	proARS401, proARS402	Likely	chrIV	Likely_chrIV	Likely_chrIV_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	15492	15739	ARS403	proARS403	Confirmed	chrIV	ARS403	ARS403	rep	NA	null	NA	NA	NA	NA	NA	NA
+chr4	21265	22262	ARS402.5	NA	Confirmed	chrIV	ARS402.5	ARS402.5	rep	NA	null	NA	NA	NA	NA	NA	NA
+chr4	46181	46237	ARS404	HO, proARS404	Confirmed	chrIV	ARS404	ARS404	null	null	null	0	0	0	reg	NA	NA
+chr4	50245	50955	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_2	null	null	null	NA	NA	NA	NA	NA	NA
+chr4	85945	86177	ARS405	proARS405	Confirmed	chrIV	ARS405	ARS405	null	null	null	NA	NA	NA	NA	NA	NA
+chr4	95435	96145	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	100380	101355	ARS405.5	NA	Confirmed	chrIV	ARS405.5	ARS405.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	123617	123902	ARS406	proARS406	Confirmed	chrIV	ARS406	ARS406	null	null	null	-1	0	-1	not reg	NA	NA
+chr4	137445	137808	ARS407	proARS407	Confirmed	chrIV	ARS407	ARS407	NA	NA	NA	0	0	1	reg	NA	NA
+chr4	157744	158235	ARS408	proARS408	Confirmed	chrIV	ARS408	ARS408	NA	NA	NA	0	0	0	NA	NA	NA
+chr4	169101	170301	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	212420	212669	ARS409	proARS409	Confirmed	chrIV	ARS409	ARS409	null	null	null	1	0	1	not reg	NA	D
+chr4	212806	227806	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	232140	232618	ARS409.3	NA	Confirmed	chrIV	ARS409.3	ARS409.3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	235935	236184	ARS409.5	NA	Confirmed	chrIV	ARS409.5	ARS409.5	NA	NA	NA	0	0	1	NA	NA	NA
+chr4	253789	254038	ARS410	proARS410	Confirmed	chrIV	ARS410	ARS410	NA	NA	NA	0	0	0	NA	NA	NA
+chr4	256029	257132	putative_ARS	proARS411	Likely	chrIV	Likely_chrIV	Likely_chrIV_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	316719	317111	ARS412	proARS412	Confirmed	chrIV	ARS412	ARS412	NA	NA	NA	0	0	1	NA	NA	NA
+chr4	329564	329813	ARS413	proARS413	Confirmed	chrIV	ARS413	ARS413	null	null	null	0	0	-1	not reg	NA	NA
+chr4	350835	351804	ARS413.5	NA	Confirmed	chrIV	ARS413.5	ARS413.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	357806	359006	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	384232	385432	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	408070	408312	ARS414	proARS414	Confirmed	chrIV	ARS414	ARS414	null	null	null	0	0	-1	not reg	NA	NA
+chr4	435056	435388	ARS415	proARS415	Confirmed	chrIV	ARS415	ARS415	null	null	null	0	0	0	not reg	1	NA
+chr4	443318	444447	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_5	NA	NA	NA	1	0	1	NA	1	NA
+chr4	462430	462700	ARS416	ARS1, proARS416	Confirmed	chrIV	ARS416	ARS416	null	NA	null	0	0	0	not reg	1	NA
+chr4	476003	477577	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_6	NA	NA	NA	0	0	0	NA	1	NA
+chr4	483846	484091	ARS417	proARS417	Confirmed	chrIV	ARS417	ARS417	NA	NA	NA	0	0	-1	not reg	1	NA
+chr4	505336	505578	ARS417.5	ARS450	Confirmed	chrIV	ARS417.5	ARS417.5	null	null	null	0	0	0	reg	NA	NA
+chr4	555224	555461	ARS418	proARS418	Confirmed	chrIV	ARS418	ARS418	null	NA	null	0	0	-1	not reg	NA	NA
+chr4	567490	567737	ARS419	proARS419	Confirmed	chrIV	ARS419	ARS419	NA	NA	NA	0	0	-1	NA	NA	NA
+chr4	603407	618407	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	629072	629669	ARS420	proARS420	Confirmed	chrIV	ARS420	ARS420	NA	NA	NA	0	0	1	NA	NA	NA
+chr4	639859	640108	ARS421	proARS421	Confirmed	chrIV	ARS421	ARS421	null	act	null	0	0	1	NA	NA	NA
+chr4	641291	648291	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_7	null	act	null	NA	NA	NA	NA	NA	NA
+chr4	689045	689755	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	702879	703125	ARS422	ARO1, proARS422	Confirmed	chrIV	ARS422	ARS422	null	null	null	0	0	1	NA	NA	D
+chr4	719873	721227	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_8	NA	NA	NA	0	0	1	NA	NA	NA
+chr4	731940	746940	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	748384	748630	ARS422.5	ARS451	Confirmed	chrIV	ARS422.5	ARS422.5	null	null	null	0	0	-1	NA	NA	NA
+chr4	753159	753391	ARS423	proARS423	Confirmed	chrIV	ARS423	ARS423	null	null	null	NA	NA	NA	reg	NA	D
+chr4	763412	764716	putative_ARS	proARS424	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	774291	781291	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	783453	798453	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	806044	806270	ARS425	proARS425	Confirmed	chrIV	ARS425	ARS425	null	null	null	0	0	0	not reg	NA	NA
+chr4	812961	827961	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	832409	834359	putative_ARS	proARS426	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	844597	845593	ARS426.5	NA	Confirmed	chrIV	ARS426.5	ARS426.5	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr4	858640	859840	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_9	NA	NA	NA	0	0	0	NA	NA	NA
+chr4	875791	882791	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_10	NA	NA	NA	NA	NA	NA	not reg	NA	NA
+chr4	898253	899887	putative_ARS	proARS427	Likely	chrIV	Likely_chrIV	Likely_chrIV_11	NA	NA	NA	-1	0	-1	NA	NA	NA
+chr4	903824	904655	ARS427.5	NA	Confirmed	chrIV	ARS427.5	ARS427.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	913780	914029	ARS428	proARS428	Confirmed	chrIV	ARS428	ARS428	null	null	null	0	0	-1	not reg	NA	C
+chr4	921682	921930	ARS429	proARS429	Confirmed	chrIV	ARS429	ARS429	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	942983	943975	ARS429.5	NA	Confirmed	chrIV	ARS429.5	ARS429.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	954024	955224	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	970250	980250	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_12	null	null	null	0	0	0	NA	NA	NA
+chr4	987000	995000	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_14	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1016624	1016922	ARS430	proARS430	Confirmed	chrIV	ARS430	ARS430	null	null	null	0	0	0	not reg	NA	NA
+chr4	1021545	1022255	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_13	null	null	null	NA	NA	NA	NA	NA	NA
+chr4	1033069	1034182	ARS430.5	NA	Confirmed	chrIV	ARS430.5	ARS430.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1057828	1058076	ARS431	proARS431	Confirmed	chrIV	ARS431	ARS431	null	null	null	0	0	1	reg	NA	NA
+chr4	1109955	1110196	ARS431.5	ARS452	Confirmed	chrIV	ARS431.5	ARS431.5	null	null	null	0	0	1	NA	NA	NA
+chr4	1130672	1131155	ARS431.7	NA	Confirmed	chrIV	ARS431.7	ARS431.7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1132291	1139291	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_15	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1159250	1159499	ARS432	proARS432	Confirmed	chrIV	ARS432	ARS432	NA	NA	NA	0	0	-1	NA	NA	NA
+chr4	1165998	1166221	ARS432.5	ARS453	Confirmed	chrIV	ARS432.5	ARS432.5	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr4	1199800	1209800	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_14	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1240869	1241098	ARS433	proARS433	Confirmed	chrIV	ARS433	ARS433	null	null	null	0	0	1	NA	NA	NA
+chr4	1274655	1275365	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_16	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1276212	1276440	ARS434	proARS434	Confirmed	chrIV	ARS434	ARS434	null	null	null	0	0	1	NA	NA	NA
+chr4	1302579	1302819	ARS435	proARS435	Confirmed	chrIV	ARS435	ARS435	null	null	null	0	0	1	reg	NA	W
+chr4	1305246	1306801	putative_ARS	proARS436	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_17	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1307650	1308850	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_15	null	null	null	NA	NA	NA	NA	NA	NA
+chr4	1353494	1353667	ARS437	proARS437	Confirmed	chrIV	ARS437	ARS437	null	null	null	0	0	0	reg	NA	D
+chr4	1355087	1356599	putative_ARS	proARS438	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_18	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1379198	1380752	putative_ARS	proARS439	Likely	chrIV	Likely_chrIV	Likely_chrIV_16	null	null	null	NA	NA	NA	NA	NA	NA
+chr4	1385151	1385630	ARS439.5	NA	Confirmed	chrIV	ARS439.5	ARS439.5	null	null	null	NA	NA	NA	NA	NA	NA
+chr4	1404277	1404512	ARS440	proARS440	Confirmed	chrIV	ARS440	ARS440	null	null	null	0	0	1	NA	NA	NA
+chr4	1428935	1429645	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_19	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1447298	1448928	ARS441	proARS441	Confirmed	chrIV	ARS441	ARS441	NA	NA	NA	1	0	1	NA	NA	D
+chr4	1454012	1455590	putative_ARS	proARS442	Likely	chrIV	Likely_chrIV	Likely_chrIV_17	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1461849	1462161	ARS442	proARS443	Confirmed	chrIV	ARS442	ARS442	null	null	null	0	0	1	not reg	NA	D
+chr4	1468121	1469948	putative_ARS	proARS444	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_20	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1469966	1471048	putative_ARS	proARS445	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_21	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1486905	1487149	ARS446	proARS446	Confirmed	chrIV	ARS446	ARS446	NA	NA	NA	0	0	0	NA	NA	W
+chr4	1495291	1502291	putative_ARS	NA	Likely	chrIV	Likely_chrIV	Likely_chrIV_18	rep	rep	null	NA	NA	NA	NA	NA	NA
+chr4	1502624	1503221	ARS447	proARS447	Confirmed	chrIV	ARS447	ARS447	rep	rep	null	0	0	0	NA	NA	C
+chr4	1505300	1507153	putative_ARS	proARS448	Likely	chrIV	Likely_chrIV	Likely_chrIV_19	rep	rep	null	NA	NA	NA	not reg	NA	NA
+chr4	1522298	1526152	putative_ARS	proARS449	Likely	chrIV	Likely_chrIV	Likely_chrIV_20	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr4	1530848	1531802	putative_ARS	NA	Dubious	chrIV	Dubious_chrIV	Dubious_chrIV_22	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	23	1144	putative_ARS	NA	Dubious	chrV	Dubious_chrV	Dubious_chrV_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	4097	4185	ARS502	Y'-ARS, proARS502	Confirmed	chrV	ARS502	ARS502	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	6464	7230	ARS503	proARS503	Confirmed	chrV	ARS503	ARS503	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	8786	10019	ARS504	proARS504	Confirmed	chrV	ARS504	ARS504	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	11713	12194	ARS504.2	proARS505	Confirmed	chrV	ARS504.2	ARS504.2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	17067	19023	putative_ARS	proARS506	Likely	chrV	Likely_chrV	Likely_chrV_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	59282	59516	ARS507	proARS507	Confirmed	chrV	ARS507	ARS507	null	null	null	0	0	-1	not reg	NA	NA
+chr5	67665	68709	putative_ARS	NA	Dubious	chrV	Dubious_chrV	Dubious_chrV_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	93977	94218	ARS508	proARS508	Confirmed	chrV	ARS508	ARS508	null	null	null	0	0	-1	not reg	NA	NA
+chr5	108553	110467	putative_ARS	proARS509	Likely	chrV	Likely_chrV	Likely_chrV_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	145539	145782	ARS510	proARS510	Confirmed	chrV	ARS510	ARS510	null	rep	null	0	0	0	not reg	1	NA
+chr5	164051	165251	putative_ARS	NA	Dubious	chrV	Dubious_chrV	Dubious_chrV_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	173636	173874	ARS511	proARS511	Confirmed	chrV	ARS511	ARS511	act	null	null	0	0	-1	not reg	NA	NA
+chr5	183823	184697	putative_ARS	NA	Dubious	chrV	Dubious_chrV	Dubious_chrV_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	192493	192926	ARS511.5	NA	Confirmed	chrV	ARS511.5	ARS511.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	212381	212630	ARS512	proARS512	Confirmed	chrV	ARS512	ARS512	null	rep	act	1	0	1	reg	NA	W
+chr5	255623	256957	putative_ARS	NA	Likely	chrV	Likely_chrV	Likely_chrV_3	NA	null	NA	NA	NA	NA	reg	NA	NA
+chr5	276127	276526	ARS513.5	NA	Confirmed	chrV	ARS513.5	ARS513.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	278073	278355	ARS513.7	NA	Confirmed	chrV	ARS513.7	ARS513.7	NA	NA	NA	NA	NA	NA	NA	NA	W
+chr5	287504	287750	ARS514	proARS514	Confirmed	chrV	ARS514	ARS514	null	null	act	0	0	0	not reg	NA	D
+chr5	301565	302061	ARS514.5	NA	Confirmed	chrV	ARS514.5	ARS514.5	NA	NA	NA	0	0	1	reg	NA	NA
+chr5	316043	317307	putative_ARS	NA	Likely	chrV	Likely_chrV	Likely_chrV_4	null	null	null	-1	0	-1	not reg	NA	NA
+chr5	353504	353751	ARS516	tRNAgluARS, proARS516	Confirmed	chrV	ARS516	ARS516	null	null	null	0	0	-1	not reg	NA	C
+chr5	406747	406949	ARS517	proARS517	Confirmed	chrV	ARS517	ARS517	null	null	null	0	0	0	not reg	NA	NA
+chr5	418015	418725	putative_ARS	NA	Dubious	chrV	Dubious_chrV	Dubious_chrV_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	429861	431061	putative_ARS	NA	Likely	chrV	Likely_chrV	Likely_chrV_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	438929	439178	ARS518	proARS518	Confirmed	chrV	ARS518	ARS518	act	null	act	0	0	0	NA	NA	NA
+chr5	442412	442731	ARS519	proARS519	Confirmed	chrV	ARS519	ARS519	act	null	act	NA	NA	NA	not reg	NA	NA
+chr5	477886	484886	putative_ARS	NA	Dubious	chrV	Dubious_chrV	Dubious_chrV_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	498417	499343	ARS520	proARS520	Confirmed	chrV	ARS520	ARS520	null	null	null	0	0	0	not reg	NA	NA
+chr5	502951	517951	putative_ARS	NA	Dubious	chrV	Dubious_chrV	Dubious_chrV_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	520767	521025	ARS521	NA	Confirmed	chrV	ARS521	ARS521	NA	NA	NA	0	0	0	reg	NA	NA
+chr5	549560	549809	ARS522	ARS501, proARS522	Confirmed	chrV	ARS522	ARS522	rep	NA	rep	0	0	0	reg	NA	NA
+chr5	559886	566886	putative_ARS	NA	Likely	chrV	Likely_chrV	Likely_chrV_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr5	569020	570085	ARS523	proARS523	Confirmed	chrV	ARS523	ARS523	NA	NA	NA	0	0	-1	NA	NA	NA
+chr5	575573	576817	putative_ARS	NA	Dubious	chrV	Dubious_chrV	Dubious_chrV_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr6	23	1527	putative_ARS	NA	Likely	chrVI	Likely_chrVI	Likely_chrVI_1	rep	rep	rep	NA	NA	NA	NA	NA	NA
+chr6	5435	6155	ARS600.1	ARS120; X-ARS, proARS600.1	Confirmed	chrVI	ARS600.1	ARS600.1	rep	rep	rep	NA	NA	NA	NA	NA	NA
+chr6	12174	13028	ARS600.2	proARS600.2	Confirmed	chrVI	ARS600.2	ARS600.2	rep	rep	rep	NA	NA	NA	NA	NA	NA
+chr6	18682	19864	ARS600.3	proARS600.3, proARS600.4	Confirmed	chrVI	ARS600.3	ARS600.3	rep	rep	rep	NA	NA	NA	NA	NA	NA
+chr6	19669	20826	ARS600.4	proARS600.3, proARS600.4	Confirmed	chrVI	ARS600.4	ARS600.4	rep	rep	rep	NA	NA	NA	NA	NA	NA
+chr6	32472	32995	ARS601	proARS601/proARS602	Confirmed	chrVI	ARS601	ARS601	rep	null	null	NA	NA	NA	NA	NA	NA
+chr6	32666	33247	ARS602	proARS601/proARS602	Confirmed	chrVI	ARS602	ARS602	rep	null	null	NA	NA	NA	NA	NA	NA
+chr6	51814	55080	putative_ARS	NA	Dubious	chrVI	Dubious_chrVI	Dubious_chrVI_1	NA	NA	NA	0	0	0	reg	NA	NA
+chr6	61781	62981	putative_ARS	NA	Likely	chrVI	Likely_chrVI	Likely_chrVI_2	rep	null	rep	NA	NA	NA	NA	NA	NA
+chr6	68690	68869	ARS603	proARS603	Confirmed	chrVI	ARS603	ARS603	rep	null	rep	0	0	0	reg	NA	NA
+chr6	95000	103000	putative_ARS	NA	Likely	chrVI	Likely_chrVI	Likely_chrVI_3	NA	NA	NA	NA	NA	NA	not reg	NA	NA
+chr6	104456	104695	ARS603.1	NA	Confirmed	chrVI	ARS603.1	ARS603.1	NA	NA	NA	0	0	0	not reg	NA	NA
+chr6	118631	118952	ARS603.5	proARS603.5	Confirmed	chrVI	ARS603.5	ARS603.5	null	null	null	0	0	0	not reg	NA	NA
+chr6	127745	128066	ARS604	NA	Confirmed	chrVI	ARS604	ARS604	NA	NA	NA	NA	NA	NA	not reg	1	W
+chr6	135979	136080	ARS605	proARS605	Confirmed	chrVI	ARS605	ARS605	null	null	null	1	0	1	not reg	1	NA
+chr6	167606	168041	ARS606	proARS606	Confirmed	chrVI	ARS606	ARS606	null	null	null	0	0	0	not reg	NA	NA
+chr6	199382	199493	ARS607	proARS607	Confirmed	chrVI	ARS607	ARS607	null	null	null	0	0	-1	not reg	NA	NA
+chr6	216344	216692	ARS608	NA	Confirmed	chrVI	ARS608	ARS608	NA	NA	NA	0	0	-1	reg	NA	NA
+chr6	228091	243091	putative_ARS	NA	Dubious	chrVI	Dubious_chrVI	Dubious_chrVI_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr6	253316	253800	ARS608.5	NA	Confirmed	chrVI	ARS608.5	ARS608.5	rep	rep	null	NA	NA	NA	NA	NA	NA
+chr6	256263	256418	ARS609	proARS609	Confirmed	chrVI	ARS609	ARS609	rep	rep	null	NA	NA	NA	NA	NA	C
+chr6	268255	268965	putative_ARS	proARS610	Likely	chrVI	Likely_chrVI	Likely_chrVI_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr6	269404	270022	ARS610	proARS610	Confirmed	chrVI	ARS610	ARS610	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	23	778	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	6261	8789	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	17629	18112	ARS700.5	NA	Confirmed	chrVII	ARS700.5	ARS700.5	rep	rep	null	0	0	-1	reg	NA	NA
+chr7	22647	29647	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_2	rep	rep	null	NA	NA	NA	NA	NA	NA
+chr7	31980	34434	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_3	NA	NA	NA	NA	NA	NA	reg	NA	NA
+chr7	64279	64528	ARS702	proARS702	Confirmed	chrVII	ARS702	ARS702	rep	rep	null	0	0	0	reg	NA	NA
+chr7	68830	70170	putative_ARS	proARS703	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	112080	112319	ARS704	proARS704	Confirmed	chrVII	ARS704	ARS704	rep	act	rep	NA	NA	NA	NA	NA	NA
+chr7	114385	115095	putative_ARS	proARS705	Likely	chrVII	Likely_chrVII	Likely_chrVII_4	rep	act	rep	NA	NA	NA	NA	NA	NA
+chr7	117471	117955	ARS706	ARO8, proARS706	Confirmed	chrVII	ARS706	ARS706	rep	act	rep	NA	NA	NA	NA	NA	NA
+chr7	163180	163447	ARS707	proARS707	Confirmed	chrVII	ARS707	ARS707	null	null	null	-1	0	-1	not reg	NA	W
+chr7	165725	167856	putative_ARS	proARS708	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	170773	172017	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	187241	187651	ARS709	proARS709	Confirmed	chrVII	ARS709	ARS709	NA	NA	NA	0	0	0	reg	NA	NA
+chr7	203917	204159	ARS710	proARS710	Confirmed	chrVII	ARS710	ARS710	null	null	null	-1	0	-1	not reg	NA	NA
+chr7	231909	231984	ARS711	ARS701; ARS137	Confirmed	chrVII	ARS711	ARS711	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	240972	241441	ARS712	proARS712	Confirmed	chrVII	ARS712	ARS712	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	266526	267726	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	268879	270680	putative_ARS	proARS713	Likely	chrVII	Likely_chrVII	Likely_chrVII_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	274818	275367	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	285951	286246	ARS714	proARS714	Confirmed	chrVII	ARS714	ARS714	null	null	null	0	0	-1	not reg	NA	NA
+chr7	287952	289013	putative_ARS	proARS715	Likely	chrVII	Likely_chrVII	Likely_chrVII_9	null	null	null	NA	NA	NA	NA	NA	NA
+chr7	318745	319455	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_10	null	rep	null	NA	NA	NA	NA	NA	NA
+chr7	330395	345395	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	352695	352917	ARS716	proARS716	Confirmed	chrVII	ARS716	ARS716	null	rep	null	0	0	0	reg	NA	W
+chr7	388658	388892	ARS717	proARS717	Confirmed	chrVII	ARS717	ARS717	null	null	null	0	0	-1	not reg	NA	NA
+chr7	421093	421342	ARS718	proARS718	Confirmed	chrVII	ARS718	ARS718	null	null	null	-1	0	-1	not reg	NA	NA
+chr7	456272	457472	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	479993	482537	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_11	null	null	null	NA	NA	NA	NA	NA	NA
+chr7	484932	485160	ARS719	proARS719	Confirmed	chrVII	ARS719	ARS719	null	null	null	0	0	0	not reg	NA	NA
+chr7	508729	508978	ARS720	proARS720	Confirmed	chrVII	ARS720	ARS720	null	null	null	0	0	0	not reg	1	W
+chr7	534750	544750	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_12	NA	NA	NA	NA	NA	NA	reg	NA	NA
+chr7	552053	553847	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	568490	568738	ARS721	proARS721	Confirmed	chrVII	ARS721	ARS721	null	null	null	0	0	-1	NA	NA	NA
+chr7	574622	574916	ARS722	proARS722	Confirmed	chrVII	ARS722	ARS722	null	null	null	NA	NA	NA	not reg	NA	NA
+chr7	574978	576840	putative_ARS	proARS723	Likely	chrVII	Likely_chrVII	Likely_chrVII_13	null	null	null	0	0	0	NA	NA	NA
+chr7	580930	582707	putative_ARS	proARS724	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	591600	592800	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	607176	607619	ARS724.5	NA	Confirmed	chrVII	ARS724.5	ARS724.5	NA	NA	NA	0	0	0	NA	NA	NA
+chr7	620243	622517	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_14	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr7	626577	627912	putative_ARS	proARS725	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	653611	654091	ARS726	proARS726	Confirmed	chrVII	ARS726	ARS726	null	null	null	0	0	0	NA	NA	NA
+chr7	659809	660054	ARS727	proARS727	Confirmed	chrVII	ARS727	ARS727	null	null	null	-1	0	-1	reg	NA	NA
+chr7	715273	715556	ARS728	proARS728	Confirmed	chrVII	ARS728	ARS728	null	null	null	-1	0	-1	not reg	NA	W
+chr7	735570	750570	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	765451	766651	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	777967	778216	ARS729	proARS729	Confirmed	chrVII	ARS729	ARS729	null	null	null	0	0	-1	not reg	NA	NA
+chr7	795134	796306	putative_ARS	proARS730	Likely	chrVII	Likely_chrVII	Likely_chrVII_15	NA	NA	NA	0	0	0	NA	NA	NA
+chr7	800891	802091	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_16	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	834492	834736	ARS731	proARS731	Confirmed	chrVII	ARS731	ARS731	null	null	null	0	0	-1	not reg	NA	W
+chr7	845923	848287	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_17	NA	NA	NA	0	0	0	NA	NA	NA
+chr7	855121	870121	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	882813	883747	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	888350	888599	ARS731.5	ARS737	Confirmed	chrVII	ARS731.5	ARS731.5	null	null	null	0	0	-1	not reg	NA	NA
+chr7	916675	917170	ARS732	proARS732	Confirmed	chrVII	ARS732	ARS732	null	NA	NA	0	0	1	reg	NA	NA
+chr7	969741	970941	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_18	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	977730	977979	ARS733	proARS733	Confirmed	chrVII	ARS733	ARS733	null	null	null	0	0	1	reg	NA	NA
+chr7	999448	999695	ARS734	proARS734	Confirmed	chrVII	ARS734	ARS734	null	null	null	0	0	1	not reg	NA	NA
+chr7	1002182	1002571	ARS735	proARS735	Confirmed	chrVII	ARS735	ARS735	null	null	null	NA	NA	NA	NA	NA	NA
+chr7	1004198	1006102	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_19	null	null	null	NA	NA	NA	NA	NA	NA
+chr7	1033147	1040147	putative_ARS	NA	Dubious	chrVII	Dubious_chrVII	Dubious_chrVII_14	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	1063254	1063715	ARS735.5	NA	Confirmed	chrVII	ARS735.5	ARS735.5	NA	NA	NA	0	0	0	NA	NA	NA
+chr7	1073298	1074352	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_20	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	1082959	1084336	ARS131a	X-ARS, proARS736	Confirmed	chrVII	ARS131a	ARS131a	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr7	1089548	1090902	putative_ARS	NA	Likely	chrVII	Likely_chrVII	Likely_chrVII_21	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	23	1245	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	5158	6168	ARS131n	X-ARS, proARS801	Confirmed	chrVIII	ARS131n	ARS131n	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	7534	7782	ARS802	proARS802	Confirmed	chrVIII	ARS802	ARS802	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	9711	11566	putative_ARS	proARS803	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	45589	46076	ARS804	proARS804	Confirmed	chrVIII	ARS804	ARS804	NA	NA	NA	0	0	0	reg	NA	NA
+chr8	56650	59172	putative_ARS	NA	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	64255	64489	ARS805	SPO11, proARS805	Confirmed	chrVIII	ARS805	ARS805	null	act	null	0	0	-1	not reg	NA	NA
+chr8	77690	78890	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	87472	89452	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	94759	95192	ARS805.5	NA	Confirmed	chrVIII	ARS805.5	ARS805.5	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr8	111293	111766	ARS805.7	NA	Confirmed	chrVIII	ARS805.7	ARS805.7	null	null	null	NA	NA	NA	NA	1	NA
+chr8	115683	117257	putative_ARS	proARS806	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_3	null	null	null	0	0	0	NA	1	NA
+chr8	133347	133591	ARS807	NA	Confirmed	chrVIII	ARS807	ARS807	null	null	null	0	0	-1	not reg	NA	NA
+chr8	134268	135517	putative_ARS	proARS807	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_4	null	null	null	NA	NA	NA	NA	NA	NA
+chr8	140340	141265	ARS808	ARS2, ARS808	Confirmed	chrVIII	ARS808	ARS808	null	null	null	NA	NA	NA	NA	NA	NA
+chr8	168531	168773	ARS809	proARS809	Confirmed	chrVIII	ARS809	ARS809	null	null	null	0	0	0	reg	NA	W
+chr8	192459	193659	putative_ARS	NA	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	197814	199014	putative_ARS	NA	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	213179	213861	ARS810	proARS810	Confirmed	chrVIII	ARS810	ARS810	null	act	null	NA	NA	NA	NA	NA	NA
+chr8	214885	215595	putative_ARS	proARS811	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_7	null	act	null	NA	NA	NA	NA	NA	NA
+chr8	218344	219498	putative_ARS	proARS812	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_8	null	act	null	NA	NA	NA	NA	NA	NA
+chr8	245719	245968	ARS813	proARS813	Confirmed	chrVIII	ARS813	ARS813	null	null	null	0	0	0	reg	NA	NA
+chr8	253470	268470	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	279858	281058	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	286650	287981	putative_ARS	proARS814	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	296882	297475	ARS815	proARS815	Confirmed	chrVIII	ARS815	ARS815	null	null	null	-1	0	-1	not reg	NA	C
+chr8	344375	345085	putative_ARS	NA	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	359469	359928	ARS816	proARS816	Confirmed	chrVIII	ARS816	ARS816	null	null	null	0	0	0	not reg	NA	NA
+chr8	363335	370335	putative_ARS	NA	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_11	null	null	null	NA	NA	NA	NA	NA	NA
+chr8	380153	382157	putative_ARS	proARS817	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_12	NA	NA	NA	0	0	0	reg	NA	NA
+chr8	392148	392391	ARS818	proARS818, proARS819	Confirmed	chrVIII	ARS818	ARS818	rep	null	null	0	0	0	reg	NA	W
+chr8	406012	406508	ARS818.5	NA	Confirmed	chrVIII	ARS818.5	ARS818.5	NA	NA	NA	0	0	0	NA	NA	NA
+chr8	447619	447853	ARS820	proARS820	Confirmed	chrVIII	ARS820	ARS820	null	null	null	0	0	-1	not reg	NA	NA
+chr8	451493	453397	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	474309	474793	ARS821	proARS821	Confirmed	chrVIII	ARS821	ARS821	null	null	NA	0	0	0	reg	NA	NA
+chr8	501751	501992	ARS822	proARS822	Confirmed	chrVIII	ARS822	ARS822	null	null	null	0	0	0	reg	NA	W
+chr8	504563	505207	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	520016	520630	ARS823	proARS823	Confirmed	chrVIII	ARS823	ARS823	rep	null	null	NA	NA	NA	NA	NA	NA
+chr8	535403	535836	ARS823.5	NA	Confirmed	chrVIII	ARS823.5	ARS823.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	550163	551317	putative_ARS	NA	Likely	chrVIII	Likely_chrVIII	Likely_chrVIII_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	553135	553845	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	555996	556327	ARS824	X-ARS, proARS824	Confirmed	chrVIII	ARS824	ARS824	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr8	561013	562587	putative_ARS	NA	Dubious	chrVIII	Dubious_chrVIII	Dubious_chrVIII_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	23	2400	putative_ARS	NA	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	6794	9748	putative_ARS	proARS902	Likely	chrIX	Likely_chrIX	Likely_chrIX_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	10094	11992	putative_ARS	proARS903	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	15901	19066	putative_ARS	proARS904	Likely	chrIX	Likely_chrIX	Likely_chrIX_2	rep	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	30065	31646	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_3	rep	null	null	NA	NA	NA	NA	NA	NA
+chr9	33335	33803	ARS905	proARS905	Confirmed	chrIX	ARS905	ARS905	rep	null	null	0	0	0	NA	NA	NA
+chr9	50806	52259	putative_ARS	proARS906	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	73803	74220	ARS907	proARS907	Confirmed	chrIX	ARS907	ARS907	null	null	null	0	0	-1	not reg	NA	NA
+chr9	80058	80557	ARS908	proARS908	Confirmed	chrIX	ARS908	ARS908	null	null	null	NA	NA	NA	NA	NA	NA
+chr9	105821	106048	ARS909	proARS909	Confirmed	chrIX	ARS909	ARS909	null	null	null	-1	0	-1	not reg	NA	NA
+chr9	112737	114306	putative_ARS	proARS910	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	136094	136335	ARS911	proARS911	Confirmed	chrIX	ARS911	ARS911	null	null	null	0	0	1	not reg	NA	W
+chr9	162936	163302	ARS911.5	NA	Confirmed	chrIX	ARS911.5	ARS911.5	NA	NA	NA	NA	NA	NA	reg	NA	NA
+chr9	175034	175355	ARS912	proARS912	Confirmed	chrIX	ARS912	ARS912	null	null	NA	0	0	1	reg	NA	NA
+chr9	179591	186591	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_4	null	null	NA	NA	NA	NA	NA	NA	NA
+chr9	189523	190747	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	197187	198387	putative_ARS	NA	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	201591	208591	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_6	null	NA	null	0	0	0	not reg	NA	NA
+chr9	214675	214826	ARS913	ARS901, proARS913	Confirmed	chrIX	ARS913	ARS913	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr9	216591	223591	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_7	NA	NA	NA	NA	NA	NA	not reg	NA	NA
+chr9	224943	227297	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_8	NA	NA	NA	0	0	-1	NA	NA	NA
+chr9	230258	245258	putative_ARS	NA	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	245694	245932	ARS913.5	ARS923	Confirmed	chrIX	ARS913.5	ARS913.5	rep	act	rep	NA	NA	NA	NA	NA	NA
+chr9	247579	247800	ARS914	proARS914	Confirmed	chrIX	ARS914	ARS914	rep	act	rep	0	0	-1	not reg	NA	NA
+chr9	247893	249347	putative_ARS	proARS915	Likely	chrIX	Likely_chrIX	Likely_chrIX_9	rep	act	rep	NA	NA	NA	NA	NA	NA
+chr9	279618	280818	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_10	NA	NA	NA	0	0	0	reg	NA	NA
+chr9	307699	309073	putative_ARS	proARS916	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	310583	311070	ARS916	proARS917	Confirmed	chrIX	ARS916	ARS916	null	null	null	0	0	1	NA	NA	NA
+chr9	313359	314533	putative_ARS	proARS918	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_8	NA	NA	NA	NA	NA	NA	reg	NA	NA
+chr9	320853	324347	putative_ARS	NA	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	327348	328548	putative_ARS	NA	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_10	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr9	341853	342096	ARS919	proARS919	Confirmed	chrIX	ARS919	ARS919	NA	NA	NA	1	0	0	not reg	1	NA
+chr9	357156	357393	ARS920	proARS920	Confirmed	chrIX	ARS920	ARS920	null	null	null	1	0	0	not reg	1	W
+chr9	362421	363718	putative_ARS	proARS921	Dubious	chrIX	Dubious_chrIX	Dubious_chrIX_11	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr9	405633	407617	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_11	null	null	null	NA	NA	NA	not reg	NA	NA
+chr9	411817	412053	ARS922	proARS922	Confirmed	chrIX	ARS922	ARS922	null	null	null	0	0	-1	not reg	NA	W
+chr9	432496	432994	ARS922.5	NA	Confirmed	chrIX	ARS922.5	ARS922.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr9	437553	439847	putative_ARS	NA	Likely	chrIX	Likely_chrIX	Likely_chrIX_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	64	577	ARS1001	Y'-ARS, proARS1001	Confirmed	chrX	ARS1001	ARS1001	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	7444	7943	ARS1002	X-ARS, proARS1002	Confirmed	chrX	ARS1002	ARS1002	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	16123	16762	ARS1003	proARS1003	Confirmed	chrX	ARS1003	ARS1003	rep	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	23661	24158	ARS1004	proARS1004	Confirmed	chrX	ARS1004	ARS1004	NA	NA	NA	NA	NA	NA	NA	NA	W
+chr10	44433	51433	putative_ARS	NA	Dubious	chrX	Dubious_chrX	Dubious_chrX_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	67467	67949	ARS1005	proARS1005	Confirmed	chrX	ARS1005	ARS1005	null	null	null	0	0	-1	not reg	NA	C
+chr10	99359	99796	ARS1006	proARS1006	Confirmed	chrX	ARS1006	ARS1006	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr10	113226	113828	ARS1007	proARS1007	Confirmed	chrX	ARS1007	ARS1007	null	NA	NA	0	0	1	reg	NA	NA
+chr10	120693	121777	putative_ARS	NA	Dubious	chrX	Dubious_chrX	Dubious_chrX_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	134000	144000	putative_ARS	NA	Dubious	chrX	Dubious_chrX	Dubious_chrX_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	161435	161860	ARS1007.5	NA	Confirmed	chrX	ARS1007.5	ARS1007.5	null	null	null	0	0	0	reg	NA	NA
+chr10	167433	174433	putative_ARS	NA	Likely	chrX	Likely_chrX	Likely_chrX_1	null	null	null	NA	NA	NA	NA	NA	NA
+chr10	203729	204614	ARS1008	proARS1008	Confirmed	chrX	ARS1008	ARS1008	NA	NA	NA	0	0	-1	not reg	NA	D
+chr10	204755	219755	putative_ARS	NA	Dubious	chrX	Dubious_chrX	Dubious_chrX_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	228248	228740	ARS1009	proARS1009	Confirmed	chrX	ARS1009	ARS1009	null	null	NA	0	0	0	not reg	NA	NA
+chr10	248600	249300	ARS1009.5	NA	Confirmed	chrX	ARS1009.5	ARS1009.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	268050	269250	putative_ARS	NA	Likely	chrX	Likely_chrX	Likely_chrX_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	298471	298952	ARS1010	proARS1010	Confirmed	chrX	ARS1010	ARS1010	null	null	null	0	0	1	NA	NA	NA
+chr10	301433	308433	putative_ARS	NA	Likely	chrX	Likely_chrX	Likely_chrX_3	null	null	null	NA	NA	NA	NA	NA	NA
+chr10	324821	326021	putative_ARS	NA	Dubious	chrX	Dubious_chrX	Dubious_chrX_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	336976	337225	ARS1011	proARS1011	Confirmed	chrX	ARS1011	ARS1011	null	null	null	0	0	1	NA	NA	D
+chr10	353463	355722	putative_ARS	NA	Likely	chrX	Likely_chrX	Likely_chrX_4	NA	NA	NA	0	0	0	reg	NA	NA
+chr10	374575	374818	ARS1012	proARS1012	Confirmed	chrX	ARS1012	ARS1012	null	null	null	-1	0	-1	NA	NA	NA
+chr10	375401	375923	ARS1013	proARS1013	Confirmed	chrX	ARS1013	ARS1013	null	null	null	NA	NA	NA	not reg	NA	NA
+chr10	405545	406255	putative_ARS	NA	Dubious	chrX	Dubious_chrX	Dubious_chrX_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	416888	417134	ARS1014	proARS1014	Confirmed	chrX	ARS1014	ARS1014	null	null	null	0	0	-1	not reg	NA	NA
+chr10	442248	442658	ARS1015	proARS1015	Confirmed	chrX	ARS1015	ARS1015	act	null	null	1	0	1	not reg	1	C
+chr10	454276	455248	ARS1016	NA	Confirmed	chrX	ARS1016	ARS1016	NA	NA	NA	NA	NA	NA	NA	NA	C
+chr10	459029	459588	ARS1017	NA	Confirmed	chrX	ARS1017	ARS1017	NA	NA	NA	0	0	1	not reg	NA	NA
+chr10	469670	479670	putative_ARS	NA	Likely	chrX	Likely_chrX	Likely_chrX_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	501595	502525	ARS1017.5	NA	Confirmed	chrX	ARS1017.5	ARS1017.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	540239	540474	ARS1018	proARS1018	Confirmed	chrX	ARS1018	ARS1018	null	null	null	-1	0	-1	not reg	NA	NA
+chr10	609000	609750	ARS1018.5	NA	Confirmed	chrX	ARS1018.5	ARS1018.5	null	null	null	NA	NA	NA	NA	NA	NA
+chr10	612542	612975	ARS1019	proARS1019	Confirmed	chrX	ARS1019	ARS1019	null	null	null	0	0	-1	not reg	NA	NA
+chr10	627618	628818	putative_ARS	NA	Dubious	chrX	Dubious_chrX	Dubious_chrX_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	643813	644767	putative_ARS	NA	Likely	chrX	Likely_chrX	Likely_chrX_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	654069	654309	ARS1020	proARS1020	Confirmed	chrX	ARS1020	ARS1020	null	NA	NA	0	0	0	reg	NA	NA
+chr10	683328	683817	ARS1021	ARS121, proARS1021	Confirmed	chrX	ARS1021	ARS1021	null	null	null	0	0	-1	not reg	NA	D
+chr10	701663	702677	putative_ARS	NA	Dubious	chrX	Dubious_chrX	Dubious_chrX_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	711590	711837	ARS1022	proARS1022	Confirmed	chrX	ARS1022	ARS1022	NA	null	NA	NA	NA	NA	NA	NA	NA
+chr10	713860	723860	putative_ARS	NA	Likely	chrX	Likely_chrX	Likely_chrX_7	NA	null	NA	NA	NA	NA	NA	NA	NA
+chr10	729677	730208	ARS1023	proARS1023	Confirmed	chrX	ARS1023	ARS1023	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	736728	736970	ARS1024	proARS1024	Confirmed	chrX	ARS1024	ARS1024	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr10	744102	744703	ARS1025	proARS1025	Confirmed	chrX	ARS1025	ARS1025	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	23	2746	putative_ARS	proARS1101	Likely	chrXI	Likely_chrXI	Likely_chrXI_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	7397	9007	putative_ARS	proARS1102	Likely	chrXI	Likely_chrXI	Likely_chrXI_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	15455	16165	putative_ARS	NA	Likely	chrXI	Likely_chrXI	Likely_chrXI_3	rep	rep	null	NA	NA	NA	NA	NA	NA
+chr11	16262	31262	putative_ARS	NA	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	42110	42563	ARS1102.5	NA	Confirmed	chrXI	ARS1102.5	ARS1102.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	55670	55917	ARS1103	proARS1103	Confirmed	chrXI	ARS1103	ARS1103	null	null	null	-1	0	-1	not reg	NA	NA
+chr11	88291	89789	putative_ARS	proARS1104	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	98329	98568	ARS1104.5	ARS1125	Confirmed	chrXI	ARS1104.5	ARS1104.5	null	null	null	0	0	1	reg	NA	NA
+chr11	113073	115127	putative_ARS	proARS1105	Likely	chrXI	Likely_chrXI	Likely_chrXI_4	NA	NA	NA	0	0	0	reg	NA	NA
+chr11	145433	145893	ARS1105.5	NA	Confirmed	chrXI	ARS1105.5	ARS1105.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	152934	153173	ARS1106	proARS1106	Confirmed	chrXI	ARS1106	ARS1106	null	null	null	0	0	0	not reg	NA	NA
+chr11	163723	164287	putative_ARS	NA	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	169021	170221	putative_ARS	NA	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	196038	196284	ARS1106.3	ARS1126	Confirmed	chrXI	ARS1106.3	ARS1106.3	NA	NA	NA	0	0	0	reg	NA	NA
+chr11	199886	200537	ARS1106.5	NA	Confirmed	chrXI	ARS1106.5	ARS1106.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	213080	213385	ARS1106.7	ARS1127	Confirmed	chrXI	ARS1106.7	ARS1106.7	null	null	act	0	0	0	not reg	NA	NA
+chr11	235293	236577	putative_ARS	NA	Likely	chrXI	Likely_chrXI	Likely_chrXI_5	NA	NA	NA	0	0	0	reg	NA	NA
+chr11	257390	257839	ARS1107	proARS1107	Confirmed	chrXI	ARS1107	ARS1107	null	null	act	0	0	1	reg	NA	NA
+chr11	302152	302524	ARS1107.5	NA	Confirmed	chrXI	ARS1107.5	ARS1107.5	act	null	null	0	0	-1	not reg	NA	NA
+chr11	313669	314957	putative_ARS	proARS1108	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	326153	327067	putative_ARS	NA	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	329322	329571	ARS1109	proARS1109	Confirmed	chrXI	ARS1109	ARS1109	act	null	act	0	0	1	not reg	NA	NA
+chr11	333114	334557	putative_ARS	proARS1110	Likely	chrXI	Likely_chrXI	Likely_chrXI_6	act	null	act	NA	NA	NA	NA	NA	NA
+chr11	343388	345027	putative_ARS	NA	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	381210	382623	putative_ARS	proARS1111	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	388607	388902	ARS1112	proARS1112	Confirmed	chrXI	ARS1112	ARS1112	null	act	null	0	0	-1	not reg	NA	NA
+chr11	416822	417055	ARS1113	proARS1113	Confirmed	chrXI	ARS1113	ARS1113	null	null	null	1	0	1	not reg	1	NA
+chr11	444561	445028	ARS1113.5	NA	Confirmed	chrXI	ARS1113.5	ARS1113.5	null	null	null	NA	NA	NA	NA	1	NA
+chr11	447657	447892	ARS1114	proARS1114	Confirmed	chrXI	ARS1114	ARS1114	null	null	null	0	0	0	not reg	1	C
+chr11	454453	459197	ARS1114.5	NA	Confirmed	chrXI	ARS1114.5	ARS1114.5	null	null	null	0	0	0	not reg	1	W
+chr11	462033	463697	putative_ARS	proARS1115	Likely	chrXI	Likely_chrXI	Likely_chrXI_7	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr11	467721	468921	putative_ARS	NA	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_9	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr11	500415	501125	putative_ARS	NA	Likely	chrXI	Likely_chrXI	Likely_chrXI_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	516653	516902	ARS1116	proARS1116	Confirmed	chrXI	ARS1116	ARS1116	null	null	null	0	0	0	not reg	NA	C
+chr11	519333	520547	putative_ARS	NA	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	530070	530560	ARS1117	proARS1117	Confirmed	chrXI	ARS1117	ARS1117	NA	NA	NA	0	0	0	reg	NA	NA
+chr11	560925	561635	putative_ARS	NA	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	581468	581706	ARS1118	proARS1118	Confirmed	chrXI	ARS1118	ARS1118	null	null	null	0	0	1	reg	NA	D
+chr11	583883	585091	putative_ARS	proARS1119	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	611874	612107	ARS1120	proARS1120	Confirmed	chrXI	ARS1120	ARS1120	null	null	null	0	0	0	not reg	NA	NA
+chr11	616672	618133	putative_ARS	proARS1121	Dubious	chrXI	Dubious_chrXI	Dubious_chrXI_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	632003	634377	putative_ARS	proARS1122	Likely	chrXI	Likely_chrXI	Likely_chrXI_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr11	642355	642602	ARS1123	proARS1123	Confirmed	chrXI	ARS1123	ARS1123	rep	rep	rep	0	0	0	NA	NA	D
+chr11	658278	666417	putative_ARS	proARS1124	Likely	chrXI	Likely_chrXI	Likely_chrXI_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	23	2077	putative_ARS	NA	Likely	chrXII	Likely_chrXII	Likely_chrXII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	5107	7993	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	10642	13971	putative_ARS	proARS1201	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	28749	32505	putative_ARS	proARS1202	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	51860	52210	ARS1203	proARS1203	Confirmed	chrXII	ARS1203	ARS1203	null	null	rep	NA	NA	NA	NA	NA	NA
+chr12	70574	72392	putative_ARS	proARS1204	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	76711	77163	ARS1205	proARS1205	Confirmed	chrXII	ARS1205	ARS1205	null	null	rep	0	0	-1	reg	NA	NA
+chr12	91417	91659	ARS1206	proARS1206	Confirmed	chrXII	ARS1206	ARS1206	null	act	rep	-1	0	-1	reg	NA	NA
+chr12	93166	93659	ARS1206.5	NA	Confirmed	chrXII	ARS1206.5	ARS1206.5	null	act	rep	NA	NA	NA	NA	NA	NA
+chr12	139293	140447	putative_ARS	proARS1207	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_5	NA	NA	NA	0	0	1	not reg	1	NA
+chr12	150914	151421	ARS1208	CEN12 ARS	Confirmed	chrXII	ARS1208	ARS1208	act	null	null	NA	NA	NA	NA	1	NA
+chr12	156646	156883	ARS1209	proARS1209	Confirmed	chrXII	ARS1209	ARS1209	act	null	null	1	0	0	not reg	1	NA
+chr12	170108	171308	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_6	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr12	179332	194332	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	197913	199417	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_8	NA	NA	NA	0	0	0	reg	NA	NA
+chr12	222410	222792	ARS1210	proARS1210	Confirmed	chrXII	ARS1210	ARS1210	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	231179	231422	ARS1211	proARS1211	Confirmed	chrXII	ARS1211	ARS1211	null	null	null	0	0	-1	not reg	NA	NA
+chr12	243527	243960	ARS1211.5	NA	Confirmed	chrXII	ARS1211.5	ARS1211.5	NA	NA	NA	0	0	1	NA	NA	NA
+chr12	278304	285304	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	289220	289469	ARS1212	proARS1212	Confirmed	chrXII	ARS1212	ARS1212	rep	null	null	0	0	1	NA	NA	NA
+chr12	295693	296893	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	312000	320000	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	343577	344033	ARS1212.5	NA	Confirmed	chrXII	ARS1212.5	ARS1212.5	NA	NA	NA	0	0	1	reg	NA	NA
+chr12	373156	373400	ARS1213	proARS1213	Confirmed	chrXII	ARS1213	ARS1213	null	null	null	0	0	-1	not reg	NA	NA
+chr12	384035	385226	putative_ARS	proARS1214	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	412668	412897	ARS1215	proARS1215	Confirmed	chrXII	ARS1215	ARS1215	null	null	null	-1	0	-1	not reg	NA	NA
+chr12	418855	419565	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	426942	441942	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_14	NA	NA	NA	0	0	0	NA	NA	NA
+chr12	450485	450726	ARS1216	proARS1216	Confirmed	chrXII	ARS1216	ARS1216	null	act	rep	NA	NA	NA	NA	NA	NA
+chr12	458826	459141	ARS1216.5	rDNA ARS	Confirmed	chrXII	ARS1216.5	ARS1216.5	NA	NA	NA	0	0	-1	NA	NA	NA
+chr12	460225	460935	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_15	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	466233	468907	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_16	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	493903	494987	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_17	NA	NA	NA	0	0	0	NA	NA	NA
+chr12	512868	513117	ARS1217	proARS1217	Confirmed	chrXII	ARS1217	ARS1217	null	null	null	0	0	-1	not reg	NA	NA
+chr12	595804	602804	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_18	NA	NA	NA	NA	NA	NA	not reg	NA	NA
+chr12	602938	603155	ARS1218	proARS1218	Confirmed	chrXII	ARS1218	ARS1218	NA	NA	NA	0	0	-1	NA	NA	NA
+chr12	606423	607627	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_19	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	612500	622500	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_20	NA	NA	NA	0	0	0	reg	NA	NA
+chr12	622672	623123	ARS1219	proARS1219	Confirmed	chrXII	ARS1219	ARS1219	NA	NA	NA	0	0	0	reg	NA	NA
+chr12	637013	639757	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_21	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	644937	645426	ARS1219.7	NA	Confirmed	chrXII	ARS1219.7	ARS1219.7	NA	NA	NA	0	0	1	reg	NA	NA
+chr12	659823	660072	ARS1220	proARS1220	Confirmed	chrXII	ARS1220	ARS1220	null	null	null	0	0	0	not reg	NA	NA
+chr12	687249	687738	ARS1220.5	NA	Confirmed	chrXII	ARS1220.5	ARS1220.5	NA	NA	NA	0	0	0	not reg	NA	NA
+chr12	720284	721918	putative_ARS	proARS1221	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_22	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	730275	730832	ARS1222	proARS1222	Confirmed	chrXII	ARS1222	ARS1222	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr12	744942	745179	ARS1223	proARS1223	Confirmed	chrXII	ARS1223	ARS1223	null	null	null	0	0	-1	not reg	NA	NA
+chr12	748375	749534	putative_ARS	proARS1224	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_23	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	768982	771133	putative_ARS	proARS1225	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_24	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	785588	786917	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_25	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	794020	794269	ARS1226	proARS1226	Confirmed	chrXII	ARS1226	ARS1226	act	null	act	0	0	1	not reg	NA	NA
+chr12	806063	806787	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_26	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	821907	822336	ARS1227	proARS1227	Confirmed	chrXII	ARS1227	ARS1227	null	null	null	0	0	1	reg	NA	NA
+chr12	838103	839237	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_27	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	848630	863630	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_28	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	865637	880637	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_29	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	888569	888810	ARS1227.5	ARS1238	Confirmed	chrXII	ARS1227.5	ARS1227.5	null	null	null	0	0	1	reg	NA	NA
+chr12	919299	921493	putative_ARS	proARS1228	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_30	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	928051	928540	ARS1229	proARS1229	Confirmed	chrXII	ARS1229	ARS1229	null	null	null	0	0	1	NA	NA	NA
+chr12	930388	931561	putative_ARS	proARS1230	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_31	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	947908	948358	ARS1231	proARS1231	Confirmed	chrXII	ARS1231	ARS1231	null	null	null	0	0	0	reg	NA	NA
+chr12	972200	982200	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_32	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	1007180	1007470	ARS1232	proARS1232	Confirmed	chrXII	ARS1232	ARS1232	NA	NA	NA	0	0	0	reg	NA	NA
+chr12	1013789	1014017	ARS1233	proARS1233	Confirmed	chrXII	ARS1233	ARS1233	NA	NA	NA	0	0	0	NA	NA	NA
+chr12	1016304	1023304	putative_ARS	NA	Likely	chrXII	Likely_chrXII	Likely_chrXII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	1023967	1024207	ARS1234	proARS1234	Confirmed	chrXII	ARS1234	ARS1234	null	NA	NA	0	0	1	NA	NA	NA
+chr12	1042798	1043952	putative_ARS	NA	Likely	chrXII	Likely_chrXII	Likely_chrXII_3	NA	NA	NA	0	0	0	reg	NA	NA
+chr12	1052304	1059304	putative_ARS	NA	Likely	chrXII	Likely_chrXII	Likely_chrXII_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	1059486	1059919	ARS1235	proARS1235	Confirmed	chrXII	ARS1235	ARS1235	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	1062398	1065752	putative_ARS	proARS1236	Likely	chrXII	Likely_chrXII	Likely_chrXII_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	1070198	1071952	putative_ARS	proARS1237	Likely	chrXII	Likely_chrXII	Likely_chrXII_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr12	1077198	1078102	putative_ARS	NA	Dubious	chrXII	Dubious_chrXII	Dubious_chrXII_33	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	23	1261	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	4983	7702	putative_ARS	proARS1301	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	8791	10699	putative_ARS	proARS1302	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	23852	25691	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	31687	31935	ARS1303	proARS1303	Confirmed	chrXIII	ARS1303	ARS1303	rep	rep	rep	-1	0	-1	not reg	NA	NA
+chr13	39922	40355	ARS1304	proARS1304	Confirmed	chrXIII	ARS1304	ARS1304	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	44666	45681	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	49645	50141	ARS1304.5	NA	Confirmed	chrXIII	ARS1304.5	ARS1304.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	50257	65257	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	73874	74373	ARS1304.7	NA	Confirmed	chrXIII	ARS1304.7	ARS1304.7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	94216	94463	ARS1305	proARS1305	Confirmed	chrXIII	ARS1305	ARS1305	null	null	null	0	0	0	not reg	NA	NA
+chr13	111844	113013	putative_ARS	proARS1306	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	137299	137548	ARS1307	proARS1307	Confirmed	chrXIII	ARS1307	ARS1307	null	null	null	0	0	-1	not reg	NA	C
+chr13	158846	159279	ARS1307.5	NA	Confirmed	chrXIII	ARS1307.5	ARS1307.5	NA	NA	NA	0	0	1	reg	NA	NA
+chr13	183793	184037	ARS1308	proARS1308	Confirmed	chrXIII	ARS1308	ARS1308	null	null	null	0	0	-1	not reg	NA	D
+chr13	198000	208000	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	227023	227487	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_5	null	rep	NA	0	0	1	reg	NA	NA
+chr13	263062	263296	ARS1309	proARS1309	Confirmed	chrXIII	ARS1309	ARS1309	null	null	null	0	0	0	not reg	1	NA
+chr13	268223	269987	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_6	null	null	null	NA	NA	NA	NA	1	NA
+chr13	277965	278675	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	286782	287067	ARS1310	proARS1310	Confirmed	chrXIII	ARS1310	ARS1310	null	null	null	0	0	-1	not reg	NA	NA
+chr13	289203	290548	putative_ARS	proARS1311	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_7	null	null	null	NA	NA	NA	NA	NA	NA
+chr13	305792	320792	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	339413	340377	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	341313	342207	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	370976	371221	ARS1312	proARS1312	Confirmed	chrXIII	ARS1312	ARS1312	null	null	null	0	0	-1	not reg	NA	NA
+chr13	372017	373196	putative_ARS	proARS1313	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	394800	396000	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	416373	418127	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	420429	421629	putative_ARS	proARS1314	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_9	NA	NA	NA	0	0	0	reg	NA	NA
+chr13	432851	433347	ARS1315	proARS1315	Confirmed	chrXIII	ARS1315	ARS1315	null	null	null	0	0	0	not reg	NA	NA
+chr13	468177	468468	ARS1316	proARS1316	Confirmed	chrXIII	ARS1316	ARS1316	null	null	null	0	0	0	not reg	NA	NA
+chr13	477105	478800	putative_ARS	proARS1317	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	480233	483637	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_10	NA	NA	NA	0	0	0	reg	NA	NA
+chr13	489950	491960	putative_ARS	proARS1318	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	503346	504087	ARS1319	proARS1319	Confirmed	chrXIII	ARS1319	ARS1319	null	act	null	0	0	0	not reg	NA	NA
+chr13	535595	535843	ARS1320	proARS1320	Confirmed	chrXIII	ARS1320	ARS1320	null	null	null	-1	0	-1	not reg	NA	D
+chr13	542380	543477	putative_ARS	proARS1321	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	554392	554750	ARS1322	proARS1322	Confirmed	chrXIII	ARS1322	ARS1322	NA	NA	NA	0	0	0	reg	NA	NA
+chr13	568128	569097	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_11	NA	NA	NA	0	0	0	NA	NA	NA
+chr13	569500	577500	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_12	NA	NA	NA	NA	NA	NA	reg	NA	NA
+chr13	611273	611488	ARS1323	proARS1323	Confirmed	chrXIII	ARS1323	ARS1323	null	null	null	0	0	-1	not reg	NA	NA
+chr13	634479	634714	ARS1324	proARS1324	Confirmed	chrXIII	ARS1324	ARS1324	NA	NA	NA	0	0	0	not reg	NA	D
+chr13	649307	649551	ARS1325	proARS1325	Confirmed	chrXIII	ARS1325	ARS1325	null	null	act	-1	0	-1	not reg	NA	W
+chr13	688766	689221	ARS1326	proARS1326	Confirmed	chrXIII	ARS1326	ARS1326	null	null	null	0	0	1	reg	NA	NA
+chr13	723574	730574	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_13	null	null	null	NA	NA	NA	NA	NA	NA
+chr13	758222	758470	ARS1327	proARS1327	Confirmed	chrXIII	ARS1327	ARS1327	null	null	null	0	0	0	not reg	NA	NA
+chr13	759074	766074	putative_ARS	NA	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_14	null	null	null	NA	NA	NA	NA	NA	NA
+chr13	772629	772878	ARS1328	proARS1328	Confirmed	chrXIII	ARS1328	ARS1328	NA	NA	NA	0	0	1	NA	NA	NA
+chr13	778857	793857	putative_ARS	NA	Dubious	chrXIII	Dubious_chrXIII	Dubious_chrXIII_14	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	805116	805338	ARS1329	proARS1329	Confirmed	chrXIII	ARS1329	ARS1329	NA	NA	NA	0	0	0	NA	NA	W
+chr13	815341	815567	ARS1330	proARS1330	Confirmed	chrXIII	ARS1330	ARS1330	null	null	null	-1	0	-1	not reg	NA	NA
+chr13	836823	838167	putative_ARS	proARS1331	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_15	NA	NA	NA	0	0	0	reg	NA	NA
+chr13	865288	865683	ARS1331.5	NA	Confirmed	chrXIII	ARS1331.5	ARS1331.5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	878619	879115	ARS1331.7	NA	Confirmed	chrXIII	ARS1331.7	ARS1331.7	NA	NA	NA	0	0	0	reg	NA	NA
+chr13	897804	898040	ARS1332	proARS1332	Confirmed	chrXIII	ARS1332	ARS1332	null	rep	null	-1	0	-1	not reg	NA	C
+chr13	918073	919137	putative_ARS	proARS1333	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_16	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr13	922023	924397	putative_ARS	proARS1335	Likely	chrXIII	Likely_chrXIII	Likely_chrXIII_17	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	50	2241	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	6282	10914	putative_ARS	proARS1402, proARS1403	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	13998	16375	putative_ARS	proARS1404	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	28467	28699	ARS1405	proARS1405	Confirmed	chrXIV	ARS1405	ARS1405	rep	NA	null	NA	NA	NA	NA	NA	NA
+chr14	28756	43756	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	61597	61894	ARS1406	proARS1406	Confirmed	chrXIV	ARS1406	ARS1406	null	null	null	0	0	1	reg	NA	NA
+chr14	84295	85005	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_4	null	rep	null	NA	NA	NA	NA	NA	NA
+chr14	89528	89802	ARS1407	proARS1407	Confirmed	chrXIV	ARS1407	ARS1407	null	rep	null	0	0	0	not reg	NA	NA
+chr14	94299	95721	putative_ARS	proARS1408	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	95745	96961	putative_ARS	proARS1409	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	111000	121000	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	126488	126981	ARS1410	proARS1410	Confirmed	chrXIV	ARS1410	ARS1410	null	null	null	0	0	0	reg	NA	NA
+chr14	136575	137285	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	151280	166280	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_4	NA	NA	NA	NA	NA	NA	reg	NA	NA
+chr14	169566	169804	ARS1411	proARS1411	Confirmed	chrXIV	ARS1411	ARS1411	null	null	null	0	0	0	reg	NA	W
+chr14	172784	187784	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	196055	196291	ARS1412	proARS1412	Confirmed	chrXIV	ARS1412	ARS1412	rep	null	null	0	0	1	reg	NA	NA
+chr14	234458	235658	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	250259	250506	ARS1413	proARS1413	Confirmed	chrXIV	ARS1413	ARS1413	null	null	null	0	0	1	reg	NA	W
+chr14	252383	254147	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_7	null	null	null	NA	NA	NA	NA	NA	NA
+chr14	279875	280108	ARS1414	proARS1414	Confirmed	chrXIV	ARS1414	ARS1414	null	null	null	0	0	1	reg	NA	NA
+chr14	321917	322210	ARS1415	proARS1415	Confirmed	chrXIV	ARS1415	ARS1415	null	null	null	0	0	-1	not reg	NA	NA
+chr14	324551	325764	putative_ARS	proARS1416	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_8	null	null	null	NA	NA	NA	NA	NA	NA
+chr14	342963	344117	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_9	NA	NA	NA	0	0	0	reg	NA	NA
+chr14	352509	352996	ARS1311.7	NA	Confirmed	chrXIV	ARS1311.7	ARS1311.7	NA	NA	NA	0	0	1	NA	NA	NA
+chr14	357215	357925	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	358745	359455	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	412263	412493	ARS1417	proARS1417	Confirmed	chrXIV	ARS1417	ARS1417	null	null	null	1	0	1	not reg	NA	NA
+chr14	415731	416931	putative_ARS	proARS1418	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_12	null	null	null	NA	NA	NA	NA	NA	NA
+chr14	430969	437969	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	449343	449588	ARS1419	proARS1419	Confirmed	chrXIV	ARS1419	ARS1419	null	act	null	0	0	0	reg	NA	NA
+chr14	451838	466838	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	498987	499232	ARS1420	proARS1420	Confirmed	chrXIV	ARS1420	ARS1420	null	null	null	0	0	1	reg	NA	D
+chr14	512969	519969	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	545966	546201	ARS1421	proARS1421	Confirmed	chrXIV	ARS1421	ARS1421	null	null	null	0	0	0	not reg	NA	NA
+chr14	550890	560890	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_14	null	null	null	NA	NA	NA	NA	NA	NA
+chr14	561106	561384	ARS1422	proARS1422	Confirmed	chrXIV	ARS1422	ARS1422	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr14	567715	569020	putative_ARS	proARS1423	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_15	NA	NA	NA	0	0	0	NA	NA	NA
+chr14	573000	581000	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	586688	587888	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	609458	609706	ARS1424	proARS1424	Confirmed	chrXIV	ARS1424	ARS1424	null	null	null	0	0	0	not reg	NA	NA
+chr14	615807	617621	putative_ARS	proARS1425	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_16	null	null	null	NA	NA	NA	NA	NA	NA
+chr14	635660	635901	ARS1426	proARS1426	Confirmed	chrXIV	ARS1426	ARS1426	act	null	null	1	0	1	not reg	1	NA
+chr14	648876	663876	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	675502	676702	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	691482	691727	ARS1427	proARS1427	Confirmed	chrXIV	ARS1427	ARS1427	null	act	null	0	0	0	reg	NA	W
+chr14	703843	705667	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	713642	714136	ARS1428	proARS1428	Confirmed	chrXIV	ARS1428	ARS1428	NA	NA	null	0	0	1	NA	NA	NA
+chr14	731085	731795	putative_ARS	NA	Dubious	chrXIV	Dubious_chrXIV	Dubious_chrXIV_14	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	734135	734845	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_17	rep	null	null	NA	NA	NA	NA	NA	NA
+chr14	738550	738982	ARS1428.5	NA	Confirmed	chrXIV	ARS1428.5	ARS1428.5	rep	null	null	0	0	0	NA	NA	NA
+chr14	764001	764500	ARS1429	proARS1429	Confirmed	chrXIV	ARS1429	ARS1429	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	769969	776969	putative_ARS	NA	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_18	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr14	781453	784287	putative_ARS	proARS1430	Likely	chrXIV	Likely_chrXIV	Likely_chrXIV_19	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	23	2646	putative_ARS	proARS1503	Likely	chrXV	Likely_chrXV	Likely_chrXV_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	9761	12672	putative_ARS	proARS1504, proARS1505	Likely	chrXV	Likely_chrXV	Likely_chrXV_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	18367	20227	putative_ARS	proARS1506	Likely	chrXV	Likely_chrXV	Likely_chrXV_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	22523	24675	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	35667	35903	ARS1506.5	ARS1531	Confirmed	chrXV	ARS1506.5	ARS1506.5	null	null	null	0	0	-1	not reg	NA	NA
+chr15	37750	52750	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	72636	72872	ARS1507	proARS1507	Confirmed	chrXV	ARS1507	ARS1507	NA	NA	NA	0	0	0	reg	NA	NA
+chr15	74000	84000	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	85195	85444	ARS1508	proARS1508	Confirmed	chrXV	ARS1508	ARS1508	NA	null	null	-1	0	0	not reg	NA	NA
+chr15	103253	104167	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_6	NA	NA	NA	0	0	0	NA	NA	NA
+chr15	113843	114084	ARS1509	proARS1509	Confirmed	chrXV	ARS1509	ARS1509	null	null	null	-1	0	-1	not reg	NA	NA
+chr15	128922	130182	ARS1509.3	NA	Confirmed	chrXV	ARS1509.3	ARS1509.3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	154972	155462	ARS1509.5	NA	Confirmed	chrXV	ARS1509.5	ARS1509.5	NA	NA	NA	0	0	0	NA	NA	NA
+chr15	159203	160567	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	166974	167220	ARS1510	proARS1510	Confirmed	chrXV	ARS1510	ARS1510	null	null	null	-1	0	-1	not reg	NA	NA
+chr15	227481	228117	ARS1510.5	NA	Confirmed	chrXV	ARS1510.5	ARS1510.5	null	null	null	0	0	-1	not reg	NA	NA
+chr15	237752	252752	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	268585	269295	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	277529	277778	ARS1511	proARS1511	Confirmed	chrXV	ARS1511	ARS1511	null	null	null	0	0	-1	not reg	NA	NA
+chr15	308969	309462	ARS1512	proARS1512	Confirmed	chrXV	ARS1512	ARS1512	null	null	NA	0	0	1	not reg	1	NA
+chr15	331493	332707	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_7	null	null	null	NA	NA	NA	NA	1	NA
+chr15	337279	337528	ARS1513	proARS1513	Confirmed	chrXV	ARS1513	ARS1513	null	null	null	0	0	0	not reg	1	C
+chr15	347633	348862	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_8	NA	NA	NA	0	0	0	NA	1	NA
+chr15	353743	354887	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_9	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr15	371693	372627	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_10	NA	NA	NA	0	0	0	not reg	NA	NA
+chr15	397773	399037	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_11	NA	NA	NA	0	0	0	not reg	NA	NA
+chr15	436732	436966	ARS1513.5	ARS1501	Confirmed	chrXV	ARS1513.5	ARS1513.5	null	null	null	-1	0	-1	not reg	NA	NA
+chr15	444823	446117	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	458023	459327	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_12	act	null	act	NA	NA	NA	NA	NA	NA
+chr15	463698	464877	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_13	act	null	act	0	0	0	not reg	NA	NA
+chr15	489645	490129	ARS1514	NA	Confirmed	chrXV	ARS1514	ARS1514	null	null	null	0	0	-1	not reg	NA	NA
+chr15	493968	495625	putative_ARS	proARS1515	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	497144	497603	ARS1515.5	NA	Confirmed	chrXV	ARS1515.5	ARS1515.5	null	null	null	NA	NA	NA	NA	NA	NA
+chr15	514258	515458	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_14	NA	null	NA	NA	NA	NA	NA	NA	NA
+chr15	520541	521040	ARS1515.7	NA	Confirmed	chrXV	ARS1515.7	ARS1515.7	NA	null	NA	0	0	1	NA	NA	NA
+chr15	566409	566643	ARS1516	ADE2, proARS1516	Confirmed	chrXV	ARS1516	ARS1516	null	null	null	0	0	1	reg	NA	NA
+chr15	575463	578947	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_15	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	600885	600960	ARS1517	ARS1502, proARS1517	Confirmed	chrXV	ARS1517	ARS1517	null	null	null	0	0	1	NA	NA	NA
+chr15	601221	608221	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_16	null	null	null	NA	NA	NA	NA	NA	NA
+chr15	616913	618427	putative_ARS	proARS1518	Likely	chrXV	Likely_chrXV	Likely_chrXV_17	null	rep	NA	0	0	0	not reg	NA	NA
+chr15	631059	632259	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	645796	646996	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_18	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	656632	656876	ARS1519	proARS1519	Confirmed	chrXV	ARS1519	ARS1519	NA	NA	NA	0	0	0	NA	NA	NA
+chr15	662888	663957	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_19	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	669805	670515	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_20	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	681112	681611	ARS1520	proARS1520	Confirmed	chrXV	ARS1520	ARS1520	null	null	null	0	0	1	reg	NA	NA
+chr15	699500	709500	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_21	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	729739	729969	ARS1521	proARS1521	Confirmed	chrXV	ARS1521	ARS1521	null	null	null	0	0	1	NA	NA	C
+chr15	733221	740221	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_22	null	null	null	NA	NA	NA	NA	NA	NA
+chr15	759221	766221	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_23	null	null	null	NA	NA	NA	NA	NA	NA
+chr15	766617	766862	ARS1523	proARS1522, proARS1523	Confirmed	chrXV	ARS1523	ARS1523	null	null	null	0	0	0	reg	NA	NA
+chr15	783344	783563	ARS1524	proARS1524	Confirmed	chrXV	ARS1524	ARS1524	NA	NA	NA	0	0	1	NA	NA	NA
+chr15	847666	848866	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_24	null	null	null	NA	NA	NA	NA	NA	NA
+chr15	854735	855228	ARS1525	proARS1525	Confirmed	chrXV	ARS1525	ARS1525	null	null	null	0	0	0	not reg	NA	NA
+chr15	874190	874434	ARS1526	proARS1526	Confirmed	chrXV	ARS1526	ARS1526	null	null	null	0	0	0	reg	NA	NA
+chr15	882650	885350	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	898603	900567	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_25	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	901383	903147	putative_ARS	proARS1527	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	908288	908537	ARS1528	proARS1528	Confirmed	chrXV	ARS1528	ARS1528	act	null	act	0	0	0	not reg	NA	C
+chr15	945350	946550	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_26	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	981454	981690	ARS1529	proARS1529	Confirmed	chrXV	ARS1529	ARS1529	null	null	act	0	0	0	reg	NA	NA
+chr15	997703	999357	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_27	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	1011435	1012635	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_28	NA	NA	NA	0	0	0	NA	NA	NA
+chr15	1019398	1019852	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_10	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	1022548	1023652	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_29	NA	NA	NA	0	0	0	reg	NA	NA
+chr15	1053490	1053901	ARS1529.5	NA	Confirmed	chrXV	ARS1529.5	ARS1529.5	null	null	null	-1	0	-1	not reg	NA	C
+chr15	1056048	1059952	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_30	null	null	null	NA	NA	NA	NA	NA	NA
+chr15	1071098	1072802	putative_ARS	NA	Dubious	chrXV	Dubious_chrXV	Dubious_chrXV_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	1077498	1085252	putative_ARS	proARS1530	Likely	chrXV	Likely_chrXV	Likely_chrXV_31	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr15	1089998	1091252	putative_ARS	NA	Likely	chrXV	Likely_chrXV	Likely_chrXV_32	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	23	2150	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_1	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	6778	8439	ARS1601	proARS1601	Confirmed	chrXVI	ARS1601	ARS1601	rep	rep	rep	NA	NA	NA	NA	NA	NA
+chr16	12290	13227	ARS1602	proARS1602	Confirmed	chrXVI	ARS1602	ARS1602	rep	rep	rep	NA	NA	NA	NA	NA	NA
+chr16	18202	19681	putative_ARS	proARS1603	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_1	rep	rep	rep	NA	NA	NA	NA	NA	NA
+chr16	42976	43212	ARS1604	proARS1604	Confirmed	chrXVI	ARS1604	ARS1604	null	rep	null	0	0	0	reg	NA	NA
+chr16	49278	64278	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_2	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	73038	73283	ARS1605	proARS1605	Confirmed	chrXVI	ARS1605	ARS1605	null	null	null	0	0	0	not reg	NA	NA
+chr16	89758	92975	putative_ARS	proARS1606	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_2	NA	null	NA	0	0	0	reg	NA	NA
+chr16	116505	116765	ARS1607	proARS1607	Confirmed	chrXVI	ARS1607	ARS1607	null	null	null	0	0	1	reg	NA	NA
+chr16	141595	142305	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_3	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	161693	163447	putative_ARS	proARS1608	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_3	null	null	null	0	0	1	reg	NA	NA
+chr16	178643	179827	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_4	NA	NA	NA	0	0	0	reg	NA	NA
+chr16	189963	191457	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_5	NA	NA	null	NA	NA	NA	NA	NA	NA
+chr16	194903	196097	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_6	NA	NA	null	0	0	-1	not reg	NA	NA
+chr16	210467	211723	ARS1609	proARS1609	Confirmed	chrXVI	ARS1609	ARS1609	null	null	null	0	0	0	NA	NA	NA
+chr16	214486	216511	putative_ARS	proARS1610	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_7	null	null	null	NA	NA	NA	NA	NA	NA
+chr16	219587	220666	putative_ARS	proARS1611	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_4	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	241223	242267	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_8	NA	NA	NA	0	0	-1	not reg	NA	NA
+chr16	250245	250955	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	261168	262687	putative_ARS	proARS1612	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_10	null	null	NA	1	0	1	reg	NA	NA
+chr16	265603	266679	putative_ARS	proARS1613	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_5	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	273918	274962	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_11	NA	NA	NA	0	0	0	not reg	NA	NA
+chr16	289483	289704	ARS1614	proARS1614	Confirmed	chrXVI	ARS1614	ARS1614	null	null	null	-1	0	-1	not reg	NA	NA
+chr16	297813	299287	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	303433	305027	putative_ARS	proARS1615	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_13	NA	NA	NA	0	0	0	NA	NA	NA
+chr16	316743	318397	putative_ARS	proARS1616	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_14	NA	NA	NA	0	0	0	NA	NA	NA
+chr16	319000	329000	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_15	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	331678	332074	ARS1617	proARS1617	Confirmed	chrXVI	ARS1617	ARS1617	null	null	null	0	0	1	reg	NA	NA
+chr16	355133	362133	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_6	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	369003	369737	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_16	NA	NA	NA	0	0	0	reg	NA	NA
+chr16	376723	377937	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_17	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	384536	384784	ARS1618	proARS1618	Confirmed	chrXVI	ARS1618	ARS1618	null	null	null	-1	0	-1	not reg	NA	NA
+chr16	414032	416072	ARS1618.5	NA	Confirmed	chrXVI	ARS1618.5	ARS1618.5	null	null	null	NA	NA	NA	NA	NA	C
+chr16	418132	418359	ARS1619	proARS1619	Confirmed	chrXVI	ARS1619	ARS1619	null	null	null	-1	0	-1	not reg	NA	NA
+chr16	422281	423380	putative_ARS	proARS1620	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_7	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	427273	428757	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_18	NA	NA	NA	0	0	0	NA	NA	NA
+chr16	439113	441372	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_19	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	453658	454627	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_20	null	rep	null	NA	NA	NA	NA	NA	NA
+chr16	456557	456805	ARS1620.5	ARS1633	Confirmed	chrXVI	ARS1620.5	ARS1620.5	null	rep	null	0	0	0	reg	NA	NA
+chr16	473000	481000	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_8	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	481995	496995	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_9	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	498853	500557	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_21	NA	NA	NA	0	0	0	NA	NA	NA
+chr16	511619	511940	ARS1621	proARS1621	Confirmed	chrXVI	ARS1621	ARS1621	null	null	null	-1	0	-1	not reg	NA	NA
+chr16	552403	554287	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_22	NA	NA	NA	0	0	1	NA	1	NA
+chr16	556133	563133	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_23	NA	NA	NA	NA	NA	NA	not reg	1	NA
+chr16	563822	564061	ARS1622	proARS1622	Confirmed	chrXVI	ARS1622	ARS1622	null	NA	null	1	0	1	NA	1	W
+chr16	565046	565289	ARS1622.5	ARS1634	Confirmed	chrXVI	ARS1622.5	ARS1622.5	null	NA	null	NA	NA	NA	not reg	1	NA
+chr16	568373	569527	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_10	NA	NA	NA	NA	NA	NA	NA	1	NA
+chr16	584037	584486	ARS1622.7	NA	Confirmed	chrXVI	ARS1622.7	ARS1622.7	NA	NA	NA	0	0	1	reg	NA	NA
+chr16	588613	589437	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_11	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	599813	601013	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_12	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	608474	609674	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_13	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	619892	621092	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_14	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	633868	634117	ARS1623	proARS1623	Confirmed	chrXVI	ARS1623	ARS1623	null	act	act	0	0	-1	not reg	NA	NA
+chr16	649000	657000	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_15	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	684383	684632	ARS1624	proARS1624	Confirmed	chrXVI	ARS1624	ARS1624	null	null	null	-1	0	0	reg	NA	NA
+chr16	687133	694133	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_24	null	null	null	NA	NA	NA	NA	NA	NA
+chr16	695432	695681	ARS1625	proARS1625	Confirmed	chrXVI	ARS1625	ARS1625	NA	NA	NA	0	0	1	NA	NA	D
+chr16	700763	701932	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_16	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	728393	729207	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_25	NA	null	NA	0	0	0	NA	NA	NA
+chr16	749094	749341	ARS1626	proARS1626	Confirmed	chrXVI	ARS1626	ARS1626	NA	NA	NA	0	0	0	reg	NA	NA
+chr16	776921	777152	ARS1626.5	ARS1635	Confirmed	chrXVI	ARS1626.5	ARS1626.5	null	null	null	-1	0	-1	not reg	NA	NA
+chr16	819153	819393	ARS1627	proARS1627	Confirmed	chrXVI	ARS1627	ARS1627	null	null	null	0	0	0	not reg	NA	NA
+chr16	822993	825387	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_26	null	null	null	NA	NA	NA	NA	NA	NA
+chr16	842646	842894	ARS1628	proARS1628	Confirmed	chrXVI	ARS1628	ARS1628	act	null	null	0	0	0	not reg	NA	NA
+chr16	850007	851124	putative_ARS	proARS1629	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_27	act	null	null	NA	NA	NA	NA	NA	NA
+chr16	863303	864667	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_28	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	865187	880187	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_17	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	880854	881102	ARS1630	proARS1630	Confirmed	chrXVI	ARS1630	ARS1630	null	null	null	0	0	0	NA	NA	NA
+chr16	902206	917206	putative_ARS	NA	Dubious	chrXVI	Dubious_chrXVI	Dubious_chrXVI_18	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	929725	930435	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_29	NA	NA	NA	NA	NA	NA	NA	NA	NA
+chr16	932976	933223	ARS1631	proARS1631	Confirmed	chrXVI	ARS1631	ARS1631	NA	NA	NA	0	0	0	NA	NA	NA
+chr16	940923	943157	putative_ARS	proARS1632	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_30	NA	NA	NA	0	0	-1	NA	NA	NA
+chr16	946803	947997	putative_ARS	NA	Likely	chrXVI	Likely_chrXVI	Likely_chrXVI_31	NA	NA	NA	NA	NA	NA	NA	NA	NA

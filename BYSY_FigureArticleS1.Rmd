@@ -1,0 +1,95 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# FigureS1
+
+***  
+
+### Figure S1A-E
+
+Example of forks. BT1 data are from BT1_run8 in NFS paper (ENA:PRJEB50302). BY/SY data are at ENA:PRJEB86411
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(tidyverse))
+theme_set(theme_bw())
+library(patchwork)
+
+`%+%` <- paste0
+
+
+source("Helper_function.r")
+
+SY100 <- readRDS("BigFiles/Data_raw/readsSY100.rds")
+SY1000 <- readRDS("BigFiles/Data_raw/readsSY1000.rds")
+BY100 <- readRDS("BigFiles/Data_raw/readsBY100.rds")
+BY1000 <- readRDS("BigFiles/Data_raw/readsBY1000.rds")
+BT1_100 <- readRDS("BigFiles/Data_raw/readsBT1_100.rds")
+
+read2plot <- c(
+	"cc797d36-1c1e-4ca4-baa5-90d804a48305",
+	"74c43e8d-5d0a-4dde-a3ae-f8b901cd8571",
+	"48009d0f-535c-4b5f-9349-da4446e68c24",
+	"06081cb5-ba72-45ab-8257-c72d745486c9",
+	"09fd72c0-95f1-4e2a-8cd8-ddf036401c29"
+	)
+toplot <- BT1_100[[1]] %>% filter(read_id %in% read2plot)
+fs1A <- plotforks(toplot,plot.raw=T,Exp="BT1_0.1mM")[[1]]+xlab("BT1 coordinates (chrXIII, kb)")+ylab("BrdU probability")+ggtitle("BT1 0.1mM BrdU")
+toplot <- BY100[[1]] %>% filter(read_id %in% read2plot)
+fs1B <- plotforks(toplot,plot.raw=T,Exp="BY_0.1mM")[[1]]+xlab("BY coordinates (chrXV, kb)")+ylab("BrdU probability")+ggtitle("BY 0.1mM BrdU")
+toplot <- SY100[[1]] %>% filter(read_id %in% read2plot)
+fs1C <- plotforks(toplot,plot.raw=T,Exp="SY_0.1mM")[[1]]+xlab("SY coordinates (kb)")+ylab("BrdU probability")+ggtitle("SY 0.1mM BrdU")
+toplot <- BY1000[[1]] %>% filter(read_id %in% read2plot)
+fs1D <- plotforks(toplot,plot.raw=T,Exp="BY_1mM")[[1]]+xlab("BY coordinates (chrXV, kb)")+ylab("BrdU probability")+ggtitle("BY 1mM BrdU")
+toplot <- SY1000[[1]] %>% filter(read_id %in% read2plot)
+fs1E <- plotforks(toplot,plot.raw=T,Exp="SY_1mM")[[1]]+xlab("SY coordinates (kb)")+ylab("BrdU probability")+ggtitle("SY 1mM BrdU")
+
+
+allForks <- bind_rows(
+	BT1_100[[2]] %>% mutate(Cond="BT1_0.1mM"),
+	SY100[[2]] %>% mutate(Cond="SY_0.1mM"),
+	SY1000[[2]] %>% mutate(Cond="SY_1mM"),
+	BY100[[2]] %>% mutate(Cond="BY_0.1mM"),
+	BY1000[[2]] %>% mutate(Cond="BY_1mM")
+	)
+toplot2 <- allForks
+toplot2$exp <- toplot2$Cond
+toplot2$exp <- as_factor(toplot2$exp)
+explist <- unique(toplot2$exp)
+totrace <- compute_meantrace(toplot2,trac.xmax=50000)
+
+totrace2 <- totrace %>% 
+	mutate(trace=map(trace, function(x) {y=caTools::runmean(x$mean_trace,k=10,align="center",endrule="mean"); x$mean_trace=y; return(x)})) %>%
+	mutate(exp=fct_rev(exp))
+fs1f <- plot_meantrace(totrace2,explist,ymax0=0.5,xmax=20000,normalise=F,root_title="FigS1_BYSYsmooth_20240206",expor=F)
+fs1F <- fs1f+ plot_annotation(tag_levels="a")+theme(plot.title=element_blank())+guides(color=guide_legend(title="Mean trace"))+xlab("Position (relative to X0, bp)")
+
+pl0 <- fs1B+fs1C+fs1A+fs1D+fs1E +plot_layout(guides="collect")+fs1F+ plot_annotation(tag_levels="A",title="Supplementary Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+ggsave(plot=pl0,"FigArticle/FigS1AF.pdf",width=14,height=6)
+
+```
+
+### FigS1G and H (doubling time)
+
+```{r}
+mypal <- c(paletteer::paletteer_d("ggthemes::Classic_20"),"grey40","black","gold","greenyellow")
+
+data1 <- read_tsv("Data_raw/BYSYgrowth.txt",show_col_types = FALSE)%>% pivot_longer(cols=2:5, values_to="OD", names_to="Strain")
+fs1G <- ggplot(data=data1 %>% filter(Rep=="rep2"),aes(x=Time, y=OD,col=Strain))+
+	geom_point()+
+	geom_line()+
+	xlab("Time (h)")+
+	ylab("O.D. 600nm")+
+	scale_color_manual("",values=mypal[c(1,2,7,8)])
+data2 <- read_tsv("Data_raw/BYSYdoubling.txt",show_col_types = FALSE) %>% pivot_longer(cols=1:4,values_to="doubling", names_to="Strain")
+fs1H <- ggplot(data=data2,aes(x=Strain, y=doubling,col=Strain))+
+	geom_point(show.legend=F)+
+	xlab("Strain")+
+	ylab("Doubling time (min)")+
+	scale_color_manual("",values=mypal[c(1,2,7,8)])+
+	ylim(c(0,120))
+
+
+pl1 <- fs1G+fs1H+plot_layout(guides="collect")+plot_annotation(tag_levels=list(c("G","H")),title="Supplementary Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+ggsave(plot=pl1,"FigArticle/FigS1GH.pdf",width=7,height=4)
+```

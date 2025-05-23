@@ -1,0 +1,606 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# 07_RFD test  
+***  
+
+In order to test difference in forks directionality between BY and SY, experiment were either pooled by strain or treated as paired replicates.
+The genome was cut into non overlapping bins of 1kb and for each bin and each conditions, we compared the number of L and R forks using either the exact Boschloo test for the pooled approach or the Mantel_Haenszel test in the paired approach. the tests were repeated using 3, 5, 11, 21 and 41kb scales by merging the counts for successive bins but counting each fork only once for eack bi at each scale. Results were corrected for multiplicity testing using the Benjamini and Yekuteli correction.
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),strand="*",seqinfo=seqinfSY)
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds")
+masked_ura3d0 <- GRanges("CP029160.1",IRanges(1051200,1051500),strand="*",seqinfo=seqinfSY,type="ura3d0")
+masked_SY <- c(maskedTy_SY,masked_ura3d0) 
+source("Helper_function.r")
+```
+
+### Importing forks
+```{r message=FALSE, warning=FALSE}
+forksBY <- readRDS("Data/forks_BYBYSY.rds") %>%
+	select(chrom=chromSY,direc,X0=X0nSY,X1=X1nSY,exp) %>%
+	mutate(Rep=map_chr(exp,function(x) x %>% str_remove("BY_"))) %>%
+	mutate(strain="BY")
+forks_BYSY.gr<- with(forksBY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+fBY <- forksBY %>% 
+	mutate(filt=!overlapsAny(forks_BYSY.gr,c(masked_SY))) %>%
+	filter(filt)
+
+forksSY <- readRDS("Data/forks_SYSY.rds") %>%
+	select(chrom,direc,X0,X1,exp) %>%
+	mutate(Rep=map_chr(exp,function(x) x %>% str_remove("SY_"))) %>%
+	mutate(strain="SY")
+forks_SYSY.gr<- with(forksSY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+fSY <- forksSY %>% 
+	mutate(filt=!overlapsAny(forks_SYSY.gr,c(masked_SY))) %>%
+	filter(filt)
+```
+
+### Create GenomicRanges as in the OEM script.  
+
+```{r message=FALSE, warning=FALSE}
+forkBY1 <- fBY %>% filter(Rep=="rep1")
+forkBY1$fid <- 1:nrow(forkBY1)
+forkBY1_R <- forkBY1 %>% filter(direc=="R")
+forkBY1_L <- forkBY1 %>% filter(direc=="L")
+forkBY1_R.gr<- with(forkBY1_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY1_L.gr<- with(forkBY1_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkBY2 <- fBY %>% filter(Rep=="rep2")
+forkBY2$fid <- 1:nrow(forkBY2)
+forkBY2_R <- forkBY2 %>% filter(direc=="R")
+forkBY2_L <- forkBY2 %>% filter(direc=="L")
+forkBY2_R.gr<- with(forkBY2_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY2_L.gr<- with(forkBY2_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkSY1 <- fSY %>% filter(Rep=="rep1")
+forkSY1$fid <- 1:nrow(forkSY1)
+forkSY1_R <- forkSY1 %>% filter(direc=="R")
+forkSY1_L <- forkSY1 %>% filter(direc=="L")
+forkSY1_R.gr<- with(forkSY1_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY1_L.gr<- with(forkSY1_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkSY2 <- fSY %>% filter(Rep=="rep2")
+forkSY2$fid <- 1:nrow(forkSY2)
+forkSY2_R <- forkSY2 %>% filter(direc=="R")
+forkSY2_L <- forkSY2 %>% filter(direc=="L")
+forkSY2_R.gr<- with(forkSY2_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY2_L.gr<- with(forkSY2_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkBY3 <- fBY %>% filter(Rep=="rep3")
+forkBY3$fid <- 1:nrow(forkBY3)
+forkBY3_R <- forkBY3 %>% filter(direc=="R")
+forkBY3_L <- forkBY3 %>% filter(direc=="L")
+forkBY3_R.gr<- with(forkBY3_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY3_L.gr<- with(forkBY3_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkSY3 <- fSY %>% filter(Rep=="rep3")
+forkSY3$fid <- 1:nrow(forkSY3)
+forkSY3_R <- forkSY3 %>% filter(direc=="R")
+forkSY3_L <- forkSY3 %>% filter(direc=="L")
+forkSY3_R.gr<- with(forkSY3_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY3_L.gr<- with(forkSY3_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+```
+
+### 1kb Data binning
+```{r message=FALSE, warning=FALSE}
+bs <- 1000 
+bingen <- tileGenome(seqinfSY,tilewidth=bs, cut.last.tile.in.chrom=T)
+nc <- 8L
+min_ovl <- 501L
+ol1 <- findOverlaps(forkBY1_R.gr,bingen,minoverlap=min_ovl)
+bingen$BY1_1kR <- smclapply(1:length(bingen), function(x) forkBY1_R.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkBY1_L.gr,bingen,minoverlap=min_ovl)
+bingen$BY1_1kL <- smclapply(1:length(bingen), function(x) forkBY1_L.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+
+ol1 <- findOverlaps(forkBY2_R.gr,bingen,minoverlap=min_ovl)
+bingen$BY2_1kR <- smclapply(1:length(bingen), function(x) forkBY2_R.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkBY2_L.gr,bingen,minoverlap=min_ovl)
+bingen$BY2_1kL <- smclapply(1:length(bingen), function(x) forkBY2_L.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+
+ol1 <- findOverlaps(forkSY1_R.gr,bingen,minoverlap=min_ovl)
+bingen$SY1_1kR <- smclapply(1:length(bingen), function(x) forkSY1_R.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkSY1_L.gr,bingen,minoverlap=min_ovl)
+bingen$SY1_1kL <- smclapply(1:length(bingen), function(x) forkSY1_L.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+
+ol1 <- findOverlaps(forkSY2_R.gr,bingen,minoverlap=min_ovl)
+bingen$SY2_1kR <- smclapply(1:length(bingen), function(x) forkSY2_R.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkSY2_L.gr,bingen,minoverlap=min_ovl)
+bingen$SY2_1kL <- smclapply(1:length(bingen), function(x) forkSY2_L.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+
+ol1 <- findOverlaps(forkBY3_R.gr,bingen,minoverlap=min_ovl)
+bingen$BY3_1kR <- smclapply(1:length(bingen), function(x) forkBY3_R.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkBY3_L.gr,bingen,minoverlap=min_ovl)
+bingen$BY3_1kL <- smclapply(1:length(bingen), function(x) forkBY3_L.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+
+ol1 <- findOverlaps(forkSY3_R.gr,bingen,minoverlap=min_ovl)
+bingen$SY3_1kR <- smclapply(1:length(bingen), function(x) forkSY3_R.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkSY3_L.gr,bingen,minoverlap=min_ovl)
+bingen$SY3_1kL <- smclapply(1:length(bingen), function(x) forkSY3_L.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+```
+
+### Other scales binning
+```{r message=FALSE, warning=FALSE}
+roll_c <- function(x,win=3)
+{
+# x is a list
+	res0 <- lapply(1:(length(x)-win+1), function(i) do.call(c,x[i:(i+win-1)]))
+	if (win%%2==0) 
+	{res <- c(rep(list(NA),win%/%2-1),res0,rep(list(NA),win%/%2))
+	}else{res <- c(rep(list(NA),win%/%2),res0,rep(list(NA),win%/%2))
+	}
+return(res)
+}
+
+bingen$BY1_01kR <- sapply(roll_c(bingen$BY1_1kR,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$BY1_01kL <- sapply(roll_c(bingen$BY1_1kL,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_01kR <- sapply(roll_c(bingen$BY2_1kR,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_01kL <- sapply(roll_c(bingen$BY2_1kL,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_01kR <- sapply(roll_c(bingen$SY1_1kR,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_01kL <- sapply(roll_c(bingen$SY1_1kL,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_01kR <- sapply(roll_c(bingen$SY2_1kR,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_01kL <- sapply(roll_c(bingen$SY2_1kL,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_01kR <- sapply(roll_c(bingen$BY3_1kR,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_01kL <- sapply(roll_c(bingen$BY3_1kL,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_01kR <- sapply(roll_c(bingen$SY3_1kR,win=1),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_01kL <- sapply(roll_c(bingen$SY3_1kL,win=1),function(x) length(unique(x[!is.na(x)])))
+
+
+bingen$BY1_3kR <- sapply(roll_c(bingen$BY1_1kR,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$BY1_3kL <- sapply(roll_c(bingen$BY1_1kL,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_3kR <- sapply(roll_c(bingen$BY2_1kR,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_3kL <- sapply(roll_c(bingen$BY2_1kL,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_3kR <- sapply(roll_c(bingen$SY1_1kR,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_3kL <- sapply(roll_c(bingen$SY1_1kL,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_3kR <- sapply(roll_c(bingen$SY2_1kR,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_3kL <- sapply(roll_c(bingen$SY2_1kL,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_3kR <- sapply(roll_c(bingen$BY3_1kR,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_3kL <- sapply(roll_c(bingen$BY3_1kL,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_3kR <- sapply(roll_c(bingen$SY3_1kR,win=3),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_3kL <- sapply(roll_c(bingen$SY3_1kL,win=3),function(x) length(unique(x[!is.na(x)])))
+
+bingen$BY1_5kR <- sapply(roll_c(bingen$BY1_1kR,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$BY1_5kL <- sapply(roll_c(bingen$BY1_1kL,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_5kR <- sapply(roll_c(bingen$BY2_1kR,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_5kL <- sapply(roll_c(bingen$BY2_1kL,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_5kR <- sapply(roll_c(bingen$SY1_1kR,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_5kL <- sapply(roll_c(bingen$SY1_1kL,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_5kR <- sapply(roll_c(bingen$SY2_1kR,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_5kL <- sapply(roll_c(bingen$SY2_1kL,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_5kR <- sapply(roll_c(bingen$BY3_1kR,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_5kL <- sapply(roll_c(bingen$BY3_1kL,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_5kR <- sapply(roll_c(bingen$SY3_1kR,win=5),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_5kL <- sapply(roll_c(bingen$SY3_1kL,win=5),function(x) length(unique(x[!is.na(x)])))
+
+bingen$BY1_11kR <- sapply(roll_c(bingen$BY1_1kR,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$BY1_11kL <- sapply(roll_c(bingen$BY1_1kL,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_11kR <- sapply(roll_c(bingen$BY2_1kR,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_11kL <- sapply(roll_c(bingen$BY2_1kL,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_11kR <- sapply(roll_c(bingen$SY1_1kR,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_11kL <- sapply(roll_c(bingen$SY1_1kL,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_11kR <- sapply(roll_c(bingen$SY2_1kR,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_11kL <- sapply(roll_c(bingen$SY2_1kL,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_11kR <- sapply(roll_c(bingen$BY3_1kR,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_11kL <- sapply(roll_c(bingen$BY3_1kL,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_11kR <- sapply(roll_c(bingen$SY3_1kR,win=11),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_11kL <- sapply(roll_c(bingen$SY3_1kL,win=11),function(x) length(unique(x[!is.na(x)])))
+
+bingen$BY1_21kR <- sapply(roll_c(bingen$BY1_1kR,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$BY1_21kL <- sapply(roll_c(bingen$BY1_1kL,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_21kR <- sapply(roll_c(bingen$BY2_1kR,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_21kL <- sapply(roll_c(bingen$BY2_1kL,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_21kR <- sapply(roll_c(bingen$SY1_1kR,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_21kL <- sapply(roll_c(bingen$SY1_1kL,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_21kR <- sapply(roll_c(bingen$SY2_1kR,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_21kL <- sapply(roll_c(bingen$SY2_1kL,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_21kR <- sapply(roll_c(bingen$BY3_1kR,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_21kL <- sapply(roll_c(bingen$BY3_1kL,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_21kR <- sapply(roll_c(bingen$SY3_1kR,win=21),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_21kL <- sapply(roll_c(bingen$SY3_1kL,win=21),function(x) length(unique(x[!is.na(x)])))
+
+bingen$BY1_41kR <- sapply(roll_c(bingen$BY1_1kR,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$BY1_41kL <- sapply(roll_c(bingen$BY1_1kL,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_41kR <- sapply(roll_c(bingen$BY2_1kR,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$BY2_41kL <- sapply(roll_c(bingen$BY2_1kL,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_41kR <- sapply(roll_c(bingen$SY1_1kR,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$SY1_41kL <- sapply(roll_c(bingen$SY1_1kL,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_41kR <- sapply(roll_c(bingen$SY2_1kR,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$SY2_41kL <- sapply(roll_c(bingen$SY2_1kL,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_41kR <- sapply(roll_c(bingen$BY3_1kR,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$BY3_41kL <- sapply(roll_c(bingen$BY3_1kL,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_41kR <- sapply(roll_c(bingen$SY3_1kR,win=41),function(x) length(unique(x[!is.na(x)])))
+bingen$SY3_41kL <- sapply(roll_c(bingen$SY3_1kL,win=41),function(x) length(unique(x[!is.na(x)])))
+```
+
+### Paired test after transforming the data into 3D data frame.  
+```{r message=FALSE, warning=FALSE}
+bingen2 <- bingen
+
+bg3 <- as_tibble(bingen) %>% select(contains("3k")) %>%
+	mutate(test_mat=pmap(., function(BY1_3kR,BY1_3kL,BY2_3kR,BY2_3kL,SY1_3kR,SY1_3kL,SY2_3kR,SY2_3kL,BY3_3kR,BY3_3kL,SY3_3kR,SY3_3kL,...) {
+		x111=BY1_3kR
+		x211=BY1_3kL
+		x121=SY1_3kR
+		x221=SY1_3kL
+		x112=BY2_3kR
+		x212=BY2_3kL
+		x122=SY2_3kR
+		x222=SY2_3kL
+		x113=BY3_3kR
+		x213=BY3_3kL
+		x123=SY3_3kR
+		x223=SY3_3kL
+		df= c(x111,x211,x121,x221,x112,x212,x122,x222,x113,x213,x123,x223)
+		df2 <- array(df,dim=c(2,2,3))
+		tempo <- list(c("R","L"),c("BY","SY"),c("rep1","rep2","rep3"))
+		names(tempo) <- c("Dir","Strain","Rep")
+		dimnames(df2) <- tempo
+		return(df2)
+		}))
+bg4 <- bg3 %>% mutate(mh_test=map_dbl(test_mat, function(x) {
+	x <- apply(x,c(1,2,3),as.numeric)
+	n1.z <- margin.table(x[1,,],2)
+	n.1z <- margin.table(x[,1,],2)
+	n.2z<- margin.table(x[,2,],2)
+	nz <- margin.table(x,3)
+	t11z <- n1.z*n.1z/nz
+	if (sum((apply(x,3,sum,na.rm=T)>1))<3 |
+	(sum(t11z,na.rm=T) - sum(pmax(0, (n1.z-n.2z),na.rm=T))) < 5 | (sum(pmin(n1.z, n.1z,na.rm=T)) - sum(t11z,na.rm=T)) < 5)
+	{res=NA}else{res=mantelhaen.test(x,correct=T,exact=F)$p.value}
+	}))
+	
+bingen2$mh_test3k <- bg4$mh_test
+
+bg3 <- as_tibble(bingen) %>% select(contains("5k")) %>%
+	mutate(test_mat=pmap(., function(BY1_5kR,BY1_5kL,BY2_5kR,BY2_5kL,SY1_5kR,SY1_5kL,SY2_5kR,SY2_5kL,BY3_5kR,BY3_5kL,SY3_5kR,SY3_5kL,...) {
+		x111=BY1_5kR
+		x211=BY1_5kL
+		x121=SY1_5kR
+		x221=SY1_5kL
+		x112=BY2_5kR
+		x212=BY2_5kL
+		x122=SY2_5kR
+		x222=SY2_5kL
+		x113=BY3_5kR
+		x213=BY3_5kL
+		x123=SY3_5kR
+		x223=SY3_5kL
+		df= c(x111,x211,x121,x221,x112,x212,x122,x222,x113,x213,x123,x223)
+		df2 <- array(df,dim=c(2,2,3))
+		tempo <- list(c("R","L"),c("BY","SY"),c("rep1","rep2","rep3"))
+		names(tempo) <- c("Dir","Strain","Rep")
+		dimnames(df2) <- tempo
+		return(df2)
+		}))
+
+bg4 <- bg3 %>% mutate(mh_test=map_dbl(test_mat, function(x) {
+	x <- apply(x,c(1,2,3),as.numeric)
+	n1.z <- margin.table(x[1,,],2)
+	n.1z <- margin.table(x[,1,],2)
+	n.2z<- margin.table(x[,2,],2)
+	nz <- margin.table(x,3)
+	t11z <- n1.z*n.1z/nz
+	if (sum((apply(x,3,sum,na.rm=T)>1))<3 |
+	(sum(t11z,na.rm=T) - sum(pmax(0, (n1.z-n.2z),na.rm=T))) < 5 | (sum(pmin(n1.z, n.1z,na.rm=T)) - sum(t11z,na.rm=T)) < 5)
+	{res=NA}else{res=mantelhaen.test(x,correct=T,exact=F)$p.value}
+	}))
+	
+bingen2$mh_test5k <- bg4$mh_test
+
+bg3 <- as_tibble(bingen) %>% select(contains("11k")) %>%
+	mutate(test_mat=pmap(., function(BY1_11kR,BY1_11kL,BY2_11kR,BY2_11kL,SY1_11kR,SY1_11kL,SY2_11kR,SY2_11kL,BY3_11kR,BY3_11kL,SY3_11kR,SY3_11kL,...) {
+		x111=BY1_11kR
+		x211=BY1_11kL
+		x121=SY1_11kR
+		x221=SY1_11kL
+		x112=BY2_11kR
+		x212=BY2_11kL
+		x122=SY2_11kR
+		x222=SY2_11kL
+		x113=BY3_11kR
+		x213=BY3_11kL
+		x123=SY3_11kR
+		x223=SY3_11kL
+		df= c(x111,x211,x121,x221,x112,x212,x122,x222,x113,x213,x123,x223)
+		df2 <- array(df,dim=c(2,2,3))
+		tempo <- list(c("R","L"),c("BY","SY"),c("rep1","rep2","rep3"))
+		names(tempo) <- c("Dir","Strain","Rep")
+		dimnames(df2) <- tempo
+		return(df2)
+		}))
+
+bg4 <- bg3 %>% mutate(mh_test=map_dbl(test_mat, function(x) {
+	x <- apply(x,c(1,2,3),as.numeric)
+	n1.z <- margin.table(x[1,,],2)
+	n.1z <- margin.table(x[,1,],2)
+	n.2z<- margin.table(x[,2,],2)
+	nz <- margin.table(x,3)
+	t11z <- n1.z*n.1z/nz
+	if (sum((apply(x,3,sum,na.rm=T)>1))<3 |
+	(sum(t11z,na.rm=T) - sum(pmax(0, (n1.z-n.2z),na.rm=T))) < 5 | (sum(pmin(n1.z, n.1z,na.rm=T)) - sum(t11z,na.rm=T)) < 5)
+	{res=NA}else{res=mantelhaen.test(x,correct=T,exact=F)$p.value}
+	}))
+	
+bingen2$mh_test11k <- bg4$mh_test
+
+bg3 <- as_tibble(bingen) %>% select(contains("21k")) %>%
+	mutate(test_mat=pmap(., function(BY1_21kR,BY1_21kL,BY2_21kR,BY2_21kL,SY1_21kR,SY1_21kL,SY2_21kR,SY2_21kL,BY3_21kR,BY3_21kL,SY3_21kR,SY3_21kL,...) {
+		x111=BY1_21kR
+		x211=BY1_21kL
+		x121=SY1_21kR
+		x221=SY1_21kL
+		x112=BY2_21kR
+		x212=BY2_21kL
+		x122=SY2_21kR
+		x222=SY2_21kL
+		x113=BY3_21kR
+		x213=BY3_21kL
+		x123=SY3_21kR
+		x223=SY3_21kL
+		df= c(x111,x211,x121,x221,x112,x212,x122,x222,x113,x213,x123,x223)
+		df2 <- array(df,dim=c(2,2,3))
+		tempo <- list(c("R","L"),c("BY","SY"),c("rep1","rep2","rep3"))
+		names(tempo) <- c("Dir","Strain","Rep")
+		dimnames(df2) <- tempo
+		return(df2)
+		}))
+
+bg4 <- bg3 %>% mutate(mh_test=map_dbl(test_mat, function(x) {
+	x <- apply(x,c(1,2,3),as.numeric)
+	n1.z <- margin.table(x[1,,],2)
+	n.1z <- margin.table(x[,1,],2)
+	n.2z<- margin.table(x[,2,],2)
+	nz <- margin.table(x,3)
+	t11z <- n1.z*n.1z/nz
+	if (sum((apply(x,3,sum,na.rm=T)>1))<3 |
+	(sum(t11z,na.rm=T) - sum(pmax(0, (n1.z-n.2z),na.rm=T))) < 5 | (sum(pmin(n1.z, n.1z,na.rm=T)) - sum(t11z,na.rm=T)) < 5)
+	{res=NA}else{res=mantelhaen.test(x,correct=T,exact=F)$p.value}
+	}))
+	
+bingen2$mh_test21k <- bg4$mh_test
+
+bg3 <- as_tibble(bingen) %>% select(contains("41k")) %>%
+	mutate(test_mat=pmap(., function(BY1_41kR,BY1_41kL,BY2_41kR,BY2_41kL,SY1_41kR,SY1_41kL,SY2_41kR,SY2_41kL,BY3_41kR,BY3_41kL,SY3_41kR,SY3_41kL,...) {
+		x111=BY1_41kR
+		x211=BY1_41kL
+		x121=SY1_41kR
+		x221=SY1_41kL
+		x112=BY2_41kR
+		x212=BY2_41kL
+		x122=SY2_41kR
+		x222=SY2_41kL
+		x113=BY3_41kR
+		x213=BY3_41kL
+		x123=SY3_41kR
+		x223=SY3_41kL
+		df= c(x111,x211,x121,x221,x112,x212,x122,x222,x113,x213,x123,x223)
+		df2 <- array(df,dim=c(2,2,3))
+		tempo <- list(c("R","L"),c("BY","SY"),c("rep1","rep2","rep3"))
+		names(tempo) <- c("Dir","Strain","Rep")
+		dimnames(df2) <- tempo
+		return(df2)
+		}))
+
+bg4 <- bg3 %>% mutate(mh_test=map_dbl(test_mat, function(x) {
+	x <- apply(x,c(1,2,3),as.numeric)
+	n1.z <- margin.table(x[1,,],2)
+	n.1z <- margin.table(x[,1,],2)
+	n.2z<- margin.table(x[,2,],2)
+	nz <- margin.table(x,3)
+	t11z <- n1.z*n.1z/nz
+	if (sum((apply(x,3,sum,na.rm=T)>1))<3 |
+	(sum(t11z,na.rm=T) - sum(pmax(0, (n1.z-n.2z),na.rm=T))) < 5 | (sum(pmin(n1.z, n.1z,na.rm=T)) - sum(t11z,na.rm=T)) < 5)
+	{res=NA}else{res=mantelhaen.test(x,correct=T,exact=F)$p.value}
+	}))
+	
+bingen2$mh_test41k <- bg4$mh_test
+```
+
+### multiple test correction and results export.  
+```{r}
+ptib3 <- as_tibble(mcols(bingen2)) %>% select(contains("mh_test")) %>% 
+pivot_longer(contains("mh_test")) %>%
+mutate(padj=p.adjust(value,"BY")) %>%
+select(-"value") %>%
+pivot_wider(names_from = name,values_from=c(padj),values_fn = list)
+
+bingen2$mh_test3kcor <- ptib3$mh_test3k[[1]]
+bingen2$mh_test5kcor <- ptib3$mh_test5k[[1]]
+bingen2$mh_test11kcor <- ptib3$mh_test11k[[1]]
+bingen2$mh_test21kcor <- ptib3$mh_test21k[[1]]
+bingen2$mh_test41kcor <- ptib3$mh_test41k[[1]]
+
+saveRDS(bingen2,file="Data/RFD_bg_MHtest_adjBY.rds")
+
+export(coverage(bingen2,weight=bingen2$mh_test3kcor),con="BigWig/RFD_MHtest3k.bw")
+export(coverage(bingen2,weight=bingen2$mh_test5kcor),con="BigWig/RFD_MHtest5k.bw")
+export(coverage(bingen2,weight=bingen2$mh_test11kcor),con="BigWig/RFD_MHtest11k.bw")
+export(coverage(bingen2,weight=bingen2$mh_test21kcor),con="BigWig/RFD_MHtest21k.bw")
+export(coverage(bingen2,weight=bingen2$mh_test41kcor),con="BigWig/RFD_MHtest41k.bw")
+```
+
+### Non pooled RFD export.  
+```{r}
+cvLBY1 <- coverage(forkBY1_L.gr)
+cvRBY1 <- coverage(forkBY1_R.gr)
+rfdBY1 <- (cvRBY1-cvLBY1)/(cvRBY1+cvLBY1)
+export(rfdBY1,con="BigWig/rfdnt_BY1.bw")
+export((cvLBY1+cvRBY1),con="BigWig/covTnt_BY1.bw")
+cvLBY2 <- coverage(forkBY2_L.gr)
+cvRBY2 <- coverage(forkBY2_R.gr)
+rfdBY2 <- (cvRBY2-cvLBY2)/(cvRBY2+cvLBY2)
+export(rfdBY2,con="BigWig/rfdnt_BY2.bw")
+export((cvLBY2+cvRBY2),con="BigWig/covTnt_BY2.bw")
+cvLSY1 <- coverage(forkSY1_L.gr)
+cvRSY1 <- coverage(forkSY1_R.gr)
+rfdSY1 <- (cvRSY1-cvLSY1)/(cvRSY1+cvLSY1)
+export(rfdSY1,con="BigWig/rfdnt_SY1.bw")
+export((cvLSY1+cvRSY1),con="BigWig/covTnt_SY1.bw")
+cvLSY2 <- coverage(forkSY2_L.gr)
+cvRSY2 <- coverage(forkSY2_R.gr)
+rfdSY2 <- (cvRSY2-cvLSY2)/(cvRSY2+cvLSY2)
+export(rfdSY2,con="BigWig/rfdnt_SY2.bw")
+export((cvLSY2+cvRSY2),con="BigWig/covTnt_SY2.bw")
+cvLBY3 <- coverage(forkBY3_L.gr)
+cvRBY3 <- coverage(forkBY3_R.gr)
+rfdBY3 <- (cvRBY3-cvLBY3)/(cvRBY3+cvLBY3)
+export(rfdBY3,con="BigWig/rfdnt_BY3.bw")
+export((cvLBY3+cvRBY3),con="BigWig/covTnt_BY3.bw")
+cvLSY3 <- coverage(forkSY3_L.gr)
+cvRSY3 <- coverage(forkSY3_R.gr)
+rfdSY3 <- (cvRSY3-cvLSY3)/(cvRSY3+cvLSY3)
+export(rfdSY3,con="BigWig/rfdnt_SY3.bw")
+export((cvLSY3+cvRSY3),con="BigWig/covTnt_SY3.bw")
+
+### I need to export the binned rfd for each experiment (1k)
+cvLBY1 <- coverage(bingen,weight=bingen$BY1_01kL)
+cvRBY1 <- coverage(bingen,weight=bingen$BY1_01kR)
+rfdBY1 <- (cvRBY1-cvLBY1)/(cvRBY1+cvLBY1)
+export(rfdBY1,con="BigWig/rfd1k_BY1.bw")
+export((cvLBY1+cvRBY1),con="BigWig/covT1k_BY1.bw")
+cvLBY2 <- coverage(bingen,weight=bingen$BY2_01kL)
+cvRBY2 <- coverage(bingen,weight=bingen$BY2_01kR)
+rfdBY2 <- (cvRBY2-cvLBY2)/(cvRBY2+cvLBY2)
+export(rfdBY2,con="BigWig/rfd1k_BY2.bw")
+export((cvLBY2+cvRBY2),con="BigWig/covT1k_BY2.bw")
+cvLSY1 <- coverage(bingen,weight=bingen$SY1_01kL)
+cvRSY1 <- coverage(bingen,weight=bingen$SY1_01kR)
+rfdSY1 <- (cvRSY1-cvLSY1)/(cvRSY1+cvLSY1)
+export(rfdSY1,con="BigWig/rfd1k_SY1.bw")
+export((cvLSY1+cvRSY1),con="BigWig/covT1k_SY1.bw")
+cvLSY2 <- coverage(bingen,weight=bingen$SY2_01kL)
+cvRSY2 <- coverage(bingen,weight=bingen$SY2_01kR)
+rfdSY2 <- (cvRSY2-cvLSY2)/(cvRSY2+cvLSY2)
+export(rfdSY2,con="BigWig/rfd1k_SY2.bw")
+export((cvLSY2+cvRSY2),con="BigWig/covT1k_SY2.bw")
+cvLBY3 <- coverage(bingen,weight=bingen$BY3_01kL)
+cvRBY3 <- coverage(bingen,weight=bingen$BY3_01kR)
+rfdBY3 <- (cvRBY3-cvLBY3)/(cvRBY3+cvLBY3)
+export(rfdBY3,con="BigWig/rfd1k_BY3.bw")
+export((cvLBY3+cvRBY3),con="BigWig/covT1k_BY3.bw")
+cvLSY3 <- coverage(bingen,weight=bingen$SY3_01kL)
+cvRSY3 <- coverage(bingen,weight=bingen$SY3_01kR)
+rfdSY3 <- (cvRSY3-cvLSY3)/(cvRSY3+cvLSY3)
+export(rfdSY3,con="BigWig/rfd1k_SY3.bw")
+export((cvLSY3+cvRSY3),con="BigWig/covT1k_SY3.bw")
+```
+
+
+### pooling forks.  
+```{r message=FALSE, warning=FALSE}
+fBY$fid <- 1:nrow(fBY)
+forkBY.gr <- with(fBY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkBY_R.gr <- forkBY.gr[strand(forkBY.gr)=="+"]
+forkBY_L.gr <- forkBY.gr[strand(forkBY.gr)=="-"]
+
+fSY$fid <- 1:nrow(fSY)
+forkSY.gr<- with(fSY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkSY_R.gr <- forkSY.gr[strand(forkSY.gr)=="+"]
+forkSY_L.gr <- forkSY.gr[strand(forkSY.gr)=="-"]
+
+```
+
+### 1kb binning.  
+```{r message=FALSE, warning=FALSE}
+bs <- 1000 
+bingen <- tileGenome(seqinfSY,tilewidth=bs, cut.last.tile.in.chrom=T)
+nc <- 4L
+min_ovl <- 501L
+ol1 <- findOverlaps(forkBY_R.gr,bingen,minoverlap=min_ovl)
+bingen$forksBY1kR <- smclapply(1:length(bingen), function(x) forkBY_R.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkBY_L.gr,bingen,minoverlap=min_ovl)
+bingen$forksBY1kL <- smclapply(1:length(bingen), function(x) forkBY_L.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkSY_R.gr,bingen,minoverlap=min_ovl)
+bingen$forksSY1kR <- smclapply(1:length(bingen), function(x) forkSY_R.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+ol1 <- findOverlaps(forkSY_L.gr,bingen,minoverlap=min_ovl)
+bingen$forksSY1kL <- smclapply(1:length(bingen), function(x) forkSY_L.gr[queryHits(ol1)[subjectHits(ol1)==x]]$fid,mc.cores=nc)
+
+### count unique forks
+bingen$BY1kR <- sapply(bingen$forksBY1kR,function(x) length(unique(x[!is.na(x)])))
+bingen$BY1kL <- sapply(bingen$forksBY1kL,function(x) length(unique(x[!is.na(x)])))
+bingen$SY1kR <- sapply(bingen$forksSY1kR,function(x) length(unique(x[!is.na(x)])))
+bingen$SY1kL <- sapply(bingen$forksSY1kL,function(x) length(unique(x[!is.na(x)])))
+```
+
+
+### pooled 1kb binned RFD.  
+```{r message=FALSE}
+# covL_BY <- coverage(forkBY_L.gr)
+# covR_BY <- coverage(forkBY_R.gr)
+# rfdBY <- (covR_BY-covL_BY)/(covR_BY+covL_BY)
+# export(rfdBY,con="BigWig/rfd_BYnt.bw")
+# export(covR_BY+covL_BY,con="BigWig/covT_BYnt.bw")
+# 
+# covL_SY <- coverage(forkSY_L.gr)
+# covR_SY <- coverage(forkSY_R.gr)
+# rfdSY <- (covR_SY-covL_SY)/(covR_SY+covL_SY)
+# export(rfdSY,con="BigWig/rfd_SYnt.bw")
+# export(covR_SY+covL_SY,con="BigWig/covT_SYnt.bw")
+
+cvLBY1k <- coverage(bingen,weight=bingen$BY1kL)
+cvRBY1k <- coverage(bingen,weight=bingen$BY1kR)
+rfdBY1k <- (cvRBY1k-cvLBY1k)/(cvRBY1k+cvLBY1k)
+export(rfdBY1k,con="BigWig/rfd1k_BY.bw")
+export((cvLBY1k+cvRBY1k),con="BigWig/covT1k_BY.bw")
+cvLSY1k <- coverage(bingen,weight=bingen$SY1kL)
+cvRSY1k <- coverage(bingen,weight=bingen$SY1kR)
+rfdSY1k <- (cvRSY1k-cvLSY1k)/(cvRSY1k+cvLSY1k)
+export(rfdSY1k,con="BigWig/rfd1k_SY.bw")
+export((cvLSY1k+cvRSY1k),con="BigWig/covT1k_SY.bw")
+
+```
+
+
+### Selecting significative RFD changes
+
+In order to recapitulate these multiscales testing procedures, we choose to select the bin that were significant for at least 3 out of the 5 tested scales. And we decide to set the threshold for the p-value at 1e-2.  
+
+```{r message=FALSE, warning=FALSE}
+
+bg_MH <- readRDS("Data/RFD_bg_MHtest_adjBY.rds")
+minp <- 1e-2
+
+bg_MH2 <- as_tibble(bg_MH) %>% select(seqnames,start,end,contains("cor"))
+bg_MH2 <- bg_MH2 %>% mutate(nbsigMH=pmap_int(., function(mh_test3kcor,mh_test5kcor,mh_test11kcor,mh_test21kcor,mh_test41kcor,...) {
+		sum(mh_test3kcor<=minp,mh_test5kcor<=minp,mh_test11kcor<=minp,mh_test21kcor<=minp,mh_test41kcor<=minp)
+		}))
+		
+bgsigMH <- with(bg_MH2 %>% filter(nbsigMH>=3),GRanges(seqnames=seqnames,range=IRanges(start,end),seqinfo=seqinfSY))
+bgsigMH2 <- GenomicRanges::reduce(bgsigMH)
+
+export(bgsigMH2,con="Data/bgsigMH.bed")
+```
+
+compute distance to CEN/Junction/Tel
+
+```{r message=FALSE, warning=FALSE}
+CEN <- import("Genome_annotations/SY14_CEN.gff3") 
+chromSY <- import("Genome_annotations/chromBYonSYgr.bed") %>% sort
+seqinfo(chromSY) <- seqinfSY
+
+chromJunction <- gaps(chromSY-10)
+chromTrueJunction <- chromJunction[4:18]
+TEL_SY <- chromJunction[c(3,19)]
+
+bgsigMH2 <- import("Data/bgsigMH.bed")
+bgsigMH2$score <- NULL
+bgsigMH2$name <- NULL
+bgsigMH2$dt_CEN <- data.frame(distanceToNearest(bgsigMH2,CEN))[,3]
+
+bgsigMH2$dt_JUNC <- data.frame(distanceToNearest(bgsigMH2,chromTrueJunction))[,3]
+bgsigMH2$dt_TEL <- data.frame(distanceToNearest(bgsigMH2,TEL_SY))[,3]
+
+bgsigMH2$dt_nearest <- data.frame(distanceToNearest(bgsigMH2,c(TEL_SY,CEN,chromTrueJunction)))[,3]
+
+write_tsv(as_tibble(bgsigMH2), file="Data/RFDsig.tsv")
+write_tsv(as_tibble(bgsigMH2) %>% select(-strand), file="Data/TableS3.tsv")
+
+```

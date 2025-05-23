@@ -1,0 +1,168 @@
+---
+title: "BYSY project Notebook"
+output: html_notebook
+---  
+# 06_Computing OEM  
+
+***  
+
+OEM were calculated as in [Hennion et al, 2020](https://doi.org/10.1186/s13059-020-02013-3) and this number will be used as proxy for the changes in net initiation activity at mapped active Ori (04_Actives Ori)
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(GenomicRanges))
+suppressMessages(library(tidyverse))
+suppressMessages(library(rtracklayer))
+`%+%`<-paste0
+seqinfSY <- readRDS("Data/seqinfSY.rds")
+rDNA_SY <- GRanges("CP029160.1",IRanges(3879940,3934000),strand="*",seqinfo=seqinfSY)
+maskedTy_SY <- readRDS("Data/maskedTy_SY.rds")
+```
+### Importing forks
+```{r message=FALSE, warning=FALSE}
+forksBY <- readRDS("Data/forks_BYBYSY.rds") %>%
+	select(chrom=chromSY,direc,X0=X0nSY,X1=X1nSY,exp) %>%
+	mutate(Rep=map_chr(exp,function(x) x %>% str_remove("BY_"))) %>%
+	mutate(strain="BY")
+forks_BYSY.gr<- with(forksBY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+fBY <- forksBY %>% 
+	mutate(Ty_filter=!overlapsAny(forks_BYSY.gr,maskedTy_SY)) %>%
+	filter(Ty_filter)
+
+forksSY <- readRDS("Data/forks_SYSY.rds") %>%
+	select(chrom,direc,X0,X1,exp) %>%
+	mutate(Rep=map_chr(exp,function(x) x %>% str_remove("SY_"))) %>%
+	mutate(strain="SY")
+forks_SYSY.gr<- with(forksSY, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),seqinfo=seqinfSY))
+fSY <- forksSY %>% 
+	mutate(Ty_filter=!overlapsAny(forks_SYSY.gr,maskedTy_SY)) %>%
+	filter(Ty_filter)
+```
+
+### Rearrange forks and create GenomicRanges
+```{r message=FALSE, warning=FALSE}
+### creating GRanges
+forkBY1 <- fBY %>% filter(Rep=="rep1")
+forkBY1$fid <- 1:nrow(forkBY1)
+forkBY1_R <- forkBY1 %>% filter(direc=="R")
+forkBY1_L <- forkBY1 %>% filter(direc=="L")
+forkBY1_R.gr<- with(forkBY1_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY1_L.gr<- with(forkBY1_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkBY2 <- fBY %>% filter(Rep=="rep2")
+forkBY2$fid <- 1:nrow(forkBY2)
+forkBY2_R <- forkBY2 %>% filter(direc=="R")
+forkBY2_L <- forkBY2 %>% filter(direc=="L")
+forkBY2_R.gr<- with(forkBY2_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY2_L.gr<- with(forkBY2_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkSY1 <- fSY %>% filter(Rep=="rep1")
+forkSY1$fid <- 1:nrow(forkSY1)
+forkSY1_R <- forkSY1 %>% filter(direc=="R")
+forkSY1_L <- forkSY1 %>% filter(direc=="L")
+forkSY1_R.gr<- with(forkSY1_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY1_L.gr<- with(forkSY1_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkSY2 <- fSY %>% filter(Rep=="rep2")
+forkSY2$fid <- 1:nrow(forkSY2)
+forkSY2_R <- forkSY2 %>% filter(direc=="R")
+forkSY2_L <- forkSY2 %>% filter(direc=="L")
+forkSY2_R.gr<- with(forkSY2_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY2_L.gr<- with(forkSY2_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkBY3 <- fBY %>% filter(Rep=="rep3")
+forkBY3$fid <- 1:nrow(forkBY3)
+forkBY3_R <- forkBY3 %>% filter(direc=="R")
+forkBY3_L <- forkBY3 %>% filter(direc=="L")
+forkBY3_R.gr<- with(forkBY3_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkBY3_L.gr<- with(forkBY3_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+
+forkSY3 <- fSY %>% filter(Rep=="rep3")
+forkSY3$fid <- 1:nrow(forkSY3)
+forkSY3_R <- forkSY3 %>% filter(direc=="R")
+forkSY3_L <- forkSY3 %>% filter(direc=="L")
+forkSY3_R.gr<- with(forkSY3_R, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+forkSY3_L.gr<- with(forkSY3_L, GRanges(seqnames=chrom,ranges=IRanges(pmin(X0,X1),pmax(X0,X1)),strand=case_when(direc=="R"~"+",T~"-"),fid=fid,seqinfo=seqinfSY))
+```
+
+### Computing coverages and OEM
+
+```{r message=FALSE, warning=FALSE}
+outdir <- "BigFiles/BigWig/"
+cvL <- coverage(forkSY1_L.gr)
+cvR <- coverage(forkSY1_R.gr)
+cvT <- cvL+cvR
+
+cvLn <- cvL/cvT
+cvRn <- cvR/cvT
+cvLn[is.na(cvLn)] <- 0
+cvRn[is.na(cvRn)] <- 0
+win=10000
+cvLs2 <- endoapply(cvLn, function(x) Rle(caTools::runmean(x,win,align="left",endrule="NA")))
+oem2 <- endoapply(cvLs2, function(cv) c(Rle(rep(NA,(win))),cv)-c(cv,Rle(rep(NA,(win)))))
+export(oem2,con=paste0(outdir,"SY1_oem_",win/1000,"k.bw"))
+
+cvL <- coverage(forkSY2_L.gr)
+cvR <- coverage(forkSY2_R.gr)
+cvT <- cvL+cvR
+
+cvLn <- cvL/cvT
+cvRn <- cvR/cvT
+cvLn[is.na(cvLn)] <- 0
+cvRn[is.na(cvRn)] <- 0
+win=10000
+cvLs2 <- endoapply(cvLn, function(x) Rle(caTools::runmean(x,win,align="left",endrule="NA")))
+oem2 <- endoapply(cvLs2, function(cv) c(Rle(rep(NA,(win))),cv)-c(cv,Rle(rep(NA,(win)))))
+export(oem2,con=paste0(outdir,"SY2_oem_",win/1000,"k.bw"))
+
+cvL <- coverage(forkSY3_L.gr)
+cvR <- coverage(forkSY3_R.gr)
+cvT <- cvL+cvR
+
+cvLn <- cvL/cvT
+cvRn <- cvR/cvT
+cvLn[is.na(cvLn)] <- 0
+cvRn[is.na(cvRn)] <- 0
+win=10000
+cvLs2 <- endoapply(cvLn, function(x) Rle(caTools::runmean(x,win,align="left",endrule="NA")))
+oem2 <- endoapply(cvLs2, function(cv) c(Rle(rep(NA,(win))),cv)-c(cv,Rle(rep(NA,(win)))))
+export(oem2,con=paste0(outdir,"SY3_oem_",win/1000,"k.bw"))
+
+cvL <- coverage(forkBY1_L.gr)
+cvR <- coverage(forkBY1_R.gr)
+cvT <- cvL+cvR
+
+cvLn <- cvL/cvT
+cvRn <- cvR/cvT
+cvLn[is.na(cvLn)] <- 0
+cvRn[is.na(cvRn)] <- 0
+win=10000
+cvLs2 <- endoapply(cvLn, function(x) Rle(caTools::runmean(x,win,align="left",endrule="NA")))
+oem2 <- endoapply(cvLs2, function(cv) c(Rle(rep(NA,(win))),cv)-c(cv,Rle(rep(NA,(win)))))
+export(oem2,con=paste0(outdir,"BY1_oem_",win/1000,"k.bw"))
+
+cvL <- coverage(forkBY2_L.gr)
+cvR <- coverage(forkBY2_R.gr)
+cvT <- cvL+cvR
+
+cvLn <- cvL/cvT
+cvRn <- cvR/cvT
+cvLn[is.na(cvLn)] <- 0
+cvRn[is.na(cvRn)] <- 0
+win=10000
+cvLs2 <- endoapply(cvLn, function(x) Rle(caTools::runmean(x,win,align="left",endrule="NA")))
+oem2 <- endoapply(cvLs2, function(cv) c(Rle(rep(NA,(win))),cv)-c(cv,Rle(rep(NA,(win)))))
+export(oem2,con=paste0(outdir,"BY2_oem_",win/1000,"k.bw"))
+
+cvL <- coverage(forkBY3_L.gr)
+cvR <- coverage(forkBY3_R.gr)
+cvT <- cvL+cvR
+
+cvLn <- cvL/cvT
+cvRn <- cvR/cvT
+cvLn[is.na(cvLn)] <- 0
+cvRn[is.na(cvRn)] <- 0
+win=10000
+cvLs2 <- endoapply(cvLn, function(x) Rle(caTools::runmean(x,win,align="left",endrule="NA")))
+oem2 <- endoapply(cvLs2, function(cv) c(Rle(rep(NA,(win))),cv)-c(cv,Rle(rep(NA,(win)))))
+export(oem2,con=paste0(outdir,"BY3_oem_",win/1000,"k.bw"))
+```
