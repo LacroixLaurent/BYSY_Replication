@@ -3,7 +3,7 @@
 ***
 ## About this repository  
 To see this text in browser, go there [https://lacroixlaurent.github.io/BYSY_Replication/](https://lacroixlaurent.github.io/BYSY_Replication/), otherwise this repository can be viewed in RStudio.  
-This repository contains the scripts used for all the analysis in the one-chromosome yeast replication manuscript [Pellet et al., 2025](https://doi.org/10.1038/XXXXXY).  
+This repository contains the scripts used for all the analysis in the one-chromosome yeast replication manuscript [Pellet et al., 2025](https://doi.org/10.1038/XZXXXY).  
 
 Raw data are available from ENA repository under accession number [PRJEB89792](https://www.ebi.ac.uk/ena/).  
 
