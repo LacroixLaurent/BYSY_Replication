@@ -44,7 +44,7 @@ The file *Helper_function.R* contains accessory R functions used during the anal
 * the *BigWig* folder contain the genomic track generated during the analysis.  
 * the *Genome_annotations* folder contains the genomic annotation  tracks generated during the analysis.  
 * the *FigArticle* folder contains the figures generated during the analysis. The figures with *mod* in their name have been manually modified with Inkscape to adjust ARS name positions for readability.  
-* the *BigFiles* folder contains *BigWig*, *Data_raw* and *Data* files too big for github and that have to be downloaded from the Zenodo repository [https://doi.org/10.5281/zenodo.15462552](https://doi.org/10.5281/zenodo.15462552).  
+* the *BigFiles* folder should contain *BigWig*, *Data_raw* and *Data* files too big for github and that have to be downloaded from the Zenodo repository [https://doi.org/10.5281/zenodo.15462552](https://doi.org/10.5281/zenodo.15462552) and unzip into the directory BigFiles. This directory has to be created upon cloning this repository. 
 
 ***
 Code to generate the session info:  
