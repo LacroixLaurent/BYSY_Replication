@@ -7,7 +7,7 @@ output: html_notebook
 ***  
 
 ### Figure 6 : RFD, RFD_BY, Init,Ter,NanoT on ARS affected and non(TEL/CEN) 4 examples using Table3
-#### Figure S6: RFD, RFD_BY, Init,Ter,NanoT on ARS affected and non(TEL/CEN) all the others (26?) using Table3
+#### Figure S6: RFD, RFD_BY, Init,Ter,NanoT on ARS affected and non(TEL/CEN) all the others using Table3
 
 
 ```{r}
@@ -57,7 +57,7 @@ FKHr <- import("Data/ARS_SYwFKHr.bed")
 FKHr <- FKHr[overlapsAny(FKHr,ARS_BYonSY,type="equal")]
 
 MasterTable <- read_tsv("Data/BYSY_MasterTable_simple_Table123.tsv",show_col_types = FALSE)
-ars2plot <- inner_join(as_tibble(ARS_BYonSY),MasterTable,by = join_by(name)) %>%
+ars2plot <- inner_join(as_tibble(ARS_BYonSY),MasterTable,by = join_by(name,start,end)) %>%
 	mutate(center=(start+end)/2) %>%
 	mutate(ars_col=case_when(Table123=="R"~"OriRep",Table123=="A"~"OriAct",T~"OriNull"))
 	
@@ -113,8 +113,9 @@ pl_geno <- lapply(seq_along(ARS_ROI), function(i) {
 	geom_rect(data=featROI%>% filter(type %in% c("FKHa","FKHr")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=2,ymax=3,col=type,fill=type))+
 	geom_rect(data=featROI%>% filter(type %in% c("RIF1r","RIF1a")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=3,ymax=4,col=type,fill=type))+
 	geom_rect(data=featROI%>% filter(type %in% c("chromBY")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=0,ymax=1,col=featname,fill=featname))+
-	geom_text_repel(data=featROI%>% filter(type %in% c("ORI")),aes(x=start,y=4.4,label=featname,col=ars_col),size=2,angle=45,hjust = 0,show.legend=F,direction="x",seed=12,ylim=c(4,8),min.segment.length=5)+
-		coord_cartesian(ylim=c(0,4),clip = "off")+
+#	geom_text_repel(data=featROI%>% filter(type %in% c("ORI")),aes(x=start,y=4.4,label=featname,col=ars_col),size=1.7,angle=45,hjust = 0,show.legend=F,direction="x",seed=12,ylim=c(4,8),min.segment.length=5)+
+	geom_text(data=featROI%>% filter(type %in% c("ORI")),aes(x=start,y=4.5,label=featname,col=ars_col),size=1.7,angle=45,hjust = 0,show.legend=F)+
+	coord_cartesian(ylim=c(0,4),clip = "off")+
 	scale_color_manual("",values = geno_pal3,breaks=legend_ord2,guide = guide_legend(reverse = TRUE))+
 	scale_fill_manual("",values = geno_pal3,breaks=legend_ord2,guide = guide_legend(reverse = TRUE))+
 	xlab(paste0("SY coordinates [",ROI$name,"]"," (kb)"))+
@@ -157,8 +158,8 @@ pl_rfd <- lapply(seq_along(ARS_ROI), function(i) {
 pl <- ggplot(toplot_rfd2)+
 	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=-1,ymax=1),fill=mypal[15],col=mypal[15])+
 	geom_rect(data=featROI2,aes(xmin=start,xmax=end,ymin=-1,ymax=1),fill="purple",col=NA,alpha=0.3)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
@@ -208,9 +209,9 @@ pl_init <- lapply(seq_along(ARS_ROI), function(i) {
 		 .groups = "drop")
 pl <- ggplot(toplot_init2)+
 	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0,ymax=10),fill=mypal[15],col=mypal[15])+
-	geom_text(data=featROI2,aes(x=start,y=7),label="*",size=8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_text(data=featROI2,aes(x=start,y=7),label="*",size=6)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=initby,col="BY"),size=0.3)+
@@ -257,8 +258,8 @@ pl_ter <- lapply(seq_along(ARS_ROI), function(i) {
 		 .groups = "drop")
 pl <- ggplot(toplot_ter2)+
 	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0,ymax=10),fill=mypal[15],col=mypal[15])+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=terby,col="BY"),size=0.3)+
@@ -308,9 +309,9 @@ pl_nano <- lapply(seq_along(ARS_ROI), function(i) {
 
 pl <- ggplot(toplot_nano2)+
 	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0.8,ymax=2.2),fill=mypal[15],col=mypal[15])+
-	geom_text(data=featROI2,aes(x=start,y=1.9),label="*",size=8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_text(data=featROI2,aes(x=start,y=1.9),label="*",size=6)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=nanoby,col="BY"),size=0.3)+
@@ -335,6 +336,21 @@ pl <- ggplot(toplot_nano2)+
 ### Composing with patchwork
 
 ```{r warning=FALSE, include=FALSE}
+themeadj <- theme(
+	text = element_text(size =7),  # Taille des polices
+	legend.margin = margin(t = 0, r = 0, b = 0, l = 0),
+	legend.text = element_text(size = 6),
+	legend.key.size = unit(3, "mm"),
+	axis.title = element_text(size = 7),
+	axis.text = element_text(size = 5),
+	axis.ticks = element_line(size=0.2),
+	plot.title = element_text(size = 8),
+	plot.margin = unit(c(1, 1, 1, 1), "mm"),
+	panel.spacing = unit(0.05, "lines"),
+	panel.grid.minor = element_line(linewidth = 0.1),
+	panel.grid.major = element_line(linewidth = 0.2),
+	panel.border = element_rect(linewidth = 0.4)
+)
 p_list <- list()
 for (i in 1:21) 
 {
@@ -344,19 +360,19 @@ pl_terpooled <- pl_ter[[i]]+theme(legend.title=element_blank(),axis.title.x=elem
 pl_nanopooled <- pl_nano[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("RT")
 pl_gen <- pl_geno[[i]]+theme(legend.title=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Features")
 
-p_list[[i]] <- pl_rfdpooled/pl_initpooled/pl_terpooled/pl_nanopooled/plot_spacer()/pl_gen+plot_layout(ncol = 1, heights = c(rep(3,4),0.6,3))
+p_list[[i]] <- pl_rfdpooled/pl_initpooled/pl_terpooled/pl_nanopooled/plot_spacer()/pl_gen+plot_layout(ncol = 1, heights = c(rep(3,4),1.6,3)) & themeadj
 }
 
 pp <- wrap_elements(p_list[[9]])+wrap_elements(p_list[[11]])+wrap_elements(p_list[[14]])+wrap_elements(p_list[[20]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels="A",title="Figure 6") & theme(text = element_text(face="bold"))
- ggsave(plot=pp,paste0("FigArticle/Fig6.pdf"),h=14,w=10)
+ ggsave(plot=pp,paste0("FigArticle/Fig6.pdf"),h=9.05,w=6.8)
 
 pp <- wrap_elements(p_list[[1]])+wrap_elements(p_list[[2]])+wrap_elements(p_list[[4]])+wrap_elements(p_list[[5]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels="A",title="Supplementary Figure 6") & theme(text = element_text(face="bold"))
- ggsave(plot=pp,paste0("FigArticle/FigS6AD.pdf"),h=14,w=10)
+ ggsave(plot=pp,paste0("FigArticle/FigS6AD.pdf"),h=9.05,w=6.80)
 
 pp <- wrap_elements(p_list[[6]])+wrap_elements(p_list[[7]])+wrap_elements(p_list[[12]])+wrap_elements(p_list[[13]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels=list(c("E","F","G","H")),title="Supplementary Figure 6") & theme(text = element_text(face="bold"))
- ggsave(plot=pp,paste0("FigArticle/FigS6EH.pdf"),h=14,w=10)
+ ggsave(plot=pp,paste0("FigArticle/FigS6EH.pdf"),h=9.05,w=6.8)
 
 pp <- wrap_elements(p_list[[17]])+wrap_elements(p_list[[19]])+plot_spacer() + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels=list(c("I","J")),title="Supplementary Figure 6") & theme(text = element_text(face="bold"))
- ggsave(plot=pp,paste0("FigArticle/FigS6IJ.pdf"),h=14,w=10)
+ ggsave(plot=pp,paste0("FigArticle/FigS6IJ.pdf"),h=9.05,w=6.8)
 
 ```

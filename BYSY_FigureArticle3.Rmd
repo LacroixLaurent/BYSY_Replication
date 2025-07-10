@@ -41,7 +41,7 @@ ura3d0 <- GRanges("CP029160.1",IRanges(1051200,1051500),strand="*",seqinfo=seqin
 masked_SY <- c(maskedTy_SY,ura3d0)
 
 MasterTable <- read_tsv("Data/BYSY_MasterTable_simple_Table123.tsv",show_col_types = FALSE)
-ars2plot <- inner_join(as_tibble(ARS_BYonSY),MasterTable,by = join_by(name)) %>%
+ars2plot <- inner_join(as_tibble(ARS_BYonSY),MasterTable,by = join_by(name,start,end)) %>%
 	mutate(center=(start+end)/2) %>%
 	mutate(ars_col=case_when(Table123=="R"~"OriRep",Table123=="A"~"OriAct",T~"OriNull"))
 	
@@ -124,8 +124,8 @@ pl_rfdBY <- lapply(seq_along(chromSY), function(i)
 pl <- ggplot(toplot_rfd2)+
 	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=-1,ymax=1),fill=mypal[15],col=mypal[15])+
 geom_rect(data=featROI2,aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=-1,ymax=1),fill="purple",col=NA,alpha=0.3)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
@@ -177,8 +177,8 @@ pl_init <- lapply(seq_along(chromSY), function(i)
 pl <- ggplot(toplot_init2)+
 	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0,ymax=10),fill=mypal[15],col=mypal[15])+
 	geom_text(data=featROI2,aes(x=start,y=8.5),label="*",size=8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=initby,col="BY"),size=0.3)+
@@ -225,8 +225,8 @@ pl_ter <- lapply(seq_along(chromSY), function(i)
 		 .groups = "drop")
 pl <- ggplot(toplot_ter2)+
 	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0,ymax=10),fill=mypal[15],col=mypal[15])+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=terby,col="BY"),size=0.3)+
@@ -278,8 +278,8 @@ pl_nano <- lapply(seq_along(chromSY), function(i)
 pl <- ggplot(toplot_nano2)+
 	geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=0.8,ymax=2.2),fill=mypal[15],col=mypal[15])+
 	geom_text(data=featROI2,aes(x=start,y=2),label="*",size=8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+	geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=nanoby,col="BY"),size=0.3)+
@@ -319,7 +319,7 @@ pl_gen <- pl_geno[[i]]+theme(legend.title=element_blank(),legend.key.size = unit
 pp <- pl_rfdpooled/pl_initpooled/pl_terpooled/pl_nanopooled/plot_spacer()/pl_gen+
 	plot_layout(ncol = 1, heights = c(rep(3,4),0.6,2)) +
 	plot_annotation(tag_levels=list(c(taging[i])),title=titling[i],theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
-ggsave(paste0("FigArticle/Fig",naming[i],".pdf"),h=7,w=8)
+ggsave(paste0("FigArticle/Fig",naming[i],".pdf"),h=6.88,w=6.88)
 }
 ```
 

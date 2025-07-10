@@ -129,7 +129,7 @@ cvSY3 <- coverage(bingen,weight=bingen$rfdSY3)
 rfd.listnt <- list(cvBY1,cvBY2,cvBY3,cvSY1,cvSY2,cvSY3)
 mcornt <- sapply(rfd.listnt, function(x) sapply(rfd.listnt, function(y) cor(x,y,use="pairwise.complete.obs",method="p")))
 colnames(mcornt) <- rownames(mcornt) <- c("BY_rep1","BY_rep2","BY_rep3","SY_rep1","SY_rep2","SY_rep3")
-f1A <- ggcorrplot(mcornt,lab=T,lab_size=4)+
+f1A <- ggcorrplot(mcornt,lab=T,lab_size=2,tl.cex=8)+
 scale_fill_gradient2("PCC",limit=c(-1,1),low="blue",mid="white",high="red",midpoint=0) + 
 theme(panel.grid=element_blank())
 ```
@@ -206,7 +206,7 @@ cvSY3n <- coverage(bg_no,weight=bg_no$rfdSY3)
 rfd.listnt <- list(cvBY1n,cvBY2n,cvBY3n,cvSY1n,cvSY2n,cvSY3n)
 mcornt <- sapply(rfd.listnt, function(x) sapply(rfd.listnt, function(y) cor(x,y,use="pairwise.complete.obs",method="p")))
 colnames(mcornt) <- rownames(mcornt) <- c("BY_rep1","BY_rep2","BY_rep3","SY_rep1","SY_rep2","SY_rep3")
-f1C <- ggcorrplot(mcornt,lab=T,lab_size=4)+
+f1C <- ggcorrplot(mcornt,lab=T,lab_size=2,tl.cex=8)+
 scale_fill_gradient2("PCC",limit=c(-1,1),low="blue",mid="white",high="red",midpoint=0)+ 
 theme(panel.grid=element_blank())
 ```
@@ -266,7 +266,7 @@ cvSY3n <- coverage(bg_no,weight=bg_no$rfdSY3)
 rfd.listnt <- list(cvBY1n,cvBY2n,cvBY3n,cvSY1n,cvSY2n,cvSY3n)
 mcornt <- sapply(rfd.listnt, function(x) sapply(rfd.listnt, function(y) cor(x,y,use="pairwise.complete.obs",method="p")))
 colnames(mcornt) <- rownames(mcornt) <- c("BY_rep1","BY_rep2","BY_rep3","SY_rep1","SY_rep2","SY_rep3")
-f1B <- ggcorrplot(mcornt,lab=T,lab_size=4)+
+f1B <- ggcorrplot(mcornt,lab=T,lab_size=2,tl.cex=8)+
 scale_fill_gradient2("PCC",limit=c(-1,1),low="blue",mid="white",high="red",midpoint=0)+ 
 theme(panel.grid=element_blank())
 ```
@@ -281,6 +281,27 @@ B <- as.numeric(seqlengths(seqinfSY))
 #p1 <- f1A+ggtitle("Whole genome")+f1B+ggtitle(paste0("CEN and Junction ",round(A/B*100,0),"%"))+f1C+ggtitle(paste0("No CEN, no Junction ",round((B-A)/B*100,0),"%"))+plot_layout(guides="collect")+plot_annotation(tag_levels="A",title="Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
 
 p1 <- f1A+ggtitle("Whole genome")+f1B+ggtitle(paste0("CENs and Junctions"))+f1C+ggtitle(paste0("No CEN, no Junction"))+plot_layout(guides="collect")+plot_annotation(tag_levels="A",title="Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
-ggsave(plot=p1,file="FigArticle/Fig1.pdf",h=5,w=10)
+#ggsave(plot=p1,file="FigArticle/Fig1.pdf",h=5,w=10)
+```
+
+### resizing figures to follow NAR guidelines
+```{r}
+plA4 <- p1 & theme(
+	text = element_text(size =8),  # Taille des polices
+	legend.margin = margin(t = 0, r = 0, b = 0, l = 0),
+	legend.text = element_text(size = 6),
+	legend.key.size = unit(3, "mm"),
+	axis.title = element_text(size = 5),
+	axis.text = element_text(size = 4),
+#	axis.ticks = element_blank(),
+	plot.title = element_text(size = 8),
+	plot.margin = unit(c(1, 1, 1, 1), "mm"),
+	panel.spacing = unit(0.1, "lines"),
+#	panel.grid.minor = element_line(linewidth = 0.1),
+#	panel.grid.major = element_line(linewidth = 0.2)
+	#panel.border = element_rect(linewidth = 0.4)
+)
+ggsave(plot=plA4,file="FigArticle/Fig1.pdf",h=3.44,w=6.88)
+
 ```
 

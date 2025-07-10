@@ -287,8 +287,8 @@ pl_rfdExp <- lapply(seq_along(chromSY), function(i)
 pl <- ggplot(toplot_rfd2)+
 geom_rect(data=featROI3,aes(xmin=start,xmax=end,ymin=-1,ymax=1),fill=mypal[15],col=mypal[15])+
 geom_rect(data=featROI2,aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=-1,ymax=1),fill="purple",col=NA,alpha=0.3)+
-		geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8)+
-		geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8)+
+		geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=start),linetype=2,alpha=0.8,col=mypal[9])+
+		geom_vline(data=featROI%>% filter(type %in% c("CEN")),aes(xintercept=end),linetype=2,alpha=0.8,col=mypal[9])+
 	geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=start),linetype=4,alpha=0.8)+
 		geom_vline(data=featROI%>% filter(type %in% c("chromBY")),aes(xintercept=end),linetype=4,alpha=0.8)+
 	geom_line(aes(x=pos,y=rfdby,col="BY"),size=0.3)+
@@ -323,7 +323,7 @@ pl_rfd_pool <- pl_rfdExp[[i]]+theme(legend.title=element_blank(),axis.title.x=el
 pp <- pl_rfd_rep1/pl_rfd_rep2/pl_rfd_rep3/pl_testMH/pl_rfd_pool/pl_gen+
 	plot_layout(ncol = 1, heights = c(rep(3,5),2))+
 	plot_annotation(tag_levels=list(c(taging[i])),title=titling[i],theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
-ggsave(paste0("FigArticle/Fig",naming[i],".pdf"),h=7,w=8,device=cairo_pdf)
+ggsave(paste0("FigArticle/Fig",naming[i],".pdf"),h=6.88,w=6.88,device=cairo_pdf)
 }
 ```
 
@@ -347,8 +347,8 @@ pl0 <- ggplot(featROI)+
 		breaks=seq(floor(1/1000000)*1000000,11848804,1000000),
 		minor_breaks=seq(floor(1/500000)*500000,11848804,500000),
 		expand=c(0,0))+
-	theme(legend.position = "top",axis.ticks.y = element_blank(),axis.text.y = element_blank(),panel.grid.major.y=element_blank(),panel.grid.minor.y=element_blank(),legend.key = element_rect(colour = "black"))+
+	theme(legend.position = "top",axis.ticks.y = element_blank(),axis.text.y = element_blank(),panel.grid.major.y=element_blank(),panel.grid.minor.y=element_blank(),legend.key = element_rect(colour = "black"),legend.key.size = unit(0.2, 'cm'),legend.text=element_text(size=5))+
 	guides(colour="none",fill = guide_legend(nrow=1))
 pl1 <- pl0+plot_annotation(tag_levels="A",title="Supplementary Figure 2",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
-ggsave(plot=pl1,file="FigArticle/FigS2A.pdf",h=3,w=12,device=cairo_pdf)
+ggsave(plot=pl1,file="FigArticle/FigS2A.pdf",h=2,w=6.88,device=cairo_pdf)
 ```

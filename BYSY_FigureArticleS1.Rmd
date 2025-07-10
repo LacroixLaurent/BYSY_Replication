@@ -69,27 +69,44 @@ ggsave(plot=pl0,"FigArticle/FigS1AF.pdf",width=14,height=6)
 
 ```
 
-### FigS1G and H (doubling time)
+### FigS1G-H-I (doubling time)
 
 ```{r}
+
 mypal <- c(paletteer::paletteer_d("ggthemes::Classic_20"),"grey40","black","gold","greenyellow")
 
 data1 <- read_tsv("Data_raw/BYSYgrowth.txt",show_col_types = FALSE)%>% pivot_longer(cols=2:5, values_to="OD", names_to="Strain")
 fs1G <- ggplot(data=data1 %>% filter(Rep=="rep2"),aes(x=Time, y=OD,col=Strain))+
-	geom_point()+
-	geom_line()+
+	geom_point(show.legend=F)+
+	geom_line(show.legend=F)+
 	xlab("Time (h)")+
 	ylab("O.D. 600nm")+
 	scale_color_manual("",values=mypal[c(1,2,7,8)])
 data2 <- read_tsv("Data_raw/BYSYdoubling.txt",show_col_types = FALSE) %>% pivot_longer(cols=1:4,values_to="doubling", names_to="Strain")
 fs1H <- ggplot(data=data2,aes(x=Strain, y=doubling,col=Strain))+
-	geom_point(show.legend=F)+
+	geom_point()+
 	xlab("Strain")+
 	ylab("Doubling time (min)")+
 	scale_color_manual("",values=mypal[c(1,2,7,8)])+
 	ylim(c(0,120))
+pl1 <- fs1G+fs1H + plot_layout(guides="collect")+plot_annotation(tag_levels=list(c("G","H","I")),title="Supplementary Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+#ggsave(plot=pl1,"FigArticle/FigS1GH.pdf",width=7,height=4)
+
+data3 <- read_tsv("Data_raw/BYSYBRDUdoubling.txt",show_col_types = FALSE) %>% mutate(name=map2_chr(strain,treatment, paste, sep="_")) %>% mutate(name=factor(name, levels=c("BY_DMSO","BY_BrdU_1mM","SY_DMSO","SY_BrdU_1mM")))
+fs1I <- ggplot(data=data3,aes(x=strain, y=time,col=name))+
+	geom_point(position=position_jitterdodge(dodge.width=0.5))+
+	xlab("Strain")+
+	ylab("Doubling time (min)")+
+	scale_color_manual("",values=mypal[c(1,9,7,3)])+
+	coord_cartesian(ylim=c(0,120))
+
+pl2 <- fs1G+fs1H +fs1I+plot_annotation(tag_levels=list(c("G","H","I")),title="Supplementary Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+
+ggsave(plot=pl2,"FigArticle/FigS1GHI.pdf",width=10,height=4)
+pl2 <- fs1G+fs1H +fs1I+plot_annotation(tag_levels=list(c("G","H","I"))) & theme(plot.tag = element_text(face="bold"))
+
+pl3 <- wrap_elements(pl0)+wrap_elements(pl2)+plot_layout(heights=c(2,1))
 
 
-pl1 <- fs1G+fs1H+plot_layout(guides="collect")+plot_annotation(tag_levels=list(c("G","H")),title="Supplementary Figure 1",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
-ggsave(plot=pl1,"FigArticle/FigS1GH.pdf",width=7,height=4)
+ggsave(plot=pl3,"FigArticle/FigS1.pdf",width=14,height=10)
 ```

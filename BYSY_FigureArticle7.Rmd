@@ -2,7 +2,7 @@
 title: "BYSY project Notebook"
 output: html_notebook
 ---  
-# Figure7,S7 and S9
+# Figure7,S7 and S10
 
 ***  
 
@@ -67,10 +67,10 @@ pl_geno <- lapply(seq_along(chromSY), function(i) {
 	ROI <- suppressWarnings(trim(chromSY[i]+ovl))
 	featROI <- as_tibble(feat[overlapsAny(feat,ROI)]) %>% rename(featname=name)
 ggplot(featROI)+
-	geom_rect(data=featROI %>% filter(type %in% c("CEN","rDNA","Ty_masked","ura3_masked")),aes(xmin=start,xmax=end,ymin=2,ymax=3,col=type,fill=type))+
-	geom_rect(data=featROI%>% filter(type %in% c("ORI")),aes(xmin=start,xmax=end,ymin=1,ymax=2,col=type,fill=type))+
-	geom_rect(data=featROI%>% filter(type %in% c("chromBY")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=0,ymax=1,col=featname,fill=featname))+
-	geom_text(data=featROI%>% filter(type %in% c("chromBY")),aes(x=(pmax(start,start(ROI))+pmin(end,end(ROI)))/2,y=0.5,label=featname),col="black",show.legend=F)+
+	geom_rect(data=featROI %>% filter(type %in% c("CEN","rDNA","Ty_masked","ura3_masked")),aes(xmin=start,xmax=end,ymin=2,ymax=3,col=type,fill=type),linewidth=0.2)+
+	geom_rect(data=featROI%>% filter(type %in% c("ORI")),aes(xmin=start,xmax=end,ymin=1,ymax=2,col=type,fill=type),linewidth=0.2)+
+	geom_rect(data=featROI%>% filter(type %in% c("chromBY")),aes(xmin=pmax(start,start(ROI)),xmax=pmin(end,end(ROI)),ymin=0,ymax=1,col=featname,fill=featname),linewidth=0.2)+
+	geom_text(data=featROI%>% filter(type %in% c("chromBY")),aes(x=(pmax(start,start(ROI))+pmin(end,end(ROI)))/2,y=0.5,label=featname),col="black",show.legend=F,size=1)+
 	scale_color_manual("",values = geno_pal)+
 	scale_fill_manual("",values = geno_pal)+	xlab(paste0("SY coordinates (kb)"))+
 	coord_cartesian(ylim=c(0,3),clip = "off")+
@@ -81,7 +81,7 @@ ggplot(featROI)+
 		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
 		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
 		expand=c(0,0))+
-	theme(axis.ticks.y = element_blank(),axis.text.y = element_blank(),panel.grid.major.y=element_blank(),panel.grid.minor.y=element_blank(),legend.key = element_rect(colour = "black"))
+	theme(axis.ticks.y = element_blank(),axis.text.y = element_blank(),panel.grid.major.y=element_blank(),panel.grid.minor.y=element_blank(),legend.key = element_rect(colour = "black",linewidth=0.2))
 })
 
 ```
@@ -172,12 +172,12 @@ toplot_cov2 <- toplot_cov %>%
 		summarise(coverageBY = mean(coverageBY,na.rm=T),coverageSY = mean(coverageSY,na.rm=T), .groups = "drop")
 
 p1 <- ggplot(toplot_bin2)+
-	geom_line(aes(x=pos,y=BYspeed,col="speedBY"))+
+	geom_line(aes(x=pos,y=BYspeed,col="speedBY"),linewidth=0.25)+
 	geom_ribbon(aes(x=pos,ymin=BYspeedINF,ymax=BYspeedSUP,fill="speedBY"),alpha=0.3,col=NA)+
-	geom_line(aes(x=pos,y=SYspeed,col="speedSY"))+
+	geom_line(aes(x=pos,y=SYspeed,col="speedSY"),linewidth=0.25)+
 	geom_ribbon(aes(x=pos,ymin=SYspeedINF,ymax=SYspeedSUP,fill="speedSY"),alpha=0.3,col=NA)+
-	geom_hline(yintercept=speedmedgenBY,linetype=2,alpha=0.5,col=speed_pal[1])+
-	geom_hline(yintercept=speedmedgenSY,linetype=2,alpha=0.5,col=speed_pal[2])+
+	geom_hline(yintercept=speedmedgenBY,linetype=2,alpha=0.5,col=speed_pal[1],linewidth=0.2)+
+	geom_hline(yintercept=speedmedgenSY,linetype=2,alpha=0.5,col=speed_pal[2],linewidth=0.2)+
 	xlab(paste0(as.character(seqnames(ROI))," [",ROI$name,"]"," (kb)"))+
 	ylab("Speed (bp/min)")+
 	scale_x_continuous(
@@ -189,7 +189,7 @@ p1 <- ggplot(toplot_bin2)+
 		expand=c(0,0))+
 	scale_color_manual("",values = speed_pal)+
 	scale_fill_manual("",values = speed_pal)+
-	theme(legend.key = element_rect(colour = "black"))+
+	theme(legend.key = element_rect(colour = "black",linewidth=0.2))+
 	coord_cartesian(ylim=c(500,3500),expand=F)
 p1cov <- ggplot(toplot_cov2)+
 	geom_hline(yintercept=medcovBY,linetype=2,alpha=0.5,col=speed_pal[1])+
@@ -267,7 +267,7 @@ p2 <- ggplot(toplot_wt2)+geom_tile(aes(x=pos+500,y=type2,fill=wt2))+
 		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
 		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
 		expand=c(0,0))+
-	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black"))
+	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black",linewidth=0.2))
 
 return(p2)
 })
@@ -325,7 +325,7 @@ p2 <- ggplot(toplot_wt2)+geom_tile(aes(x=pos+500,y=type2,fill=wt2))+
 		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
 		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
 		expand=c(0,0))+
-	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black"))
+	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black",linewidth=0.2))
 return(p2)
 })
 ```
@@ -384,7 +384,7 @@ p2 <- ggplot(toplot_wt2)+geom_tile(aes(x=pos+500,y=type2,fill=wt2))+
 		breaks=seq(floor(start(ROI)/100000)*100000,end(ROI),100000),
 		minor_breaks=seq(floor(start(ROI)/50000)*50000,end(ROI),50000),
 		expand=c(0,0))+
-	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black"))
+	theme(axis.ticks.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(),legend.key = element_rect(colour = "black",linewidth=0.2))
 return(p2)
 })
 ```
@@ -392,32 +392,48 @@ return(p2)
 ### Composing with patchwork
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
+themeadj <- theme(
+	text = element_text(size =6),  # Taille des polices
+	legend.margin = margin(t = 0, r = 0, b = 0, l = 0),
+	legend.text = element_text(size = 4),
+	legend.key.size = unit(1, "mm"),
+	axis.title = element_text(size = 4),
+	axis.text = element_text(size = 3),
+	axis.ticks = element_line(size=0.2),
+	plot.title = element_text(size = 7),
+	plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), "mm"),
+	panel.spacing = unit(0.05, "lines"),
+	panel.grid.minor = element_line(linewidth = 0.1),
+	panel.grid.major = element_line(linewidth = 0.2),
+	panel.border = element_rect(linewidth = 0.1)
+)
+
 p_list <- list()
 for (i in 1:16) 
 {
 pl_speed <- pl21k[[i]][[1]]+theme(axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+coord_cartesian(ylim=c(1000,3000))+labs(tag=chromSY$name[i])+theme(plot.tag=element_text(face="bold"))
-pl_gen <- pl_geno[[i]]+theme(legend.title=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Features")
-pl_testSYBY <- pl_MWW_SYBY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Scale_BYvsSY")
-pl_testBY <- pl_MWW_BY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Scale_BY")
-pl_testSY <- pl_MWW_SY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.3, 'cm'))+ylab("Scale_SY")
-p_list[[i]] <- pl_speed/pl_testSYBY/pl_testBY/pl_testSY/pl_gen+plot_layout(ncol = 1, heights = c(3.8,1.4,1.4,1.4,1))
+pl_gen <- pl_geno[[i]]+theme(legend.title=element_blank(),legend.key.size = unit(0.05, 'cm'))+ylab("Features")
+pl_testSYBY <- pl_MWW_SYBY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.05, 'cm'))+ylab("Scale_BYvsSY")
+pl_testBY <- pl_MWW_BY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.05, 'cm'))+ylab("Scale_BY")
+pl_testSY <- pl_MWW_SY[[i]]+theme(legend.title=element_blank(),axis.title.x=element_blank(),legend.key.size = unit(0.05, 'cm'))+ylab("Scale_SY")
+p_list[[i]] <- pl_speed/pl_testSYBY/pl_testBY/pl_testSY/pl_gen+plot_layout(ncol = 1, heights = c(3.8,1.4,1.4,1.4,1)) & themeadj
 }
 
 pp <- wrap_elements(p_list[[7]])+wrap_elements(p_list[[16]])+wrap_elements(p_list[[3]])+wrap_elements(p_list[[4]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels="A",title="Figure 7") & theme(text = element_text(face="bold"))
-ggsave(plot=pp,paste0("FigArticle/Fig7.pdf"),h=14,w=16)
+ggsave(plot=pp,paste0("FigArticle/Fig7.pdf"),h=6,w=6.8)
 
 pp <- wrap_elements(p_list[[1]])+wrap_elements(p_list[[2]])+wrap_elements(p_list[[5]])+wrap_elements(p_list[[6]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels="A",title="Supplementary Figure 7") & theme(text = element_text(face="bold"))
-ggsave(plot=pp,paste0("FigArticle/FigS7AD.pdf"),h=14,w=16)
+ggsave(plot=pp,paste0("FigArticle/FigS7AD.pdf"),h=6,w=6.8)
 
 pp <- wrap_elements(p_list[[8]])+wrap_elements(p_list[[9]])+wrap_elements(p_list[[10]])+wrap_elements(p_list[[11]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels=list(c("E","F","G","H")),title="Supplementary Figure 7") & theme(text = element_text(face="bold"))
-ggsave(plot=pp,paste0("FigArticle/FigS7EH.pdf"),h=14,w=16)
+ggsave(plot=pp,paste0("FigArticle/FigS7EH.pdf"),h=6,w=6.8)
 
 pp <- wrap_elements(p_list[[12]])+wrap_elements(p_list[[13]])+wrap_elements(p_list[[14]])+wrap_elements(p_list[[15]]) + plot_layout(guides="collect",ncol=2)+plot_annotation(tag_levels=list(c("I","J","K","L")),title="Supplementary Figure 7") & theme(text = element_text(face="bold"))
-ggsave(plot=pp,paste0("FigArticle/FigS7IL.pdf"),h=14,w=16)
+ggsave(plot=pp,paste0("FigArticle/FigS7IL.pdf"),h=6,w=6.8)
 
 ```
 
-### FigS9: speed distri vs genomic features
+### FigS10: speed distri vs genomic features
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(ggdist)
@@ -471,11 +487,17 @@ toplot0$feat <- factor(toplot0$feat,levels=c("centromeres","rDNA","tRNA genes","
 totext <- toplot0 %>% group_by(feat,strain) %>% summarise(n=n()) %>% ungroup
 tomed <- toplot0 %>% group_by(feat,strain) %>% summarise(med=round(median(speed))) %>% ungroup
 
-fs9a <- ggplot(toplot0,aes(x=feat,y=speed,fill=strain,group=strain))+
+fs10a <- ggplot(toplot0,aes(x=feat,y=speed,fill=strain,group=strain))+
 	stat_slab(col=NA,alpha=0.6,scale=0.7,position="dodge")+
-	stat_pointinterval(.width=c(.5,.95),col="grey40",position="dodge",show.legend=F)+
-	geom_text(data=totext,aes(x=feat,y=0,label=n),fontface="italic",position =position_dodge(width=1)) +
-	geom_text(data=tomed,aes(x=feat,y=4800,label=med),col="red",position =position_dodge(width=1)) +
+	stat_pointinterval(
+		point_size = 1,
+		interval_size_domain = c(0.5, 0.95),
+		interval_size_range = c(0.16, 0.21),
+    col="grey40",
+		position="dodge",
+		show.legend=F)+
+	geom_text(data=totext,aes(x=feat,y=0,label=n),fontface="italic",position =position_dodge(width=1),size=1.7) +
+	geom_text(data=tomed,aes(x=feat,y=4800,label=med),col="red",position =position_dodge(width=1),size=1.7) +
 	scale_fill_manual("Strain",values=mypal[c(1,7)])+
 	coord_cartesian(ylim=c(0,5000))+
 	theme(axis.title.x= element_blank(),axis.ticks.x= element_blank(),plot.tag=element_text(face="bold"))+
@@ -493,11 +515,17 @@ toplot$feat_name <- factor(toplot$feat_name,levels=paste0("CEN",1:16))
 totext <- toplot %>% group_by(feat_name,strain) %>% summarise(n=n()) %>% ungroup
 tomed <- toplot %>% group_by(feat_name,strain) %>% summarise(med=round(median(speed))) %>% ungroup
 
-fs9b <-  ggplot(toplot,aes(x=feat_name,y=speed,fill=strain,group=strain))+
+fs10b <-  ggplot(toplot,aes(x=feat_name,y=speed,fill=strain,group=strain))+
 	stat_slab(col=NA,alpha=0.6,scale=0.7,position="dodge")+
-	stat_pointinterval(.width=c(.5,.95),col="grey40",position="dodge",show.legend=F)+
-	geom_text(data=totext,aes(x=feat_name,y=0,label=n),fontface="italic",position =position_dodge(width=1)) +
-	geom_text(data=tomed,aes(x=feat_name,y=4800,label=med),col="red",position =position_dodge(width=1)) +
+	stat_pointinterval(
+		point_size = 1,
+		interval_size_domain = c(0.5, 0.95),
+		interval_size_range = c(0.16, 0.21),
+    col="grey40",
+		position="dodge",
+		show.legend=F)+
+	geom_text(data=totext,aes(x=feat_name,y=0,label=n),fontface="italic",position =position_dodge(width=1),size=1.7) +
+	geom_text(data=tomed,aes(x=feat_name,y=4800,label=med),col="red",position =position_dodge(width=1),size=1.7) +
 	scale_fill_manual("Strain",values=mypal[c(1,7)])+
 	coord_cartesian(ylim=c(0,5000))+
 	theme(axis.title.x= element_blank(),axis.ticks.x= element_blank(),plot.tag=element_text(face="bold"))+
@@ -507,8 +535,8 @@ design <- "
  11111#########
  22222222222222
 "
-pl <- fs9a+fs9b+plot_layout(guides="collect",design=design)+plot_annotation(tag_levels="A",title="Supplementary Figure 9",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold"))
+pl <- fs10a+fs10b+plot_layout(guides="collect",design=design)+plot_annotation(tag_levels="A",title="Supplementary Figure 10",theme=theme(plot.title = element_text(face="bold"))) & theme(plot.tag = element_text(face="bold")) & themeadj
 
-ggsave(plot=pl,paste0("FigArticle/FigS9.pdf"),h=8,w=16)
+ggsave(plot=pl,paste0("FigArticle/FigS10.pdf"),h=3.4,w=6.8)
 
 ```
